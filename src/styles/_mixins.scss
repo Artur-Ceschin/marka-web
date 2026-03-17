@@ -1,0 +1,31 @@
+@use 'tokens' as *;
+
+@mixin respond($bp) {
+  @if $bp == sm  { @media (min-width: $bp-sm)  { @content; } }
+  @if $bp == md  { @media (min-width: $bp-md)  { @content; } }
+  @if $bp == lg  { @media (min-width: $bp-lg)  { @content; } }
+  @if $bp == xl  { @media (min-width: $bp-xl)  { @content; } }
+  @if $bp == 2xl { @media (min-width: $bp-2xl) { @content; } }
+}
+
+@mixin container {
+  width: 100%;
+  max-width: $max-width;
+  margin-inline: auto;
+  padding-inline: $space-4;
+
+  @include respond(md) { padding-inline: $space-6; }
+  @include respond(lg) { padding-inline: $space-8; }
+}
+
+@mixin card {
+  background: $bg-birch;
+  border: 1px solid $bg-bark;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-sm;
+}
+
+@mixin focus-ring {
+  outline: 2px solid $green-moss;
+  outline-offset: 2px;
+}

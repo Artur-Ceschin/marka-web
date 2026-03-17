@@ -1,0 +1,65 @@
+// ── Colors ──────────────────────────────────────────────────────────────────
+$bg-birch:  #F5F0E8;
+$bg-linen:  #EDE7D9;
+$bg-fog:    #E2DDD4;
+$bg-bark:   #D4CCC0;
+
+$green-moss:  #4A6741;
+$green-sage:  #7A9E73;
+$green-pale:  #C8D9C4;
+$green-mist:  #EBF2EA;
+
+$amber:       #C97B3A;
+$amber-pale:  #F5E6D3;
+
+$berry:       #8B4F6B;
+$berry-pale:  #F0E4EB;
+
+$text-charcoal: #2C2C2C;
+$text-stone:    #6B6560;
+$text-ash:      #9E9992;
+$text-white:    #FAF8F4;
+
+$dark-forest: #1A1F16;
+$dark-bark:   #1A1A18;
+
+// ── Typography ───────────────────────────────────────────────────────────────
+$font-display: var(--font-display), 'Playfair Display', Georgia, serif;
+$font-body:    var(--font-body), 'DM Sans', system-ui, sans-serif;
+$font-mono:    'Courier Prime', 'Courier New', monospace;
+
+// ── Spacing ──────────────────────────────────────────────────────────────────
+$space-1:  4px;
+$space-2:  8px;
+$space-3:  12px;
+$space-4:  16px;
+$space-5:  20px;
+$space-6:  24px;
+$space-8:  32px;
+$space-10: 40px;
+$space-12: 48px;
+$space-16: 64px;
+$space-20: 80px;
+
+// ── Radius ───────────────────────────────────────────────────────────────────
+$radius-sm:   4px;
+$radius-md:   8px;
+$radius-lg:   16px;
+$radius-xl:   24px;
+$radius-full: 9999px;
+
+// ── Shadows ──────────────────────────────────────────────────────────────────
+$shadow-sm: 0 1px 3px rgba(44, 40, 35, 0.08);
+$shadow-md: 0 4px 12px rgba(44, 40, 35, 0.10);
+$shadow-lg: 0 8px 24px rgba(44, 40, 35, 0.12);
+
+// ── Breakpoints ──────────────────────────────────────────────────────────────
+$bp-sm:  640px;
+$bp-md:  768px;
+$bp-lg:  1024px;
+$bp-xl:  1280px;
+$bp-2xl: 1536px;
+
+// ── Layout ───────────────────────────────────────────────────────────────────
+$max-width: 1200px;
+$nav-height: 64px;

@@ -1,0 +1,33 @@
+{
+  "name": "marka-web",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^5.80.7",
+    "@trpc/client": "^11.4.3",
+    "@trpc/react-query": "^11.4.3",
+    "@trpc/server": "^11.4.3",
+    "marka-api": "file:../mark-api",
+    "next": "^15.3.3",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "sass": "^1.89.4",
+    "zod": "^3.25.64",
+    "zustand": "^5.0.5"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.29",
+    "@types/react": "^19.1.6",
+    "@types/react-dom": "^19.1.5",
+    "typescript": "^5.8.3"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}
