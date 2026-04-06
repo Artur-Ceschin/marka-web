@@ -14,8 +14,8 @@ html {
 
 body {
   font-family: var(--font-body), #{$font-body};
-  background-color: $bg-birch;
-  color: $text-charcoal;
+  background-color: $dark-forest;
+  color: $text-white;
   line-height: 1.6;
   min-height: 100dvh;
 }
@@ -44,5 +44,5 @@ input, textarea, select {
 h1, h2, h3, h4, h5, h6 {
   font-family: $font-display;
   line-height: 1.2;
-  color: $text-charcoal;
+  color: $text-white;
 }

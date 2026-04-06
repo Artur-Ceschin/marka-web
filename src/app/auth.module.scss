@@ -1,0 +1,284 @@
+@use '@/styles/tokens' as *;
+@use '@/styles/mixins' as *;
+
+$surface:    #1e231d;
+$border:     rgba(255,255,255,0.07);
+$border-mid: rgba(255,255,255,0.10);
+$text-dim:   rgba(250,248,244,0.52);
+$text-faint: rgba(250,248,244,0.28);
+
+// ── Two-panel page shell ──────────────────────────────────────────────────────
+.page {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background: $surface;
+
+  @include respond(md) {
+    flex-direction: row;
+  }
+}
+
+// ── Brand panel (desktop left) ────────────────────────────────────────────────
+.brand {
+  display: none;
+
+  @include respond(md) {
+    display: flex;
+    flex-direction: column;
+    width: 400px;
+    flex-shrink: 0;
+    background: $dark-forest;
+    border-right: 1px solid $border;
+    position: sticky;
+    top: 0;
+    height: 100dvh;
+    overflow: hidden;
+  }
+
+  @include respond(lg) {
+    width: 460px;
+  }
+}
+
+// Decorative blobs inside brand panel
+.brandBlob1 {
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  background: rgba(74,103,65,0.18);
+  top: -200px;
+  left: -180px;
+  pointer-events: none;
+}
+
+.brandBlob2 {
+  position: absolute;
+  width: 320px;
+  height: 320px;
+  border-radius: 50%;
+  background: rgba(122,158,115,0.10);
+  bottom: -100px;
+  right: -100px;
+  pointer-events: none;
+}
+
+.brandBack {
+  position: relative;
+  z-index: 1;
+  padding: $space-6 $space-8;
+
+  a {
+    font-family: $font-mono;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(250,248,244,0.35);
+    transition: color 0.15s;
+    &:hover { color: rgba(250,248,244,0.7); }
+  }
+}
+
+.brandBody {
+  flex: 1;
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: $space-8;
+  text-align: center;
+  gap: $space-4;
+}
+
+.brandWordmark {
+  font-family: $font-display;
+  font-size: 30px;
+  font-weight: 700;
+  color: $text-white;
+  letter-spacing: -0.03em;
+  margin-top: $space-3;
+}
+
+.brandTagline {
+  font-family: $font-display;
+  font-style: italic;
+  font-size: 18px;
+  color: rgba(250,248,244,0.55);
+  line-height: 1.5;
+  max-width: 240px;
+}
+
+.brandFooter {
+  position: relative;
+  z-index: 1;
+  padding: $space-6 $space-8;
+  font-family: $font-mono;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(250,248,244,0.18);
+  text-align: center;
+}
+
+// ── Form pane (right / mobile full) ──────────────────────────────────────────
+.formPane {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: $space-10 $space-6 $space-12;
+  min-height: 100dvh;
+  background: $surface;
+}
+
+// Mobile-only brand header
+.mobileHeader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $space-3;
+  margin-bottom: $space-10;
+
+  @include respond(md) {
+    display: none;
+  }
+}
+
+.mobileWordmark {
+  font-family: $font-display;
+  font-size: 26px;
+  font-weight: 700;
+  color: $text-white;
+  letter-spacing: -0.03em;
+}
+
+// ── Form card ─────────────────────────────────────────────────────────────────
+.formCard {
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+}
+
+.formTitle {
+  font-family: $font-display;
+  font-size: clamp(26px, 3vw, 34px);
+  font-weight: 700;
+  color: $text-white;
+  letter-spacing: -0.03em;
+  margin-bottom: $space-2;
+}
+
+.formSub {
+  font-size: 14px;
+  color: $text-dim;
+  margin-bottom: $space-8;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: $space-5;
+  margin-bottom: $space-5;
+}
+
+.forgotRow {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: -$space-3;
+
+  a {
+    font-size: 12px;
+    color: $text-faint;
+    transition: color 0.15s;
+    &:hover { color: $green-sage; }
+  }
+}
+
+// ── Divider ───────────────────────────────────────────────────────────────────
+.divider {
+  display: flex;
+  align-items: center;
+  gap: $space-3;
+  margin: $space-6 0;
+  font-family: $font-mono;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: $text-faint;
+
+  &::before, &::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: $border;
+  }
+}
+
+// ── Google button wrapper ─────────────────────────────────────────────────────
+.googleBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: $space-3;
+  width: 100%;
+  padding: 14px $space-5;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid $border-mid;
+  border-radius: $radius-full;
+  font-family: $font-body;
+  font-size: 15px;
+  font-weight: 500;
+  color: $text-white;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+
+  &:hover {
+    background: rgba(255,255,255,0.09);
+    border-color: rgba(255,255,255,0.18);
+  }
+}
+
+// ── Footer link ───────────────────────────────────────────────────────────────
+.footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: $space-2;
+  margin-top: $space-8;
+  font-size: 14px;
+  color: $text-dim;
+
+  a {
+    font-weight: 600;
+    color: $text-white;
+    transition: color 0.15s;
+    &:hover { color: $green-sage; }
+  }
+}
+
+// ── Dark input overrides ──────────────────────────────────────────────────────
+.darkInputs {
+  :global(.marka-input),
+  input,
+  textarea {
+    background: rgba(255,255,255,0.05) !important;
+    border-color: rgba(255,255,255,0.10) !important;
+    color: $text-white !important;
+
+    &::placeholder { color: rgba(250,248,244,0.28) !important; }
+
+    &:focus {
+      border-color: $green-sage !important;
+      box-shadow: 0 0 0 3px rgba(122,158,115,0.14) !important;
+    }
+  }
+
+  label {
+    color: rgba(250,248,244,0.38) !important;
+  }
+}

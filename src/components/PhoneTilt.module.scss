@@ -1,0 +1,9 @@
+.wrap {
+  --rx: 0deg;
+  --ry: 0deg;
+  transform: rotateX(var(--rx)) rotateY(var(--ry));
+  transition: transform 0.1s linear;
+  transform-style: preserve-3d;
+  will-change: transform;
+  perspective: 900px;
+}

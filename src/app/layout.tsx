@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Playfair_Display, DM_Sans } from "next/font/google";
 import { Providers } from "./providers";
+import "@marka-app/ui/styles";
 import "@/styles/globals.scss";
 
 const playfair = Playfair_Display({

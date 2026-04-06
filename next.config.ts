@@ -1,6 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  transpilePackages: ["@marka-app/ui", "@marka-app/tokens"],
   images: {
     remotePatterns: [
       {
