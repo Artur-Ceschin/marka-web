@@ -26,7 +26,7 @@ $text-faint: rgba(250,248,244,0.28);
   @include respond(md) {
     display: flex;
     flex-direction: column;
-    width: 400px;
+    width: 42%;
     flex-shrink: 0;
     background: $dark-forest;
     border-right: 1px solid $border;
@@ -37,36 +37,46 @@ $text-faint: rgba(250,248,244,0.28);
   }
 
   @include respond(lg) {
-    width: 460px;
+    width: 45%;
   }
 }
 
-// Decorative blobs inside brand panel
-.brandBlob1 {
-  position: absolute;
-  width: 500px;
-  height: 500px;
-  border-radius: 50%;
-  background: rgba(74,103,65,0.18);
-  top: -200px;
-  left: -180px;
-  pointer-events: none;
+// Video background inside brand panel
+@keyframes videoFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 0.55; }
 }
 
-.brandBlob2 {
+.brandVideo {
   position: absolute;
-  width: 320px;
-  height: 320px;
-  border-radius: 50%;
-  background: rgba(122,158,115,0.10);
-  bottom: -100px;
-  right: -100px;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.55;
+  pointer-events: none;
+  z-index: 0;
+  animation: videoFadeIn 1.4s ease-in-out forwards;
+}
+
+// Dark overlay so text stays readable
+.brand::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    160deg,
+    rgba(20,28,18,0.55) 0%,
+    rgba(20,28,18,0.25) 50%,
+    rgba(20,28,18,0.65) 100%
+  );
   pointer-events: none;
 }
 
 .brandBack {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   padding: $space-6 $space-8;
 
   a {
@@ -83,7 +93,7 @@ $text-faint: rgba(250,248,244,0.28);
 .brandBody {
   flex: 1;
   position: relative;
-  z-index: 1;
+  z-index: 2;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -113,7 +123,7 @@ $text-faint: rgba(250,248,244,0.28);
 
 .brandFooter {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   padding: $space-6 $space-8;
   font-family: $font-mono;
   font-size: 10px;

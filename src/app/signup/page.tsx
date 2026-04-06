@@ -21,8 +21,14 @@ export default function SignUpPage() {
     <div className={styles.page}>
       {/* ── Brand panel (desktop left) ─────────────────── */}
       <div className={styles.brand}>
-        <div className={styles.brandBlob1} />
-        <div className={styles.brandBlob2} />
+        <video
+          className={styles.brandVideo}
+          src="/videos/signup-video.mp4"
+          autoPlay
+          muted
+          loop
+          playsInline
+        />
 
         <div className={styles.brandBack}>
           <Link href="/">← Back to marka</Link>
