@@ -1,0 +1,266 @@
+@use '@/styles/tokens' as *;
+
+$surface: rgba(255,255,255,0.04);
+$border:  rgba(255,255,255,0.08);
+
+// ── Page ─────────────────────────────────────────────────────────────────────
+.page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+}
+
+// ── Header ────────────────────────────────────────────────────────────────────
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: $space-8 $space-6 $space-6;
+  background: linear-gradient(170deg, #2a4025 0%, $dark-forest 100%);
+}
+
+.headerText {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.title {
+  font-family: $font-display;
+  font-size: clamp(28px, 4vw, 36px);
+  font-weight: 700;
+  color: $text-white;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.subtitle {
+  font-family: $font-body;
+  font-size: 14px;
+  color: rgba(250,248,244,0.55);
+}
+
+// ── View toggle ───────────────────────────────────────────────────────────────
+.viewToggle {
+  display: flex;
+  background: rgba(0,0,0,0.25);
+  border-radius: $radius-full;
+  padding: 3px;
+  gap: 2px;
+  margin-top: 4px;
+}
+
+.toggleBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: $radius-full;
+  border: none;
+  background: transparent;
+  color: rgba(250,248,244,0.45);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+
+  &:hover { color: rgba(250,248,244,0.8); }
+}
+
+.toggleBtnActive {
+  background: $text-white;
+  color: $dark-forest;
+}
+
+// ── Filters ───────────────────────────────────────────────────────────────────
+.filters {
+  padding: $space-5 $space-6 $space-4;
+  background: $dark-forest;
+  border-bottom: 1px solid $border;
+}
+
+// ── List ──────────────────────────────────────────────────────────────────────
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: $space-5;
+  padding: $space-5 $space-6 $space-10;
+  max-width: 680px;
+  width: 100%;
+  margin: 0 auto;
+
+  @media (min-width: $bp-lg) {
+    padding: $space-6 $space-8 $space-12;
+  }
+}
+
+// ── Feed card ─────────────────────────────────────────────────────────────────
+.card {
+  background: $surface;
+  border: 1px solid $border;
+  border-radius: $radius-xl;
+  overflow: hidden;
+}
+
+.cardUser {
+  display: flex;
+  align-items: center;
+  gap: $space-3;
+  padding: $space-4 $space-5;
+}
+
+.cardAvatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: rgba(255,255,255,0.1);
+
+  img { width: 100%; height: 100%; object-fit: cover; }
+}
+
+.cardUserInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.cardUserName {
+  font-family: $font-body;
+  font-size: 14px;
+  font-weight: 600;
+  color: $text-white;
+}
+
+.cardLocation {
+  font-size: 12px;
+  color: rgba(250,248,244,0.45);
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.cardDate {
+  font-size: 12px;
+  color: rgba(250,248,244,0.35);
+  flex-shrink: 0;
+}
+
+.cardPhoto {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16/9;
+  background: rgba(255,255,255,0.06);
+}
+
+.cardBody {
+  padding: $space-5;
+  display: flex;
+  flex-direction: column;
+  gap: $space-3;
+}
+
+.cardPlantName {
+  font-family: $font-display;
+  font-size: 22px;
+  font-weight: 700;
+  color: $text-white;
+  letter-spacing: -0.02em;
+}
+
+.cardLatin {
+  font-family: $font-display;
+  font-style: italic;
+  font-size: 13px;
+  color: rgba(250,248,244,0.5);
+  margin-top: -$space-2;
+}
+
+.confidenceRow {
+  display: flex;
+  align-items: center;
+  gap: $space-3;
+}
+
+.confidenceBar {
+  flex: 1;
+  height: 4px;
+  background: rgba(255,255,255,0.1);
+  border-radius: $radius-full;
+  overflow: hidden;
+}
+
+.confidenceFill {
+  height: 100%;
+  border-radius: $radius-full;
+  transition: width 0.4s ease;
+}
+
+.confidencePct {
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(250,248,244,0.6);
+  flex-shrink: 0;
+}
+
+.cardNote {
+  font-size: 14px;
+  color: rgba(250,248,244,0.6);
+  line-height: 1.5;
+}
+
+.cardFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: $space-3;
+  border-top: 1px solid $border;
+  margin-top: $space-2;
+}
+
+.cardActions {
+  display: flex;
+  align-items: center;
+  gap: $space-1;
+}
+
+.actionBtn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: none;
+  border: none;
+  color: rgba(250,248,244,0.4);
+  font-size: 13px;
+  cursor: pointer;
+  padding: 6px 8px;
+  border-radius: $radius-md;
+  transition: color 0.15s, background 0.15s;
+
+  &:hover {
+    color: rgba(250,248,244,0.75);
+    background: rgba(255,255,255,0.05);
+  }
+}
+
+.actionBtnActive {
+  color: #e05c7a;
+}
+
+.shareBtn {
+  margin-left: $space-2;
+}
+
+// ── Map placeholder ───────────────────────────────────────────────────────────
+.mapPlaceholder {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mapComingSoon {
+  font-size: 14px;
+  color: rgba(250,248,244,0.3);
+}

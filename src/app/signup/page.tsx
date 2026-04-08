@@ -2,19 +2,71 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Button, Input } from "@/components/ui";
+import { PasswordInput } from "../PasswordInput";
 import { LeafMark } from "@/components/MarkaLogo";
+import { signUp, confirmSignUp, resendConfirmationCode, startGoogleSignIn, CognitoError } from "@/lib/cognito";
 import styles from "../auth.module.scss";
 
-export default function SignUpPage() {
-  const [loading, setLoading] = useState(false);
+type Step = "register" | "confirm";
 
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+export default function SignUpPage() {
+  const router = useRouter();
+
+  const [step, setStep] = useState<Step>("register");
+  const [pendingEmail, setPendingEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [resent, setResent] = useState(false);
+
+  async function handleRegister(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    setError("");
     setLoading(true);
-    // TODO: wire up auth
-    await new Promise((r) => setTimeout(r, 900));
-    setLoading(false);
+
+    const form = e.currentTarget;
+    const name = (form.elements.namedItem("name") as HTMLInputElement).value;
+    const email = (form.elements.namedItem("email") as HTMLInputElement).value;
+    const password = (form.elements.namedItem("password") as HTMLInputElement).value;
+
+    try {
+      await signUp(name, email, password);
+      setPendingEmail(email);
+      setStep("confirm");
+    } catch (err) {
+      setError(err instanceof CognitoError ? err.message : "Something went wrong.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function handleConfirm(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setError("");
+    setLoading(true);
+
+    const form = e.currentTarget;
+    const code = (form.elements.namedItem("code") as HTMLInputElement).value;
+
+    try {
+      await confirmSignUp(pendingEmail, code);
+      router.push("/signin");
+    } catch (err) {
+      setError(err instanceof CognitoError ? err.message : "Something went wrong.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function handleResend() {
+    setResent(false);
+    try {
+      await resendConfirmationCode(pendingEmail);
+      setResent(true);
+    } catch {
+      // silent — don't expose resend errors
+    }
   }
 
   return (
@@ -53,69 +105,116 @@ export default function SignUpPage() {
           <span className={styles.mobileWordmark}>marka</span>
         </div>
 
-        <div className={styles.formCard}>
-          <h1 className={styles.formTitle}>Create your account</h1>
-          <p className={styles.formSub}>Free forever. Start your field journal today.</p>
+        {step === "register" ? (
+          <div className={styles.formCard}>
+            <h1 className={styles.formTitle}>Create your account</h1>
+            <p className={styles.formSub}>Free forever. Start your field journal today.</p>
 
-          <form className={styles.form} onSubmit={handleSubmit} noValidate>
-            <div className={styles.darkInputs}>
-              <Input
-                label="Full name"
-                type="text"
-                placeholder="Jane Smith"
-                autoComplete="name"
-                required
-                pill
-              />
+            <form className={styles.form} onSubmit={handleRegister} noValidate>
+              <div className={styles.darkInputs}>
+                <Input
+                  name="name"
+                  label="Full name"
+                  type="text"
+                  placeholder="Jane Smith"
+                  autoComplete="name"
+                  required
+                  pill
+                />
+              </div>
+
+              <div className={styles.darkInputs}>
+                <Input
+                  name="email"
+                  label="Email"
+                  type="email"
+                  placeholder="you@example.com"
+                  autoComplete="email"
+                  required
+                  error={error || undefined}
+                  pill
+                />
+              </div>
+
+              <div className={styles.darkInputs}>
+                <PasswordInput
+                  name="password"
+                  label="Password"
+                  placeholder="Minimum 8 characters"
+                  autoComplete="new-password"
+                  minLength={8}
+                  hint="Minimum 8 characters"
+                  required
+                  error={error ? " " : undefined}
+                  pill
+                />
+              </div>
+
+              <Button
+                type="submit"
+                variant="primary"
+                size="xl"
+                fullWidth
+                loading={loading}
+              >
+                Create account
+              </Button>
+            </form>
+
+            <div className={styles.divider}>or continue with</div>
+
+            <button type="button" className={styles.googleBtn} onClick={startGoogleSignIn}>
+              <GoogleIcon />
+              Continue with Google
+            </button>
+
+            <div className={styles.footer}>
+              <span>Already have an account?</span>
+              <Link href="/signin">Sign in</Link>
             </div>
-
-            <div className={styles.darkInputs}>
-              <Input
-                label="Email"
-                type="email"
-                placeholder="you@example.com"
-                autoComplete="email"
-                required
-                pill
-              />
-            </div>
-
-            <div className={styles.darkInputs}>
-              <Input
-                label="Password"
-                type="password"
-                placeholder="Minimum 8 characters"
-                autoComplete="new-password"
-                minLength={8}
-                hint="Minimum 8 characters"
-                required
-                pill
-              />
-            </div>
-
-            <Button
-              type="submit"
-              variant="primary"
-              size="xl"
-              fullWidth
-              loading={loading}
-            >
-              Create account
-            </Button>
-          </form>
-
-          <div className={styles.divider}>or continue with</div>
-
-          <button type="button" className={styles.googleBtn}>
-            <GoogleIcon />
-            Continue with Google
-          </button>
-
-          <div className={styles.footer}>
-            <span>Already have an account?</span>
-            <Link href="/signin">Sign in</Link>
           </div>
-        </div>
+        ) : (
+          <div className={styles.formCard}>
+            <h1 className={styles.formTitle}>Check your email</h1>
+            <p className={styles.formSub}>
+              We sent a confirmation code to <strong>{pendingEmail}</strong>
+            </p>
+
+            <form className={styles.form} onSubmit={handleConfirm} noValidate>
+              <div className={styles.darkInputs}>
+                <Input
+                  name="code"
+                  label="Confirmation code"
+                  type="text"
+                  placeholder="123456"
+                  autoComplete="one-time-code"
+                  inputMode="numeric"
+                  maxLength={6}
+                  required
+                  error={error || undefined}
+                  pill
+                />
+              </div>
+
+              <Button
+                type="submit"
+                variant="primary"
+                size="xl"
+                fullWidth
+                loading={loading}
+              >
+                Confirm account
+              </Button>
+            </form>
+
+            <div className={styles.footer}>
+              <span>{resent ? "Code sent!" : "Didn't get it?"}</span>
+              <button type="button" onClick={handleResend} className={styles.inlineLink}>
+                Resend code
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

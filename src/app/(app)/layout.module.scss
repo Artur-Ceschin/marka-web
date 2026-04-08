@@ -1,0 +1,127 @@
+@use '@/styles/tokens' as *;
+
+$sidebar-w: 220px;
+$nav-h: 64px;
+$border: rgba(255,255,255,0.07);
+
+// ── Shell ─────────────────────────────────────────────────────────────────────
+.shell {
+  display: flex;
+  min-height: 100dvh;
+  background: $dark-forest;
+  color: $text-white;
+}
+
+.splash {
+  min-height: 100dvh;
+  background: $dark-forest;
+}
+
+// ── Desktop sidebar ───────────────────────────────────────────────────────────
+.sidebar {
+  display: none;
+
+  @media (min-width: $bp-md) {
+    display: flex;
+    flex-direction: column;
+    width: $sidebar-w;
+    flex-shrink: 0;
+    background: rgba(0,0,0,0.18);
+    border-right: 1px solid $border;
+    position: sticky;
+    top: 0;
+    height: 100dvh;
+    padding: $space-6 0 $space-8;
+    gap: $space-2;
+  }
+}
+
+.sidebarLogo {
+  display: flex;
+  align-items: center;
+  gap: $space-3;
+  padding: $space-2 $space-6 $space-6;
+  text-decoration: none;
+}
+
+.sidebarWordmark {
+  font-family: $font-display;
+  font-size: 20px;
+  font-weight: 700;
+  color: $text-white;
+  letter-spacing: -0.03em;
+}
+
+.sidebarNav {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 0 $space-3;
+  flex: 1;
+}
+
+.sidebarItem {
+  display: flex;
+  align-items: center;
+  gap: $space-3;
+  padding: 11px $space-4;
+  border-radius: $radius-lg;
+  text-decoration: none;
+  color: rgba(250,248,244,0.45);
+  font-family: $font-body;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background 0.15s, color 0.15s;
+
+  &:hover {
+    background: rgba(255,255,255,0.06);
+    color: rgba(250,248,244,0.8);
+  }
+}
+
+.sidebarItemActive {
+  background: rgba(74,103,65,0.28);
+  color: $text-white;
+
+  .sidebarIcon svg {
+    stroke: $green-sage;
+  }
+}
+
+.sidebarIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  flex-shrink: 0;
+}
+
+.sidebarLabel {
+  line-height: 1;
+}
+
+// ── Main content ──────────────────────────────────────────────────────────────
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding-bottom: $nav-h; // space for mobile bottom nav
+
+  @media (min-width: $bp-md) {
+    padding-bottom: 0;
+  }
+}
+
+// ── Mobile bottom nav ─────────────────────────────────────────────────────────
+.mobileNav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+
+  @media (min-width: $bp-md) {
+    display: none;
+  }
+}

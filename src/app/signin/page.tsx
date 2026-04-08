@@ -2,11 +2,18 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Button, Input } from "@/components/ui";
+import { PasswordInput } from "../PasswordInput";
 import { LeafMark } from "@/components/MarkaLogo";
+import { signIn, startGoogleSignIn, CognitoError } from "@/lib/cognito";
+import { useAuthStore } from "@/store/auth.store";
 import styles from "../auth.module.scss";
 
 export default function SignInPage() {
+  const router = useRouter();
+  const setAuthenticated = useAuthStore((s) => s.setAuthenticated);
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -14,9 +21,20 @@ export default function SignInPage() {
     e.preventDefault();
     setError("");
     setLoading(true);
-    // TODO: wire up auth
-    await new Promise((r) => setTimeout(r, 900));
-    setLoading(false);
+
+    const form = e.currentTarget;
+    const email = (form.elements.namedItem("email") as HTMLInputElement).value;
+    const password = (form.elements.namedItem("password") as HTMLInputElement).value;
+
+    try {
+      const tokens = await signIn(email, password);
+      setAuthenticated(email, tokens.idToken, tokens.refreshToken);
+      router.push("/");
+    } catch (err) {
+      setError(err instanceof CognitoError ? err.message : "Something went wrong.");
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -62,6 +80,7 @@ export default function SignInPage() {
           <form className={styles.form} onSubmit={handleSubmit} noValidate>
             <div className={styles.darkInputs}>
               <Input
+                name="email"
                 label="Email"
                 type="email"
                 placeholder="you@example.com"
@@ -73,9 +92,9 @@ export default function SignInPage() {
             </div>
 
             <div className={styles.darkInputs}>
-              <Input
+              <PasswordInput
+                name="password"
                 label="Password"
-                type="password"
                 placeholder="••••••••••"
                 autoComplete="current-password"
                 required
@@ -100,7 +119,7 @@ export default function SignInPage() {
 
           <div className={styles.divider}>or continue with</div>
 
-          <button type="button" className={styles.googleBtn}>
+          <button type="button" className={styles.googleBtn} onClick={startGoogleSignIn}>
             <GoogleIcon />
             Continue with Google
           </button>
