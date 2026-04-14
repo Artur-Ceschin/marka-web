@@ -6,10 +6,10 @@ import { exchangeCodeForTokens, storeTokens, CognitoError } from "@/lib/cognito"
 import { useAuthStore } from "@/store/auth.store";
 
 function CallbackHandler() {
-  const router           = useRouter();
-  const searchParams     = useSearchParams();
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const setAuthenticated = useAuthStore((s) => s.setAuthenticated);
-  const handled          = useRef(false);
+  const handled = useRef(false);
   const [errorMsg, setErrorMsg] = useState("");
 
   useEffect(() => {
@@ -17,7 +17,7 @@ function CallbackHandler() {
     handled.current = true;
 
     const error = searchParams.get("error");
-    const code  = searchParams.get("code");
+    const code = searchParams.get("code");
     const isPopup = Boolean(window.opener && window.opener !== window);
 
     function fail(msg: string) {
@@ -30,8 +30,14 @@ function CallbackHandler() {
       }
     }
 
-    if (error) { fail(`Sign in failed (${error}).`); return; }
-    if (!code)  { fail("No authorisation code received."); return; }
+    if (error) {
+      fail(`Sign in failed (${error}).`);
+      return;
+    }
+    if (!code) {
+      fail("No authorisation code received.");
+      return;
+    }
 
     exchangeCodeForTokens(code)
       .then(({ userId }) => {
@@ -50,16 +56,18 @@ function CallbackHandler() {
   }, []);
 
   return (
-    <div style={{
-      minHeight: "100dvh",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      background: "#1e231d",
-      color: errorMsg ? "#ff7b7b" : "rgba(250,248,244,0.55)",
-      fontFamily: "sans-serif",
-      fontSize: 14,
-    }}>
+    <div
+      style={{
+        minHeight: "100dvh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        background: "#1e231d",
+        color: errorMsg ? "#ff7b7b" : "rgba(250,248,244,0.55)",
+        fontFamily: "sans-serif",
+        fontSize: 14,
+      }}
+    >
       {errorMsg || "Signing you in…"}
     </div>
   );
@@ -67,20 +75,24 @@ function CallbackHandler() {
 
 export default function AuthCallbackPage() {
   return (
-    <Suspense fallback={
-      <div style={{
-        minHeight: "100dvh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        background: "#1e231d",
-        color: "rgba(250,248,244,0.55)",
-        fontFamily: "sans-serif",
-        fontSize: 14,
-      }}>
-        Signing you in…
-      </div>
-    }>
+    <Suspense
+      fallback={
+        <div
+          style={{
+            minHeight: "100dvh",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            background: "#1e231d",
+            color: "rgba(250,248,244,0.55)",
+            fontFamily: "sans-serif",
+            fontSize: 14,
+          }}
+        >
+          Signing you in…
+        </div>
+      }
+    >
       <CallbackHandler />
     </Suspense>
   );

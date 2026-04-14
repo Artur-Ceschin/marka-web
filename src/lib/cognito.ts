@@ -8,7 +8,10 @@ import { pool } from "@/lib/auth";
 const CLIENT_ID = process.env.NEXT_PUBLIC_COGNITO_CLIENT_ID!;
 
 export class CognitoError extends Error {
-  constructor(public code: string, message: string) {
+  constructor(
+    public code: string,
+    message: string,
+  ) {
     super(message);
     this.name = "CognitoError";
   }
@@ -43,10 +46,10 @@ const COGNITO_DOMAIN = process.env.NEXT_PUBLIC_COGNITO_DOMAIN!;
 export function startGoogleSignIn(): void {
   const callbackUrl = `${window.location.origin}/auth/popup-callback`;
   const params = new URLSearchParams({
-    client_id:         CLIENT_ID,
-    response_type:     "code",
-    scope:             "openid email profile",
-    redirect_uri:      callbackUrl,
+    client_id: CLIENT_ID,
+    response_type: "code",
+    scope: "openid email profile",
+    redirect_uri: callbackUrl,
     identity_provider: "Google",
   });
 
@@ -54,35 +57,43 @@ export function startGoogleSignIn(): void {
   window.open(url, "_blank");
 }
 
-export async function exchangeCodeForTokens(code: string, redirectUri?: string): Promise<{ userId: string }> {
+export async function exchangeCodeForTokens(
+  code: string,
+  redirectUri?: string,
+): Promise<{ userId: string }> {
   const callbackUrl = redirectUri ?? `${window.location.origin}/auth/callback`;
   const res = await fetch(`https://${COGNITO_DOMAIN}/oauth2/token`, {
     method: "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
     body: new URLSearchParams({
-      grant_type:   "authorization_code",
-      client_id:    CLIENT_ID,
+      grant_type: "authorization_code",
+      client_id: CLIENT_ID,
       code,
       redirect_uri: callbackUrl,
     }),
   });
 
-  if (!res.ok) throw new CognitoError("TokenExchangeError", "Something went wrong. Please try again.");
+  if (!res.ok)
+    throw new CognitoError("TokenExchangeError", "Something went wrong. Please try again.");
 
   const data = await res.json();
   return storeTokens(data.id_token, data.access_token, data.refresh_token);
 }
 
-export function storeTokens(idToken: string, accessToken: string, refreshToken: string): { userId: string } {
-  const payload  = JSON.parse(atob(idToken.split(".")[1].replace(/-/g, "+").replace(/_/g, "/")));
+export function storeTokens(
+  idToken: string,
+  accessToken: string,
+  refreshToken: string,
+): { userId: string } {
+  const payload = JSON.parse(atob(idToken.split(".")[1].replace(/-/g, "+").replace(/_/g, "/")));
   const username = (payload["cognito:username"] ?? payload.sub) as string;
-  const prefix   = `CognitoIdentityServiceProvider.${CLIENT_ID}`;
+  const prefix = `CognitoIdentityServiceProvider.${CLIENT_ID}`;
 
-  localStorage.setItem(`${prefix}.LastAuthUser`,             username);
-  localStorage.setItem(`${prefix}.${username}.idToken`,      idToken);
-  localStorage.setItem(`${prefix}.${username}.accessToken`,  accessToken);
+  localStorage.setItem(`${prefix}.LastAuthUser`, username);
+  localStorage.setItem(`${prefix}.${username}.idToken`, idToken);
+  localStorage.setItem(`${prefix}.${username}.accessToken`, accessToken);
   localStorage.setItem(`${prefix}.${username}.refreshToken`, refreshToken);
-  localStorage.setItem(`${prefix}.${username}.clockDrift`,   "0");
+  localStorage.setItem(`${prefix}.${username}.clockDrift`, "0");
 
   return { userId: payload.sub as string };
 }

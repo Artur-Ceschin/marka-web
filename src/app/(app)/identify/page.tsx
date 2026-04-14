@@ -22,14 +22,18 @@ function confidenceLabel(pct: number) {
 }
 
 export default function IdentifyPage() {
-  const [step, setStep]         = useState<Step>("upload");
-  const [preview, setPreview]   = useState<string | null>(null);
-  const [file, setFile]         = useState<File | null>(null);
+  const [step, setStep] = useState<Step>("upload");
+  const [preview, setPreview] = useState<string | null>(null);
+  const [file, setFile] = useState<File | null>(null);
   const [selected, setSelected] = useState<number | null>(null);
-  const fileInputRef            = useRef<HTMLInputElement>(null);
-  const cameraInputRef          = useRef<HTMLInputElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const cameraInputRef = useRef<HTMLInputElement>(null);
 
-  const { mutate: runIdentify, data: identifyData, isPending } = useMutation({
+  const {
+    mutate: runIdentify,
+    data: identifyData,
+    isPending,
+  } = useMutation({
     mutationFn: (f: File) => identify.fromImage(f),
     onSuccess: () => setStep("results"),
   });
@@ -68,7 +72,10 @@ export default function IdentifyPage() {
       {/* ── Content ──────────────────────────────── */}
       <div className={styles.content}>
         {/* Photo area */}
-        <div className={styles.photoArea} onClick={() => step === "upload" && fileInputRef.current?.click()}>
+        <div
+          className={styles.photoArea}
+          onClick={() => step === "upload" && fileInputRef.current?.click()}
+        >
           {preview ? (
             <Image src={preview} alt="Selected plant" fill style={{ objectFit: "cover" }} />
           ) : (
@@ -100,11 +107,21 @@ export default function IdentifyPage() {
             onChange={(e) => handleFile(e.target.files?.[0] ?? null)}
           />
 
-          <Button variant="primary" size="xl" fullWidth onClick={() => cameraInputRef.current?.click()}>
+          <Button
+            variant="primary"
+            size="xl"
+            fullWidth
+            onClick={() => cameraInputRef.current?.click()}
+          >
             Take photo
           </Button>
 
-          <Button variant="secondary" size="xl" fullWidth onClick={() => fileInputRef.current?.click()}>
+          <Button
+            variant="secondary"
+            size="xl"
+            fullWidth
+            onClick={() => fileInputRef.current?.click()}
+          >
             Choose from gallery
           </Button>
 
@@ -113,7 +130,13 @@ export default function IdentifyPage() {
               <button className={styles.clearBtn} onClick={handleClear}>
                 Clear photo
               </button>
-              <Button variant="primary" size="xl" fullWidth loading={isPending} onClick={handleIdentify}>
+              <Button
+                variant="primary"
+                size="xl"
+                fullWidth
+                loading={isPending}
+                onClick={handleIdentify}
+              >
                 Identify this plant
               </Button>
             </>
@@ -122,7 +145,8 @@ export default function IdentifyPage() {
 
         {/* Tip */}
         <div className={styles.tip}>
-          For best results, capture a clear shot of the leaves or flowers against a simple background.
+          For best results, capture a clear shot of the leaves or flowers against a simple
+          background.
         </div>
 
         {/* Results sheet */}
@@ -145,7 +169,10 @@ export default function IdentifyPage() {
                     description={result.description ?? ""}
                     imageUrl={result.imageUrl ?? ""}
                     tags={[
-                      { label: confidenceLabel(result.confidence), variant: confidenceVariant(result.confidence) },
+                      {
+                        label: confidenceLabel(result.confidence),
+                        variant: confidenceVariant(result.confidence),
+                      },
                     ]}
                     onSave={() => setSelected(i)}
                     onLearnMore={() => {}}
@@ -175,17 +202,35 @@ export default function IdentifyPage() {
 
 function LeafOutlineIcon() {
   return (
-    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/>
-      <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/>
+    <svg
+      width="40"
+      height="40"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z" />
+      <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12" />
     </svg>
   );
 }
 
 function CheckIcon() {
   return (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-      <polyline points="20 6 9 17 4 12"/>
+    <svg
+      width="14"
+      height="14"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <polyline points="20 6 9 17 4 12" />
     </svg>
   );
 }

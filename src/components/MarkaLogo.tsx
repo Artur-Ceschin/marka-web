@@ -24,31 +24,75 @@ export function LeafMark({ size = 96, className }: LeafMarkProps) {
 
       {/* Leaf body — ellipse rotated -8° around its centre (48,43) */}
       <ellipse
-        cx="48" cy="43"
-        rx="14" ry="19"
+        cx="48"
+        cy="43"
+        rx="14"
+        ry="19"
         fill="rgba(245,240,232,0.92)"
         transform="rotate(-8 48 43)"
       />
 
       {/* Central vein (inside leaf) */}
-      <line x1="48" y1="28" x2="48" y2="60"
-        stroke="#4A6741" strokeWidth="1.5" strokeLinecap="round" />
+      <line
+        x1="48"
+        y1="28"
+        x2="48"
+        y2="60"
+        stroke="#4A6741"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
 
       {/* Upper veins */}
-      <line x1="48" y1="38" x2="40" y2="46"
-        stroke="#4A6741" strokeWidth="0.8" strokeLinecap="round" />
-      <line x1="48" y1="38" x2="56" y2="46"
-        stroke="#4A6741" strokeWidth="0.8" strokeLinecap="round" />
+      <line
+        x1="48"
+        y1="38"
+        x2="40"
+        y2="46"
+        stroke="#4A6741"
+        strokeWidth="0.8"
+        strokeLinecap="round"
+      />
+      <line
+        x1="48"
+        y1="38"
+        x2="56"
+        y2="46"
+        stroke="#4A6741"
+        strokeWidth="0.8"
+        strokeLinecap="round"
+      />
 
       {/* Lower veins */}
-      <line x1="48" y1="46" x2="41" y2="53"
-        stroke="#4A6741" strokeWidth="0.6" strokeLinecap="round" />
-      <line x1="48" y1="46" x2="55" y2="53"
-        stroke="#4A6741" strokeWidth="0.6" strokeLinecap="round" />
+      <line
+        x1="48"
+        y1="46"
+        x2="41"
+        y2="53"
+        stroke="#4A6741"
+        strokeWidth="0.6"
+        strokeLinecap="round"
+      />
+      <line
+        x1="48"
+        y1="46"
+        x2="55"
+        y2="53"
+        stroke="#4A6741"
+        strokeWidth="0.6"
+        strokeLinecap="round"
+      />
 
       {/* Stem below leaf */}
-      <line x1="48" y1="60" x2="48" y2="72"
-        stroke="rgba(245,240,232,0.7)" strokeWidth="2" strokeLinecap="round" />
+      <line
+        x1="48"
+        y1="60"
+        x2="48"
+        y2="72"
+        stroke="rgba(245,240,232,0.7)"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
     </svg>
   );
 }

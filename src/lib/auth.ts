@@ -2,24 +2,22 @@ import { CognitoUserPool } from "amazon-cognito-identity-js";
 
 export const pool = new CognitoUserPool({
   UserPoolId: process.env.NEXT_PUBLIC_COGNITO_USER_POOL_ID!,
-  ClientId:   process.env.NEXT_PUBLIC_COGNITO_CLIENT_ID!,
+  ClientId: process.env.NEXT_PUBLIC_COGNITO_CLIENT_ID!,
 });
 
 export interface Session {
   idToken: string;
-  userId:  string;
+  userId: string;
 }
 
 function sessionFromLocalStorage(): Session | null {
   try {
-    const prefix   = `CognitoIdentityServiceProvider.${pool.getClientId()}`;
+    const prefix = `CognitoIdentityServiceProvider.${pool.getClientId()}`;
     const username = localStorage.getItem(`${prefix}.LastAuthUser`);
     if (!username) return null;
-    const idToken  = localStorage.getItem(`${prefix}.${username}.idToken`);
+    const idToken = localStorage.getItem(`${prefix}.${username}.idToken`);
     if (!idToken) return null;
-    const payload  = JSON.parse(
-      atob(idToken.split(".")[1].replace(/-/g, "+").replace(/_/g, "/")),
-    );
+    const payload = JSON.parse(atob(idToken.split(".")[1].replace(/-/g, "+").replace(/_/g, "/")));
     if ((payload.exp as number) * 1000 < Date.now()) return null;
     return { idToken, userId: payload.sub as string };
   } catch {
@@ -42,7 +40,7 @@ export function getCurrentSession(): Promise<Session | null> {
       }
       resolve({
         idToken: session.getIdToken().getJwtToken() as string,
-        userId:  session.getIdToken().payload.sub   as string,
+        userId: session.getIdToken().payload.sub as string,
       });
     });
   });

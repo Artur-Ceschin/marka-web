@@ -161,7 +161,10 @@ function LightPhone() {
         {/* Bottom nav */}
         <div className={styles.lightNav}>
           {["Feed", "Identify", "Notebook", "Profile"].map((label, i) => (
-            <div key={label} className={`${styles.lightNavItem} ${i === 2 ? styles.lightNavItemActive : ""}`}>
+            <div
+              key={label}
+              className={`${styles.lightNavItem} ${i === 2 ? styles.lightNavItemActive : ""}`}
+            >
               <div className={styles.navIcon}>
                 {i === 0 && "🌿"}
                 {i === 1 && "🔍"}
@@ -187,8 +190,8 @@ export function HeroPhones() {
     const rect = wrap.getBoundingClientRect();
     const cx = rect.left + rect.width / 2;
     const cy = rect.top + rect.height / 2;
-    const dx = (e.clientX - cx) / (rect.width / 2);   // -1 to 1
-    const dy = (e.clientY - cy) / (rect.height / 2);  // -1 to 1
+    const dx = (e.clientX - cx) / (rect.width / 2); // -1 to 1
+    const dy = (e.clientY - cy) / (rect.height / 2); // -1 to 1
     wrap.style.setProperty("--tilt-x", `${dy * -10}deg`);
     wrap.style.setProperty("--tilt-y", `${dx * 10}deg`);
   }, []);

@@ -1,7 +1,6 @@
 import { getValidToken } from "./auth";
 
-const BASE =
-  process.env.NEXT_PUBLIC_REST_API_URL ?? "http://127.0.0.1:8080";
+const BASE = process.env.NEXT_PUBLIC_REST_API_URL ?? "http://127.0.0.1:8080";
 
 async function authHeaders(): Promise<HeadersInit> {
   const token = await getValidToken();
@@ -12,17 +11,16 @@ async function authHeaders(): Promise<HeadersInit> {
 }
 
 class ApiError extends Error {
-  constructor(public status: number, message: string) {
+  constructor(
+    public status: number,
+    message: string,
+  ) {
     super(message);
     this.name = "ApiError";
   }
 }
 
-async function request<T>(
-  method: string,
-  path: string,
-  body?: unknown,
-): Promise<T> {
+async function request<T>(method: string, path: string, body?: unknown): Promise<T> {
   const res = await fetch(`${BASE}${path}`, {
     method,
     headers: await authHeaders(),
@@ -120,11 +118,9 @@ export interface IdentifyResponse {
 export const users = {
   me: () => request<UserProfile>("GET", "/users/me"),
 
-  updateMe: (body: UpdateProfileBody) =>
-    request<UserProfile>("PUT", "/users/me", body),
+  updateMe: (body: UpdateProfileBody) => request<UserProfile>("PUT", "/users/me", body),
 
-  avatarUploadUrl: () =>
-    request<AvatarUploadResponse>("POST", "/users/me/avatar"),
+  avatarUploadUrl: () => request<AvatarUploadResponse>("POST", "/users/me/avatar"),
 
   getById: (id: string) => request<UserProfile>("GET", `/users/${id}`),
 };

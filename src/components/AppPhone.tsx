@@ -88,7 +88,9 @@ function DarkBody() {
           <p className={styles.feedName}>Bottle gourd</p>
           <p className={styles.feedLatin}>Lagenaria siceraria (Molina) Standl.</p>
           <div className={styles.confRow}>
-            <div className={styles.confBar}><div className={styles.confFill} style={{ width: "82%" }} /></div>
+            <div className={styles.confBar}>
+              <div className={styles.confFill} style={{ width: "82%" }} />
+            </div>
             <span className={styles.confPct}>82%</span>
           </div>
           <span className={styles.feedChip}>Medium Confidence</span>
@@ -137,10 +139,10 @@ function LightBody() {
 function SignalIcon() {
   return (
     <svg width="14" height="10" viewBox="0 0 14 10" fill="currentColor">
-      <rect x="0"  y="6" width="2" height="4" rx="0.5" />
-      <rect x="3"  y="4" width="2" height="6" rx="0.5" />
-      <rect x="6"  y="2" width="2" height="8" rx="0.5" />
-      <rect x="9"  y="0" width="2" height="10" rx="0.5" />
+      <rect x="0" y="6" width="2" height="4" rx="0.5" />
+      <rect x="3" y="4" width="2" height="6" rx="0.5" />
+      <rect x="6" y="2" width="2" height="8" rx="0.5" />
+      <rect x="9" y="0" width="2" height="10" rx="0.5" />
     </svg>
   );
 }
@@ -148,9 +150,23 @@ function SignalIcon() {
 function BatteryIcon() {
   return (
     <svg width="18" height="10" viewBox="0 0 18 10" fill="none">
-      <rect x="0.5" y="0.5" width="14" height="9" rx="2" stroke="currentColor" strokeOpacity="0.6" />
-      <rect x="2"   y="2"   width="10" height="6" rx="1" fill="currentColor" />
-      <path d="M15.5 3.5v3" stroke="currentColor" strokeOpacity="0.5" strokeWidth="1.5" strokeLinecap="round" />
+      <rect
+        x="0.5"
+        y="0.5"
+        width="14"
+        height="9"
+        rx="2"
+        stroke="currentColor"
+        strokeOpacity="0.6"
+      />
+      <rect x="2" y="2" width="10" height="6" rx="1" fill="currentColor" />
+      <path
+        d="M15.5 3.5v3"
+        stroke="currentColor"
+        strokeOpacity="0.5"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
     </svg>
   );
 }

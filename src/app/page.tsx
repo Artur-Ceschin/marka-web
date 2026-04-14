@@ -54,8 +54,21 @@ const GUIDES = [
     sub: "Identification of broad-leafed species",
     icon: (
       <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-        <path d="M10 2C10 2 4 6 4 11a6 6 0 0 0 12 0c0-5-6-9-6-9Z" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round"/>
-        <line x1="10" y1="11" x2="10" y2="18" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/>
+        <path
+          d="M10 2C10 2 4 6 4 11a6 6 0 0 0 12 0c0-5-6-9-6-9Z"
+          stroke="currentColor"
+          strokeWidth="1.4"
+          strokeLinejoin="round"
+        />
+        <line
+          x1="10"
+          y1="11"
+          x2="10"
+          y2="18"
+          stroke="currentColor"
+          strokeWidth="1.4"
+          strokeLinecap="round"
+        />
       </svg>
     ),
   },
@@ -64,8 +77,18 @@ const GUIDES = [
     sub: "Survival strategies in saline environments",
     icon: (
       <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-        <path d="M2 13c3-3 4-1 6-3s3-5 6-5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/>
-        <path d="M2 17c3-3 4-1 6-3s3-5 6-5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/>
+        <path
+          d="M2 13c3-3 4-1 6-3s3-5 6-5"
+          stroke="currentColor"
+          strokeWidth="1.4"
+          strokeLinecap="round"
+        />
+        <path
+          d="M2 17c3-3 4-1 6-3s3-5 6-5"
+          stroke="currentColor"
+          strokeWidth="1.4"
+          strokeLinecap="round"
+        />
       </svg>
     ),
   },
@@ -74,9 +97,30 @@ const GUIDES = [
     sub: "Guide to spores and mycelial networks",
     icon: (
       <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-        <path d="M4 10c0-3.3 2.7-6 6-6s6 2.7 6 6H4Z" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round"/>
-        <line x1="10" y1="10" x2="10" y2="16" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/>
-        <line x1="8" y1="16" x2="12" y2="16" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/>
+        <path
+          d="M4 10c0-3.3 2.7-6 6-6s6 2.7 6 6H4Z"
+          stroke="currentColor"
+          strokeWidth="1.4"
+          strokeLinejoin="round"
+        />
+        <line
+          x1="10"
+          y1="10"
+          x2="10"
+          y2="16"
+          stroke="currentColor"
+          strokeWidth="1.4"
+          strokeLinecap="round"
+        />
+        <line
+          x1="8"
+          y1="16"
+          x2="12"
+          y2="16"
+          stroke="currentColor"
+          strokeWidth="1.4"
+          strokeLinecap="round"
+        />
       </svg>
     ),
   },
@@ -97,21 +141,19 @@ export default function HomePage() {
           </Link>
 
           <div className={styles.navRight}>
-            <Link href="/signin" className={styles.navLink}>Sign in</Link>
-            <Link href="/signup" className={styles.navSignUp}>Get started</Link>
+            <Link href="/signin" className={styles.navLink}>
+              Sign in
+            </Link>
+            <Link href="/signup" className={styles.navSignUp}>
+              Get started
+            </Link>
           </div>
         </div>
       </header>
 
       {/* ── Hero video ───────────────────────────────────── */}
       <section className={styles.hero}>
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
-          className={styles.heroVideo}
-        >
+        <video autoPlay muted loop playsInline className={styles.heroVideo}>
           <source src="/videos/hero-forest.mp4" type="video/mp4" />
         </video>
         <div className={styles.heroOverlay} />
@@ -119,7 +161,8 @@ export default function HomePage() {
         <div className={styles.heroFadeIn} />
         <div className={styles.heroContent}>
           <h1 className={styles.heroH1}>
-            Your Field Journal for the<br />
+            Your Field Journal for the
+            <br />
             <em>Modern Naturalist</em>
           </h1>
           <p className={styles.heroSub}>
@@ -139,12 +182,13 @@ export default function HomePage() {
       {/* ── Main content ─────────────────────────────────── */}
       <main className={styles.main}>
         <div className={styles.mainInner}>
-
           {/* Left: Recent Discoveries */}
           <section className={styles.content}>
             <div className={styles.sectionHeader}>
               <h2 className={styles.sectionTitle}>Recent Discoveries</h2>
-              <Link href="/signup" className={styles.viewAll}>View All</Link>
+              <Link href="/signup" className={styles.viewAll}>
+                View All
+              </Link>
             </div>
 
             <div className={styles.discoveryGrid}>
@@ -205,9 +249,8 @@ export default function HomePage() {
                   </div>
                 </div>
                 <p className={styles.communityQuote}>
-                  &ldquo;Found a cluster of Rare Ghost Pipe (Monotropa uniflora)
-                  in the North Ridge park today. First time seeing them this far
-                  south!&rdquo;
+                  &ldquo;Found a cluster of Rare Ghost Pipe (Monotropa uniflora) in the North Ridge
+                  park today. First time seeing them this far south!&rdquo;
                 </p>
                 <p className={styles.communityLikes}>
                   <HeartIcon /> 124 likes
@@ -221,9 +264,9 @@ export default function HomePage() {
                 <em>Start Your Journal</em>
               </h3>
               <p className={styles.ctaBody}>
-                Join over 50,000 nature enthusiasts cataloging the beauty of the
-                wild. Record observations, get AI-assisted identification, and
-                contribute to global biodiversity data.
+                Join over 50,000 nature enthusiasts cataloging the beauty of the wild. Record
+                observations, get AI-assisted identification, and contribute to global biodiversity
+                data.
               </p>
               <Link href="/signup" className={styles.ctaBtn}>
                 Join the Community
@@ -242,8 +285,8 @@ export default function HomePage() {
               <span>Marka</span>
             </Link>
             <p className={styles.footerTagline}>
-              Dedicated to the documentation and preservation of global
-              biodiversity through the eyes of citizen scientists.
+              Dedicated to the documentation and preservation of global biodiversity through the
+              eyes of citizen scientists.
             </p>
           </div>
 
@@ -264,9 +307,15 @@ export default function HomePage() {
           <div className={styles.footerCol}>
             <p className={styles.footerColHead}>Connect</p>
             <div className={styles.socialRow}>
-              <a href="#" aria-label="Website"><GlobeIcon /></a>
-              <a href="#" aria-label="Email"><MailIcon /></a>
-              <a href="#" aria-label="Community"><ChatIcon /></a>
+              <a href="#" aria-label="Website">
+                <GlobeIcon />
+              </a>
+              <a href="#" aria-label="Email">
+                <MailIcon />
+              </a>
+              <a href="#" aria-label="Community">
+                <ChatIcon />
+              </a>
             </div>
           </div>
         </div>
@@ -287,16 +336,32 @@ export default function HomePage() {
 function ProfileIcon() {
   return (
     <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-      <circle cx="10" cy="7" r="3.5" stroke="currentColor" strokeWidth="1.4"/>
-      <path d="M3 17c0-3.3 3.1-6 7-6s7 2.7 7 6" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/>
+      <circle cx="10" cy="7" r="3.5" stroke="currentColor" strokeWidth="1.4" />
+      <path
+        d="M3 17c0-3.3 3.1-6 7-6s7 2.7 7 6"
+        stroke="currentColor"
+        strokeWidth="1.4"
+        strokeLinecap="round"
+      />
     </svg>
   );
 }
 
 function HeartIcon() {
   return (
-    <svg width="13" height="13" viewBox="0 0 13 13" fill="none" style={{display:"inline",verticalAlign:"middle",marginRight:4}}>
-      <path d="M6.5 11S1 7.5 1 4a2.5 2.5 0 0 1 5.5-.5A2.5 2.5 0 0 1 12 4c0 3.5-5.5 7-5.5 7Z" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round"/>
+    <svg
+      width="13"
+      height="13"
+      viewBox="0 0 13 13"
+      fill="none"
+      style={{ display: "inline", verticalAlign: "middle", marginRight: 4 }}
+    >
+      <path
+        d="M6.5 11S1 7.5 1 4a2.5 2.5 0 0 1 5.5-.5A2.5 2.5 0 0 1 12 4c0 3.5-5.5 7-5.5 7Z"
+        stroke="currentColor"
+        strokeWidth="1.2"
+        strokeLinejoin="round"
+      />
     </svg>
   );
 }
@@ -304,8 +369,12 @@ function HeartIcon() {
 function GlobeIcon() {
   return (
     <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-      <circle cx="9" cy="9" r="7.5" stroke="currentColor" strokeWidth="1.3"/>
-      <path d="M9 1.5C9 1.5 6 5 6 9s3 7.5 3 7.5M9 1.5C9 1.5 12 5 12 9s-3 7.5-3 7.5M1.5 9h15" stroke="currentColor" strokeWidth="1.3"/>
+      <circle cx="9" cy="9" r="7.5" stroke="currentColor" strokeWidth="1.3" />
+      <path
+        d="M9 1.5C9 1.5 6 5 6 9s3 7.5 3 7.5M9 1.5C9 1.5 12 5 12 9s-3 7.5-3 7.5M1.5 9h15"
+        stroke="currentColor"
+        strokeWidth="1.3"
+      />
     </svg>
   );
 }
@@ -313,8 +382,8 @@ function GlobeIcon() {
 function MailIcon() {
   return (
     <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-      <rect x="1.5" y="4" width="15" height="10" rx="1.5" stroke="currentColor" strokeWidth="1.3"/>
-      <path d="m1.5 4.5 7.5 5 7.5-5" stroke="currentColor" strokeWidth="1.3"/>
+      <rect x="1.5" y="4" width="15" height="10" rx="1.5" stroke="currentColor" strokeWidth="1.3" />
+      <path d="m1.5 4.5 7.5 5 7.5-5" stroke="currentColor" strokeWidth="1.3" />
     </svg>
   );
 }
@@ -322,7 +391,12 @@ function MailIcon() {
 function ChatIcon() {
   return (
     <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-      <path d="M15 3H3a1.5 1.5 0 0 0-1.5 1.5v8A1.5 1.5 0 0 0 3 14h2l2 2.5L9 14h6a1.5 1.5 0 0 0 1.5-1.5v-8A1.5 1.5 0 0 0 15 3Z" stroke="currentColor" strokeWidth="1.3" strokeLinejoin="round"/>
+      <path
+        d="M15 3H3a1.5 1.5 0 0 0-1.5 1.5v8A1.5 1.5 0 0 0 3 14h2l2 2.5L9 14h6a1.5 1.5 0 0 0 1.5-1.5v-8A1.5 1.5 0 0 0 15 3Z"
+        stroke="currentColor"
+        strokeWidth="1.3"
+        strokeLinejoin="round"
+      />
     </svg>
   );
 }
