@@ -2,60 +2,63 @@
 
 import { Suspense, useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { exchangeCodeForTokens, CognitoError } from "@/lib/cognito";
+import { exchangeCodeForTokens, storeTokens, CognitoError } from "@/lib/cognito";
 import { useAuthStore } from "@/store/auth.store";
-import { getSubFromToken } from "@/lib/auth";
 
 function CallbackHandler() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
+  const router           = useRouter();
+  const searchParams     = useSearchParams();
   const setAuthenticated = useAuthStore((s) => s.setAuthenticated);
-  const handled = useRef(false);
+  const handled          = useRef(false);
   const [errorMsg, setErrorMsg] = useState("");
 
   useEffect(() => {
     if (handled.current) return;
     handled.current = true;
 
-    const code = searchParams.get("code");
     const error = searchParams.get("error");
+    const code  = searchParams.get("code");
+    const isPopup = Boolean(window.opener && window.opener !== window);
 
-    if (error) {
-      setErrorMsg(`Sign in was cancelled or failed (${error}). Redirecting…`);
-      setTimeout(() => router.replace("/signin"), 2000);
-      return;
+    function fail(msg: string) {
+      if (isPopup) {
+        window.opener.postMessage({ type: "AUTH_ERROR", error: msg }, window.location.origin);
+        window.close();
+      } else {
+        setErrorMsg(`${msg} Redirecting…`);
+        setTimeout(() => router.replace("/signin"), 2000);
+      }
     }
 
-    if (!code) {
-      router.replace("/signin");
-      return;
-    }
+    if (error) { fail(`Sign in failed (${error}).`); return; }
+    if (!code)  { fail("No authorisation code received."); return; }
 
     exchangeCodeForTokens(code)
-      .then((tokens) => {
-        const userId = getSubFromToken(tokens.idToken) ?? "";
-        setAuthenticated(userId, tokens.idToken, tokens.refreshToken);
-        router.replace("/");
+      .then(({ userId }) => {
+        if (isPopup) {
+          window.opener.postMessage({ type: "AUTH_SUCCESS", userId }, window.location.origin);
+          window.close();
+        } else {
+          setAuthenticated(userId);
+          router.replace("/feed");
+        }
       })
       .catch((err) => {
         const msg = err instanceof CognitoError ? err.message : "Something went wrong.";
-        setErrorMsg(`${msg} Redirecting…`);
-        setTimeout(() => router.replace("/signin"), 2000);
+        fail(msg);
       });
-  }, [searchParams]);
+  }, []);
 
   return (
     <div style={{
       minHeight: "100dvh",
       display: "flex",
-      flexDirection: "column",
       alignItems: "center",
       justifyContent: "center",
       background: "#1e231d",
       color: errorMsg ? "#ff7b7b" : "rgba(250,248,244,0.55)",
       fontFamily: "sans-serif",
       fontSize: 14,
-      gap: 8,
     }}>
       {errorMsg || "Signing you in…"}
     </div>

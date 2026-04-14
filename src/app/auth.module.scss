@@ -247,9 +247,14 @@ $text-faint: rgba(250,248,244,0.28);
   cursor: pointer;
   transition: background 0.15s, border-color 0.15s;
 
-  &:hover {
+  &:hover:not(:disabled) {
     background: rgba(255,255,255,0.09);
     border-color: rgba(255,255,255,0.18);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
   }
 }
 

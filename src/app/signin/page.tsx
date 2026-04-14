@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button, Input } from "@/components/ui";
 import { PasswordInput } from "../PasswordInput";
@@ -14,8 +14,24 @@ export default function SignInPage() {
   const router = useRouter();
   const setAuthenticated = useAuthStore((s) => s.setAuthenticated);
 
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [loading, setLoading]             = useState(false);
+  const [googleLoading, setGoogleLoading] = useState(false);
+  const [error, setError]                 = useState("");
+
+  useEffect(() => {
+    const channel = new BroadcastChannel("google_auth");
+    channel.onmessage = (e) => {
+      if (e.data?.type === "AUTH_SUCCESS") {
+        setGoogleLoading(false);
+        setAuthenticated(e.data.userId);
+        router.replace("/feed");
+      } else if (e.data?.type === "AUTH_ERROR") {
+        setGoogleLoading(false);
+        setError("Google sign in failed. Please try again.");
+      }
+    };
+    return () => channel.close();
+  }, []);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -27,9 +43,9 @@ export default function SignInPage() {
     const password = (form.elements.namedItem("password") as HTMLInputElement).value;
 
     try {
-      const tokens = await signIn(email, password);
-      setAuthenticated(email, tokens.idToken, tokens.refreshToken);
-      router.push("/");
+      const { userId } = await signIn(email, password);
+      setAuthenticated(userId);
+      router.push("/feed");
     } catch (err) {
       setError(err instanceof CognitoError ? err.message : "Something went wrong.");
     } finally {
@@ -119,9 +135,27 @@ export default function SignInPage() {
 
           <div className={styles.divider}>or continue with</div>
 
-          <button type="button" className={styles.googleBtn} onClick={startGoogleSignIn}>
-            <GoogleIcon />
-            Continue with Google
+          <button
+            type="button"
+            className={styles.googleBtn}
+            disabled={googleLoading}
+            onClick={() => {
+              startGoogleSignIn();
+              setError("");
+              setGoogleLoading(true);
+              // Clear spinner if user comes back to this tab without completing
+              const onFocus = () => {
+                window.removeEventListener("focus", onFocus);
+                setTimeout(() => setGoogleLoading((v) => {
+                  // Only clear if still loading (BroadcastChannel may have already cleared it)
+                  return v ? false : v;
+                }), 2000);
+              };
+              window.addEventListener("focus", onFocus);
+            }}
+          >
+            {googleLoading ? <GoogleSpinner /> : <GoogleIcon />}
+            {googleLoading ? "Signing in…" : "Continue with Google"}
           </button>
 
           <div className={styles.footer}>
@@ -131,6 +165,23 @@ export default function SignInPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+function GoogleSpinner() {
+  return (
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 18 18"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      style={{ animation: "spin 0.75s linear infinite" }}
+    >
+      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+      <circle cx="9" cy="9" r="7" stroke="rgba(255,255,255,0.25)" strokeWidth="2" />
+      <path d="M9 2a7 7 0 0 1 7 7" stroke="rgba(255,255,255,0.75)" strokeWidth="2" strokeLinecap="round" />
+    </svg>
   );
 }
 

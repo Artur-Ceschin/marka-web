@@ -1,17 +1,11 @@
 import {
-  CognitoUserPool,
   CognitoUser,
   AuthenticationDetails,
   CognitoUserAttribute,
 } from "amazon-cognito-identity-js";
+import { pool } from "@/lib/auth";
 
-const USER_POOL_ID = process.env.NEXT_PUBLIC_COGNITO_USER_POOL_ID!;
 const CLIENT_ID = process.env.NEXT_PUBLIC_COGNITO_CLIENT_ID!;
-
-const pool = new CognitoUserPool({
-  UserPoolId: USER_POOL_ID,
-  ClientId: CLIENT_ID,
-});
 
 export class CognitoError extends Error {
   constructor(public code: string, message: string) {
@@ -44,34 +38,30 @@ function friendlyMessage(code: string): string {
   }
 }
 
-export interface AuthTokens {
-  idToken: string;
-  accessToken: string;
-  refreshToken: string;
-}
-
 const COGNITO_DOMAIN = process.env.NEXT_PUBLIC_COGNITO_DOMAIN!;
 
-export function startGoogleSignIn() {
-  const callbackUrl = `${window.location.origin}/auth/callback`;
+export function startGoogleSignIn(): void {
+  const callbackUrl = `${window.location.origin}/auth/popup-callback`;
   const params = new URLSearchParams({
+    client_id:         CLIENT_ID,
+    response_type:     "code",
+    scope:             "openid email profile",
+    redirect_uri:      callbackUrl,
     identity_provider: "Google",
-    redirect_uri: callbackUrl,
-    response_type: "code",
-    client_id: CLIENT_ID,
-    scope: "email openid profile",
   });
-  window.location.href = `https://${COGNITO_DOMAIN}/oauth2/authorize?${params}`;
+
+  const url = `https://${COGNITO_DOMAIN}/oauth2/authorize?${params}`;
+  window.open(url, "_blank");
 }
 
-export async function exchangeCodeForTokens(code: string): Promise<AuthTokens> {
-  const callbackUrl = `${window.location.origin}/auth/callback`;
+export async function exchangeCodeForTokens(code: string, redirectUri?: string): Promise<{ userId: string }> {
+  const callbackUrl = redirectUri ?? `${window.location.origin}/auth/callback`;
   const res = await fetch(`https://${COGNITO_DOMAIN}/oauth2/token`, {
     method: "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
     body: new URLSearchParams({
-      grant_type: "authorization_code",
-      client_id: CLIENT_ID,
+      grant_type:   "authorization_code",
+      client_id:    CLIENT_ID,
       code,
       redirect_uri: callbackUrl,
     }),
@@ -80,28 +70,31 @@ export async function exchangeCodeForTokens(code: string): Promise<AuthTokens> {
   if (!res.ok) throw new CognitoError("TokenExchangeError", "Something went wrong. Please try again.");
 
   const data = await res.json();
-  return {
-    idToken: data.id_token,
-    accessToken: data.access_token,
-    refreshToken: data.refresh_token,
-  };
+  return storeTokens(data.id_token, data.access_token, data.refresh_token);
 }
 
-export function signIn(email: string, password: string): Promise<AuthTokens> {
+export function storeTokens(idToken: string, accessToken: string, refreshToken: string): { userId: string } {
+  const payload  = JSON.parse(atob(idToken.split(".")[1].replace(/-/g, "+").replace(/_/g, "/")));
+  const username = (payload["cognito:username"] ?? payload.sub) as string;
+  const prefix   = `CognitoIdentityServiceProvider.${CLIENT_ID}`;
+
+  localStorage.setItem(`${prefix}.LastAuthUser`,             username);
+  localStorage.setItem(`${prefix}.${username}.idToken`,      idToken);
+  localStorage.setItem(`${prefix}.${username}.accessToken`,  accessToken);
+  localStorage.setItem(`${prefix}.${username}.refreshToken`, refreshToken);
+  localStorage.setItem(`${prefix}.${username}.clockDrift`,   "0");
+
+  return { userId: payload.sub as string };
+}
+
+export function signIn(email: string, password: string): Promise<{ userId: string }> {
   return new Promise((resolve, reject) => {
     const user = new CognitoUser({ Username: email, Pool: pool });
-    const authDetails = new AuthenticationDetails({
-      Username: email,
-      Password: password,
-    });
+    const authDetails = new AuthenticationDetails({ Username: email, Password: password });
 
     user.authenticateUser(authDetails, {
       onSuccess(session) {
-        resolve({
-          idToken: session.getIdToken().getJwtToken(),
-          accessToken: session.getAccessToken().getJwtToken(),
-          refreshToken: session.getRefreshToken().getToken(),
-        });
+        resolve({ userId: session.getIdToken().payload.sub as string });
       },
       onFailure(err) {
         reject(new CognitoError(err.code ?? err.name, friendlyMessage(err.code ?? err.name)));

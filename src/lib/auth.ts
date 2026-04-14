@@ -1,72 +1,60 @@
-const KEY_ID_TOKEN = "marka_id_token";
-const KEY_REFRESH_TOKEN = "marka_refresh_token";
+import { CognitoUserPool } from "amazon-cognito-identity-js";
 
-const COGNITO_DOMAIN = process.env.NEXT_PUBLIC_COGNITO_DOMAIN;
-const CLIENT_ID = process.env.NEXT_PUBLIC_COGNITO_CLIENT_ID!;
+export const pool = new CognitoUserPool({
+  UserPoolId: process.env.NEXT_PUBLIC_COGNITO_USER_POOL_ID!,
+  ClientId:   process.env.NEXT_PUBLIC_COGNITO_CLIENT_ID!,
+});
 
-export function getToken(): string | null {
-  if (typeof window === "undefined") return null;
-  return localStorage.getItem(KEY_ID_TOKEN);
+export interface Session {
+  idToken: string;
+  userId:  string;
 }
 
-export function saveTokens(idToken: string, refreshToken: string): void {
-  localStorage.setItem(KEY_ID_TOKEN, idToken);
-  localStorage.setItem(KEY_REFRESH_TOKEN, refreshToken);
-}
-
-export function clearTokens(): void {
-  localStorage.removeItem(KEY_ID_TOKEN);
-  localStorage.removeItem(KEY_REFRESH_TOKEN);
-}
-
-export function getSubFromToken(token: string): string | null {
+function sessionFromLocalStorage(): Session | null {
   try {
-    const payload = token.split(".")[1];
-    const decoded = JSON.parse(atob(payload));
-    return (decoded.sub as string) ?? null;
+    const prefix   = `CognitoIdentityServiceProvider.${pool.getClientId()}`;
+    const username = localStorage.getItem(`${prefix}.LastAuthUser`);
+    if (!username) return null;
+    const idToken  = localStorage.getItem(`${prefix}.${username}.idToken`);
+    if (!idToken) return null;
+    const payload  = JSON.parse(
+      atob(idToken.split(".")[1].replace(/-/g, "+").replace(/_/g, "/")),
+    );
+    if ((payload.exp as number) * 1000 < Date.now()) return null;
+    return { idToken, userId: payload.sub as string };
   } catch {
     return null;
   }
 }
 
-function isTokenExpired(token: string): boolean {
-  try {
-    const payload = JSON.parse(atob(token.split(".")[1]));
-    return Date.now() / 1000 > payload.exp - 60;
-  } catch {
-    return true;
-  }
-}
+/** Restores the current session from SDK storage, auto-refreshing if expired. */
+export function getCurrentSession(): Promise<Session | null> {
+  return new Promise((resolve) => {
+    if (typeof window === "undefined") return resolve(null);
 
-async function refreshTokens(): Promise<string | null> {
-  const refreshToken = localStorage.getItem(KEY_REFRESH_TOKEN);
-  if (!refreshToken) return null;
+    const user = pool.getCurrentUser();
+    if (!user) return resolve(sessionFromLocalStorage());
 
-  try {
-    const res = await fetch(`https://${COGNITO_DOMAIN}/oauth2/token`, {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: new URLSearchParams({
-        grant_type: "refresh_token",
-        client_id: CLIENT_ID,
-        refresh_token: refreshToken,
-      }).toString(),
+    user.getSession((err: Error | null, session: any) => {
+      if (err || !session?.isValid()) {
+        // Fallback for federated (Google) users — SDK getSession may fail
+        return resolve(sessionFromLocalStorage());
+      }
+      resolve({
+        idToken: session.getIdToken().getJwtToken() as string,
+        userId:  session.getIdToken().payload.sub   as string,
+      });
     });
-
-    if (!res.ok) return null;
-
-    const data = await res.json();
-    const newIdToken = data.id_token as string;
-    localStorage.setItem(KEY_ID_TOKEN, newIdToken);
-    return newIdToken;
-  } catch {
-    return null;
-  }
+  });
 }
 
+/** Returns a valid idToken for use in API Authorization headers. */
 export async function getValidToken(): Promise<string | null> {
-  const token = getToken();
-  if (!token) return null;
-  if (!isTokenExpired(token)) return token;
-  return refreshTokens();
+  const session = await getCurrentSession();
+  return session?.idToken ?? null;
+}
+
+/** Signs out the current user and clears SDK storage. */
+export function signOutCognito(): void {
+  pool.getCurrentUser()?.signOut();
 }

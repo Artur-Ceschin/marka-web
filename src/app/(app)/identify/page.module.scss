@@ -1,0 +1,185 @@
+@use '@/styles/tokens' as *;
+
+$border: rgba(255,255,255,0.08);
+$surface: rgba(255,255,255,0.05);
+
+.page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+}
+
+.header {
+  padding: $space-8 $space-6 $space-6;
+  background: linear-gradient(170deg, #2a4025 0%, $dark-forest 100%);
+}
+
+.title {
+  font-family: $font-display;
+  font-size: clamp(28px, 4vw, 36px);
+  font-weight: 700;
+  color: $text-white;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.subtitle {
+  font-size: 14px;
+  color: rgba(250,248,244,0.55);
+  margin-top: 4px;
+}
+
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: $space-4;
+  padding: $space-6;
+  max-width: 560px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.photoArea {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4/3;
+  background: $surface;
+  border: 1px solid $border;
+  border-radius: $radius-xl;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.emptyState {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: $space-3;
+  padding: $space-8;
+  text-align: center;
+}
+
+.emptyIcon {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: rgba(74,103,65,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $green-sage;
+}
+
+.emptyTitle {
+  font-family: $font-display;
+  font-size: 18px;
+  color: $text-white;
+}
+
+.emptyHint {
+  font-size: 13px;
+  color: rgba(250,248,244,0.45);
+  line-height: 1.5;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: $space-3;
+}
+
+.clearBtn {
+  background: none;
+  border: none;
+  color: rgba(250,248,244,0.4);
+  font-family: $font-body;
+  font-size: 14px;
+  cursor: pointer;
+  text-align: center;
+  padding: $space-2;
+  transition: color 0.15s;
+
+  &:hover { color: rgba(250,248,244,0.7); }
+}
+
+.tip {
+  background: rgba(74,103,65,0.12);
+  border: 1px solid rgba(74,103,65,0.25);
+  border-radius: $radius-lg;
+  padding: $space-4 $space-5;
+  font-size: 13px;
+  color: rgba(250,248,244,0.55);
+  line-height: 1.6;
+  text-align: center;
+}
+
+.results {
+  display: flex;
+  flex-direction: column;
+  gap: $space-5;
+  padding-top: $space-4;
+  border-top: 1px solid $border;
+}
+
+.resultsTitle {
+  font-family: $font-display;
+  font-size: 26px;
+  font-weight: 700;
+  color: $text-white;
+  letter-spacing: -0.02em;
+}
+
+.resultsSub {
+  font-size: 13px;
+  color: rgba(250,248,244,0.5);
+  margin-top: -$space-3;
+}
+
+.resultsList {
+  display: flex;
+  flex-direction: column;
+  gap: $space-3;
+}
+
+.resultItem {
+  position: relative;
+  border-radius: $radius-xl;
+  border: 1.5px solid transparent;
+  transition: border-color 0.15s;
+  cursor: pointer;
+
+  &:hover { border-color: rgba(74,103,65,0.4); }
+}
+
+.resultItemSelected {
+  border-color: $green-moss;
+}
+
+.selectedBadge {
+  position: absolute;
+  bottom: $space-4;
+  left: $space-4;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: $green-moss;
+  color: $text-white;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: $radius-full;
+}
+
+.saveBar {
+  position: sticky;
+  bottom: 80px;
+  padding: $space-4 0;
+
+  @media (min-width: $bp-md) {
+    bottom: $space-6;
+  }
+}

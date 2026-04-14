@@ -2,57 +2,34 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Tag, TagGroup, Badge } from "@/components/ui";
+import { feed, type FeedItem } from "@/lib/api";
 import styles from "./page.module.scss";
-
-const FEED_ITEMS = [
-  {
-    id: "1",
-    user: { name: "Artur", avatar: "/images/bianca-profile.png", location: "San Francisco, CA, United States" },
-    date: "16 Mar",
-    plantName: "Bottle gourd",
-    latin: "Lagenaria siceraria (Molina) Standl.",
-    imageUrl: "/images/plant-araucaria.jpg",
-    confidence: 82,
-    confidenceLabel: "Medium Confidence",
-    confidenceVariant: "amber" as const,
-    note: "Found it growing along the fence near the trail.",
-    likes: 0,
-  },
-  {
-    id: "2",
-    user: { name: "Artur", avatar: "/images/bianca-profile.png", location: "San Francisco, CA, United States" },
-    date: "16 Mar",
-    plantName: "Brazilian pine",
-    latin: "Araucaria angustifolia (Bertol.) Steud.",
-    imageUrl: "/images/plant-sequoia.avif",
-    confidence: 45,
-    confidenceLabel: "Low Confidence",
-    confidenceVariant: "berry" as const,
-    note: "Araucaria brasikeira",
-    likes: 0,
-  },
-  {
-    id: "3",
-    user: { name: "Artur", avatar: "/images/bianca-profile.png", location: "Porto Alegre, Brazil" },
-    date: "14 Mar",
-    plantName: "Giant Sequoia",
-    latin: "Sequoiadendron giganteum (Lindl.) J.Buchholz",
-    imageUrl: "/images/plant-juniper.png",
-    confidence: 90,
-    confidenceLabel: "High Confidence",
-    confidenceVariant: "green" as const,
-    note: "Spotted in the park, incredible size.",
-    likes: 3,
-  },
-];
 
 type Filter = "all" | "week" | "popular";
 type View = "list" | "map";
 
+function confidenceVariant(pct: number): "green" | "amber" | "berry" {
+  if (pct >= 80) return "green";
+  if (pct >= 50) return "amber";
+  return "berry";
+}
+
+function confidenceLabel(pct: number) {
+  if (pct >= 80) return "High Confidence";
+  if (pct >= 50) return "Medium Confidence";
+  return "Low Confidence";
+}
+
 export default function FeedPage() {
   const [filter, setFilter] = useState<Filter>("all");
-  const [view, setView] = useState<View>("list");
+  const [view, setView]     = useState<View>("list");
+
+  const { data: items = [], isLoading } = useQuery({
+    queryKey: ["feed"],
+    queryFn: feed.list,
+  });
 
   return (
     <div className={styles.page}>
@@ -91,11 +68,17 @@ export default function FeedPage() {
 
       {/* ── Content ──────────────────────────────── */}
       {view === "list" ? (
-        <div className={styles.list}>
-          {FEED_ITEMS.map((item) => (
-            <FeedCard key={item.id} item={item} />
-          ))}
-        </div>
+        isLoading ? (
+          <div className={styles.list}>
+            <p style={{ color: "var(--color-text-muted, #888)", padding: "2rem 0" }}>Loading…</p>
+          </div>
+        ) : (
+          <div className={styles.list}>
+            {items.map((item) => (
+              <FeedCard key={item.id} item={item} />
+            ))}
+          </div>
+        )
       ) : (
         <div className={styles.mapPlaceholder}>
           <p className={styles.mapComingSoon}>Map view coming soon</p>
@@ -105,42 +88,69 @@ export default function FeedPage() {
   );
 }
 
-function FeedCard({ item }: { item: typeof FEED_ITEMS[0] }) {
-  const [liked, setLiked] = useState(false);
-  const likeCount = item.likes + (liked ? 1 : 0);
+function FeedCard({ item }: { item: FeedItem }) {
+  const queryClient = useQueryClient();
+
+  const likeMutation = useMutation({
+    mutationFn: () => item.likedByMe ? feed.unlike(item.id) : feed.like(item.id),
+    onMutate: async () => {
+      await queryClient.cancelQueries({ queryKey: ["feed"] });
+      queryClient.setQueryData<FeedItem[]>(["feed"], (old = []) =>
+        old.map((f) =>
+          f.id === item.id
+            ? { ...f, likedByMe: !f.likedByMe, likesCount: f.likesCount + (f.likedByMe ? -1 : 1) }
+            : f,
+        ),
+      );
+    },
+    onError: () => {
+      queryClient.invalidateQueries({ queryKey: ["feed"] });
+    },
+  });
+
+  const variant = confidenceVariant(item.confidence);
+  const date    = new Date(item.createdAt).toLocaleDateString("en-US", { day: "numeric", month: "short" });
 
   return (
     <article className={styles.card}>
-      {/* User row */}
       <div className={styles.cardUser}>
         <div className={styles.cardAvatar}>
-          <Image src={item.user.avatar} alt={item.user.name} width={36} height={36} />
+          {item.user.avatarUrl ? (
+            <Image src={item.user.avatarUrl} alt={item.user.name} width={36} height={36} />
+          ) : (
+            <Image src="/images/bianca-profile.png" alt={item.user.name} width={36} height={36} />
+          )}
         </div>
         <div className={styles.cardUserInfo}>
           <span className={styles.cardUserName}>{item.user.name}</span>
-          <span className={styles.cardLocation}>
-            <PinIcon /> {item.user.location}
-          </span>
+          {item.location && (
+            <span className={styles.cardLocation}>
+              <PinIcon /> {item.location}
+            </span>
+          )}
         </div>
-        <span className={styles.cardDate}>{item.date}</span>
+        <span className={styles.cardDate}>{date}</span>
       </div>
 
-      {/* Photo */}
-      <div className={styles.cardPhoto}>
-        <Image src={item.imageUrl} alt={item.plantName} fill style={{ objectFit: "cover" }} />
-      </div>
+      {item.imageUrl && (
+        <div className={styles.cardPhoto}>
+          <Image src={item.imageUrl} alt={item.plantName} fill style={{ objectFit: "cover" }} />
+        </div>
+      )}
 
-      {/* Body */}
       <div className={styles.cardBody}>
         <h2 className={styles.cardPlantName}>{item.plantName}</h2>
-        <p className={styles.cardLatin}>{item.latin}</p>
+        <p className={styles.cardLatin}>{item.latinName}</p>
 
-        {/* Confidence bar */}
         <div className={styles.confidenceRow}>
           <div className={styles.confidenceBar}>
             <div
               className={styles.confidenceFill}
-              style={{ width: `${item.confidence}%`, backgroundColor: item.confidenceVariant === "green" ? "#4a6741" : item.confidenceVariant === "amber" ? "#c97b3a" : "#8b4f6b" }}
+              style={{
+                width: `${item.confidence}%`,
+                backgroundColor:
+                  variant === "green" ? "#4a6741" : variant === "amber" ? "#c97b3a" : "#8b4f6b",
+              }}
             />
           </div>
           <span className={styles.confidencePct}>{item.confidence}%</span>
@@ -149,11 +159,14 @@ function FeedCard({ item }: { item: typeof FEED_ITEMS[0] }) {
         {item.note && <p className={styles.cardNote}>{item.note}</p>}
 
         <div className={styles.cardFooter}>
-          <Badge variant={item.confidenceVariant}>{item.confidenceLabel}</Badge>
+          <Badge variant={variant}>{confidenceLabel(item.confidence)}</Badge>
 
           <div className={styles.cardActions}>
-            <button className={`${styles.actionBtn} ${liked ? styles.actionBtnActive : ""}`} onClick={() => setLiked((l) => !l)}>
-              <HeartIcon filled={liked} /> <span>{likeCount}</span>
+            <button
+              className={`${styles.actionBtn} ${item.likedByMe ? styles.actionBtnActive : ""}`}
+              onClick={() => likeMutation.mutate()}
+            >
+              <HeartIcon filled={item.likedByMe} /> <span>{item.likesCount}</span>
             </button>
             <button className={styles.actionBtn}>
               <CommentIcon />

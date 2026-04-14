@@ -1,33 +1,35 @@
 import { create } from "zustand";
-import { clearTokens, getSubFromToken, getToken, saveTokens } from "@/lib/auth";
+import { getCurrentSession, signOutCognito } from "@/lib/auth";
 
 interface AuthState {
   isAuthenticated: boolean;
-  hasHydrated: boolean;
-  userId: string | null;
-  hydrate: () => void;
-  setAuthenticated: (userId: string, idToken: string, refreshToken: string) => void;
-  logout: () => void;
+  hasHydrated:     boolean;
+  userId:          string | null;
+  hydrate:         () => Promise<void>;
+  setAuthenticated:(userId: string) => void;
+  logout:          () => void;
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
   isAuthenticated: false,
-  hasHydrated: false,
-  userId: null,
+  hasHydrated:     false,
+  userId:          null,
 
-  hydrate: () => {
-    const token = getToken();
-    const userId = token ? getSubFromToken(token) : null;
-    set({ isAuthenticated: !!userId, userId, hasHydrated: true });
+  hydrate: async () => {
+    const session = await getCurrentSession();
+    set({
+      isAuthenticated: !!session,
+      userId:          session?.userId ?? null,
+      hasHydrated:     true,
+    });
   },
 
-  setAuthenticated: (userId, idToken, refreshToken) => {
-    saveTokens(idToken, refreshToken);
-    set({ isAuthenticated: true, userId });
+  setAuthenticated: (userId) => {
+    set({ isAuthenticated: true, userId, hasHydrated: true });
   },
 
   logout: () => {
-    clearTokens();
+    signOutCognito();
     set({ isAuthenticated: false, userId: null });
   },
 }));

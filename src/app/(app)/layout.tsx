@@ -20,7 +20,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const { isAuthenticated, hasHydrated, hydrate } = useAuthStore();
 
-  useEffect(() => { hydrate(); }, []);
+  useEffect(() => { if (!hasHydrated) hydrate(); }, []);
 
   useEffect(() => {
     if (hasHydrated && !isAuthenticated) router.replace("/signin");
