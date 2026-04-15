@@ -37,7 +37,7 @@ function PopupCallbackHandler() {
         // Try popup close first; if this is a tab (Arc) it won't close — redirect instead
         window.close();
         setTimeout(() => {
-          window.location.replace("/feed");
+          window.location.replace("/identify");
         }, 300);
       })
       .catch((err) => {

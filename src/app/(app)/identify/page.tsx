@@ -3,11 +3,12 @@
 import { useRef, useState } from "react";
 import Image from "next/image";
 import { useMutation } from "@tanstack/react-query";
-import { Button, PlantResultCard, Tag, TagGroup } from "@/components/ui";
+import { Button, Badge, Tag, TagGroup } from "@/components/ui";
 import { identify, type IdentifyResult } from "@/lib/api";
+import { PageHeader } from "@/components/PageHeader";
 import styles from "./page.module.scss";
 
-type Step = "upload" | "preview" | "results";
+type Step = "upload" | "preview" | "results" | "detail";
 
 function confidenceVariant(pct: number): "green" | "amber" | "berry" {
   if (pct >= 80) return "green";
@@ -25,7 +26,7 @@ export default function IdentifyPage() {
   const [step, setStep] = useState<Step>("upload");
   const [preview, setPreview] = useState<string | null>(null);
   const [file, setFile] = useState<File | null>(null);
-  const [selected, setSelected] = useState<number | null>(null);
+  const [detail, setDetail] = useState<IdentifyResult | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const cameraInputRef = useRef<HTMLInputElement>(null);
 
@@ -43,7 +44,7 @@ export default function IdentifyPage() {
     setFile(picked);
     setPreview(URL.createObjectURL(picked));
     setStep("preview");
-    setSelected(null);
+    setDetail(null);
   }
 
   function handleIdentify() {
@@ -54,21 +55,21 @@ export default function IdentifyPage() {
     setPreview(null);
     setFile(null);
     setStep("upload");
-    setSelected(null);
+    setDetail(null);
   }
 
   const results: IdentifyResult[] = identifyData?.results ?? [];
 
+  if (step === "detail" && detail) {
+    return <DetailView result={detail} onBack={() => setStep("results")} />;
+  }
+
   return (
     <div className={styles.page}>
-      {/* ── Header ───────────────────────────────── */}
-      <div className={styles.header}>
-        <div>
-          <h1 className={styles.title}>Identify</h1>
-          <p className={styles.subtitle}>Photograph a plant to discover its name.</p>
-        </div>
-      </div>
+      <PageHeader title="Identify" subtitle="Photograph a plant to discover its name." />
 
+      {/* ── Dark card ────────────────────────────── */}
+      <div className={styles.card}>
       {/* ── Content ──────────────────────────────── */}
       <div className={styles.content}>
         {/* Photo area */}
@@ -149,52 +150,101 @@ export default function IdentifyPage() {
           background.
         </div>
 
-        {/* Results sheet */}
+        {/* Results */}
         {step === "results" && (
           <div className={styles.results}>
             <h2 className={styles.resultsTitle}>Top matches</h2>
-            <p className={styles.resultsSub}>Tap the best match, then add it to your notebook.</p>
+            <p className={styles.resultsSub}>Tap a result to see more details.</p>
 
             <div className={styles.resultsList}>
               {results.map((result, i) => (
-                <div
+                <button
                   key={i}
-                  className={`${styles.resultItem} ${selected === i ? styles.resultItemSelected : ""}`}
-                  onClick={() => setSelected(i)}
+                  className={styles.resultRow}
+                  onClick={() => {
+                    setDetail(result);
+                    setStep("detail");
+                  }}
                 >
-                  <PlantResultCard
-                    name={result.name}
-                    latin={result.latinName}
-                    confidence={result.confidence}
-                    description={result.description ?? ""}
-                    imageUrl={result.imageUrl ?? ""}
-                    tags={[
-                      {
-                        label: confidenceLabel(result.confidence),
-                        variant: confidenceVariant(result.confidence),
-                      },
-                    ]}
-                    onSave={() => setSelected(i)}
-                    onLearnMore={() => {}}
-                  />
-                  {selected === i && (
-                    <div className={styles.selectedBadge}>
-                      <CheckIcon /> Selected
+                  {result.imageUrl && (
+                    <div className={styles.resultThumb}>
+                      <Image
+                        src={result.imageUrl}
+                        alt={result.name}
+                        fill
+                        style={{ objectFit: "cover" }}
+                      />
                     </div>
                   )}
-                </div>
+                  <div className={styles.resultInfo}>
+                    <span className={styles.resultName}>{result.name}</span>
+                    <span className={styles.resultLatin}>{result.latinName}</span>
+                    <Badge variant={confidenceVariant(result.confidence)}>
+                      {confidenceLabel(result.confidence)}
+                    </Badge>
+                  </div>
+                  <ChevronIcon />
+                </button>
               ))}
             </div>
-
-            {selected !== null && (
-              <div className={styles.saveBar}>
-                <Button variant="primary" size="xl" fullWidth>
-                  Add to notebook
-                </Button>
-              </div>
-            )}
           </div>
         )}
+      </div>
+      </div>
+    </div>
+  );
+}
+
+function DetailView({ result, onBack }: { result: IdentifyResult; onBack: () => void }) {
+  const variant = confidenceVariant(result.confidence);
+
+  return (
+    <div className={styles.detailPage}>
+      <button className={styles.detailBack} onClick={onBack}>
+        <BackArrowIcon />
+      </button>
+
+      <div className={styles.detailHeader}>
+        <h1 className={styles.detailName}>{result.name}</h1>
+        <p className={styles.detailLatin}>{result.latinName}</p>
+      </div>
+
+      {result.imageUrl && (
+        <div className={styles.detailHero}>
+          <Image src={result.imageUrl} alt={result.name} fill style={{ objectFit: "cover" }} />
+        </div>
+      )}
+
+      <div className={styles.detailTags}>
+        <Badge variant={variant}>{confidenceLabel(result.confidence)}</Badge>
+      </div>
+
+      {result.description && (
+        <p className={styles.detailDescription}>{result.description}</p>
+      )}
+
+      <div className={styles.refSection}>
+        <p className={styles.refLabel}>Reference photos</p>
+        <div className={styles.refGrid}>
+          {[0, 1, 2].map((i) => (
+            <div key={i} className={styles.refThumb}>
+              {result.imageUrl && (
+                <Image
+                  src={result.imageUrl}
+                  alt="Reference"
+                  fill
+                  style={{ objectFit: "cover" }}
+                />
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className={styles.detailSave}>
+        <Button variant="primary" size="xl" fullWidth>
+          Add to notebook
+        </Button>
       </div>
     </div>
   );
@@ -218,19 +268,37 @@ function LeafOutlineIcon() {
   );
 }
 
-function CheckIcon() {
+function BackArrowIcon() {
   return (
     <svg
-      width="14"
-      height="14"
+      width="20"
+      height="20"
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth="2.5"
+      strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
     >
-      <polyline points="20 6 9 17 4 12" />
+      <path d="M19 12H5" />
+      <path d="m12 5-7 7 7 7" />
+    </svg>
+  );
+}
+
+function ChevronIcon() {
+  return (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="m9 18 6-6-6-6" />
     </svg>
   );
 }

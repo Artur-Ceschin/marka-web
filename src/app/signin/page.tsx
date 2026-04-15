@@ -25,7 +25,7 @@ export default function SignInPage() {
       if (e.data?.type === "AUTH_SUCCESS") {
         setGoogleLoading(false);
         setAuthenticated(e.data.userId);
-        router.replace("/feed");
+        router.replace("/identify");
       } else if (e.data?.type === "AUTH_ERROR") {
         setGoogleLoading(false);
         setErrors({ form: "Google sign in failed. Please try again." });
@@ -58,7 +58,7 @@ export default function SignInPage() {
     try {
       const { userId } = await signIn(raw.email, raw.password);
       setAuthenticated(userId);
-      router.push("/feed");
+      router.push("/identify");
     } catch (err) {
       setErrors({ email: err instanceof CognitoError ? err.message : "Something went wrong." });
     } finally {

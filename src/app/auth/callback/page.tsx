@@ -46,7 +46,7 @@ function CallbackHandler() {
           window.close();
         } else {
           setAuthenticated(userId);
-          router.replace("/feed");
+          router.replace("/identify");
         }
       })
       .catch((err) => {

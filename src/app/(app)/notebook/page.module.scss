@@ -1,46 +1,106 @@
-@use '@/styles/tokens' as *;
+@use "@/styles/tokens" as *;
 
-$border: rgba(255,255,255,0.08);
 
 .page {
   display: flex;
   flex-direction: column;
+  width: 100%;
   min-height: 100dvh;
+  background: $dark-forest;
 }
 
-.header {
-  padding: $space-8 $space-6 $space-6;
-  background: linear-gradient(170deg, #2a4025 0%, $dark-forest 100%);
+
+.card {
+  flex: 1;
+  background: $dark-forest;
+  border-radius: 28px 28px 0 0;
+  margin-top: -28px;
+  padding: $space-5 $space-6 $space-6;
+  display: flex;
+  flex-direction: column;
+  gap: $space-4;
+  position: relative;
 }
 
-.title {
-  font-family: $font-display;
-  font-size: clamp(28px, 4vw, 36px);
-  font-weight: 700;
+
+.search {
+  display: flex;
+  align-items: center;
+  gap: $space-3;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: $radius-full;
+  padding: 12px $space-5;
+  cursor: text;
+}
+
+.searchIcon {
+  color: rgba(250, 248, 244, 0.35);
+  flex-shrink: 0;
+}
+
+.searchInput {
+  flex: 1;
+  background: none;
+  border: none;
+  outline: none;
+  font-family: $font-body;
+  font-size: 15px;
   color: $text-white;
-  letter-spacing: -0.02em;
-  line-height: 1.1;
+
+  &::placeholder {
+    color: rgba(250, 248, 244, 0.35);
+  }
+
+  &::-webkit-search-cancel-button {
+    display: none;
+  }
 }
 
-.subtitle {
+
+.filters {
+  display: flex;
+  gap: $space-2;
+  overflow-x: auto;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.filterBtn {
+  padding: 8px 18px;
+  border-radius: $radius-full;
+  border: 1.5px solid rgba(255, 255, 255, 0.15);
+  background: transparent;
+  font-family: $font-body;
   font-size: 14px;
-  color: rgba(250,248,244,0.55);
-  margin-top: 4px;
+  font-weight: 500;
+  color: rgba(250, 248, 244, 0.7);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+
+  &:hover:not(.filterBtnActive) {
+    border-color: rgba(255, 255, 255, 0.3);
+    color: $text-white;
+  }
 }
 
-.strip {
-  padding: $space-5 $space-6;
-  border-bottom: 1px solid $border;
+.filterBtnActive {
+  background: $green-moss;
+  border-color: $green-moss;
+  color: $text-white;
 }
+
 
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: $space-4;
-  padding: $space-6;
 
   @media (min-width: $bp-lg) {
-    padding: $space-6 $space-8;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   }
 }
@@ -64,7 +124,7 @@ $border: rgba(255,255,255,0.08);
 
 .emptyHint {
   font-size: 14px;
-  color: rgba(250,248,244,0.4);
+  color: rgba(250, 248, 244, 0.4);
   max-width: 280px;
   line-height: 1.5;
 }

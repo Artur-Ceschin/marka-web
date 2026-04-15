@@ -1,0 +1,72 @@
+@use "@/styles/tokens" as *;
+
+.header {
+  position: relative;
+  overflow: hidden;
+  padding: $space-10 $space-6 $space-16;
+  background: linear-gradient(140deg, #2c5026 0%, #4d7a42 55%, #3e6c36 100%);
+}
+
+.headerContent {
+  position: relative;
+  z-index: 1;
+}
+
+.bubble1 {
+  position: absolute;
+  border-radius: 50%;
+  width: 320px;
+  height: 320px;
+  background: rgba(255, 255, 255, 0.09);
+  top: -110px;
+  right: -80px;
+  pointer-events: none;
+}
+
+.bubble2 {
+  position: absolute;
+  border-radius: 50%;
+  width: 200px;
+  height: 200px;
+  background: rgba(255, 255, 255, 0.07);
+  top: 18px;
+  right: 68px;
+  pointer-events: none;
+}
+
+.bubble3 {
+  position: absolute;
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  border: 1.5px solid rgba(255, 255, 255, 0.14);
+  top: -24px;
+  right: 192px;
+  pointer-events: none;
+}
+
+.bubble4 {
+  position: absolute;
+  border-radius: 50%;
+  width: 72px;
+  height: 72px;
+  background: rgba(255, 255, 255, 0.06);
+  bottom: 12px;
+  right: 24px;
+  pointer-events: none;
+}
+
+.title {
+  font-family: $font-display;
+  font-size: clamp(32px, 5vw, 48px);
+  font-weight: 700;
+  color: $text-white;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+}
+
+.subtitle {
+  font-size: 15px;
+  color: rgba(250, 248, 244, 0.65);
+  margin-top: $space-1;
+}

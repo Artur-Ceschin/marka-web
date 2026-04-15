@@ -18,7 +18,6 @@ $w: 248px;
 $h: 500px;
 $r: 36px;
 
-// ── Shell ─────────────────────────────────────────────────────────────────────
 .shell {
   width: $w;
   height: $h;
@@ -28,7 +27,6 @@ $r: 36px;
   flex-direction: column;
   overflow: hidden;
   position: relative;
-  // Device bezels
   box-shadow:
     inset 0 0 0 1px rgba(255,255,255,0.06),
     0 0 0 8px #111410,

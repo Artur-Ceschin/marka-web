@@ -6,49 +6,80 @@ $surface:  rgba(255,255,255,0.05);
 .page {
   display: flex;
   flex-direction: column;
+  width: 100%;
   min-height: 100dvh;
+  background: $dark-forest;
 }
 
-// ── Header ────────────────────────────────────────────────────────────────────
-.header {
+.card {
+  flex: 1;
+  background: $dark-forest;
+  border-radius: 28px 28px 0 0;
+  margin-top: -28px;
+  padding: $space-6;
+  display: flex;
+  flex-direction: column;
+  gap: $space-6;
+  position: relative;
+  max-width: 560px;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+// ── Profile info ──────────────────────────────────────────────────────────────
+
+.profileInfo {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: $space-3;
-  padding: $space-10 $space-6 $space-8;
-  background: linear-gradient(170deg, #2a4025 0%, $dark-forest 100%);
   text-align: center;
+  gap: $space-2;
 }
 
 .avatar {
-  width: 80px;
-  height: 80px;
+  width: 96px;
+  height: 96px;
   border-radius: 50%;
   overflow: hidden;
-  border: 2.5px solid rgba(122,158,115,0.4);
+  border: 3px solid rgba(122, 158, 115, 0.45);
+  box-shadow: 0 0 0 6px rgba(74, 103, 65, 0.15), 0 0 24px rgba(74, 103, 65, 0.2);
+  margin-bottom: $space-2;
 
   img { width: 100%; height: 100%; object-fit: cover; }
 }
 
 .name {
   font-family: $font-display;
-  font-size: 26px;
+  font-size: 28px;
   font-weight: 700;
   color: $text-white;
   letter-spacing: -0.02em;
 }
 
-.userId {
+.email {
   font-family: $font-mono;
   font-size: 11px;
-  color: rgba(250,248,244,0.3);
+  color: rgba(250, 248, 244, 0.3);
+}
+
+.bio {
+  font-size: 14px;
+  color: rgba(250, 248, 244, 0.5);
+  line-height: 1.5;
+  max-width: 320px;
+  margin-top: $space-1;
 }
 
 // ── Stats ─────────────────────────────────────────────────────────────────────
+
 .stats {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  border-bottom: 1px solid $border;
+  background: $surface;
+  border: 1px solid $border;
+  border-radius: $radius-xl;
+  overflow: hidden;
 }
 
 .stat {
@@ -75,18 +106,15 @@ $surface:  rgba(255,255,255,0.05);
   font-size: 9px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: rgba(250,248,244,0.35);
+  color: rgba(250, 248, 244, 0.35);
 }
 
 // ── Sections ──────────────────────────────────────────────────────────────────
+
 .sections {
   display: flex;
   flex-direction: column;
   gap: $space-2;
-  padding: $space-6;
-  max-width: 560px;
-  width: 100%;
-  margin: 0 auto;
 }
 
 .sectionTitle {
@@ -94,7 +122,7 @@ $surface:  rgba(255,255,255,0.05);
   font-size: 10px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: rgba(250,248,244,0.3);
+  color: rgba(250, 248, 244, 0.3);
   margin-top: $space-4;
   margin-bottom: $space-1;
   padding: 0 $space-2;
@@ -129,28 +157,83 @@ $surface:  rgba(255,255,255,0.05);
   transition: background 0.15s;
 
   &:hover:not(:disabled) {
-    background: rgba(255,255,255,0.05);
+    background: rgba(255, 255, 255, 0.05);
   }
 
   &:disabled {
     cursor: default;
-    color: rgba(250,248,244,0.45);
+    color: rgba(250, 248, 244, 0.45);
   }
 
-  svg { flex-shrink: 0; color: rgba(250,248,244,0.45); }
+  svg { flex-shrink: 0; color: rgba(250, 248, 244, 0.45); }
 
   span:nth-child(2) { flex: 1; }
 
-  svg:last-child { color: rgba(250,248,244,0.25); }
+  svg:last-child { color: rgba(250, 248, 244, 0.25); }
 }
 
 .rowBadge {
   font-size: 13px;
-  color: rgba(250,248,244,0.35) !important;
+  color: rgba(250, 248, 244, 0.35) !important;
 }
 
 .rowDanger {
   color: #ff7b7b;
   svg { color: #ff7b7b !important; }
-  &:hover { background: rgba(255,80,80,0.08); }
+  &:hover { background: rgba(255, 80, 80, 0.08); }
+}
+
+// ── Edit dialog (centered modal override) ─────────────────────────────────────
+
+.editDialog {
+  bottom: auto;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: $radius-xl;
+  border-top: none;
+  animation: none;
+
+  &[data-state="open"] {
+    animation: modal-in 0.25s ease-out;
+  }
+
+  &[data-state="closed"] {
+    animation: modal-out 0.15s ease-in forwards;
+  }
+}
+
+@keyframes modal-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -48%) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@keyframes modal-out {
+  from {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translate(-50%, -48%) scale(0.96);
+  }
+}
+
+.editForm {
+  display: flex;
+  flex-direction: column;
+  gap: $space-5;
+  padding-top: $space-4;
+}
+
+.editActions {
+  display: flex;
+  gap: $space-3;
+  padding-top: $space-2;
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button, Input } from "@/components/ui";
 import { PasswordInput } from "../PasswordInput";
@@ -13,6 +13,7 @@ import {
   startGoogleSignIn,
   CognitoError,
 } from "@/lib/cognito";
+import { useAuthStore } from "@/store/auth.store";
 import { SignUpSchema, ConfirmSchema } from "./schema";
 import styles from "../auth.module.scss";
 
@@ -20,12 +21,29 @@ type Step = "register" | "confirm";
 
 export default function SignUpPage() {
   const router = useRouter();
+  const setAuthenticated = useAuthStore((s) => s.setAuthenticated);
 
   const [step, setStep] = useState<Step>("register");
   const [pendingEmail, setPendingEmail] = useState("");
   const [loading, setLoading] = useState(false);
+  const [googleLoading, setGoogleLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [resent, setResent] = useState(false);
+
+  useEffect(() => {
+    const channel = new BroadcastChannel("google_auth");
+    channel.onmessage = (e) => {
+      if (e.data?.type === "AUTH_SUCCESS") {
+        setGoogleLoading(false);
+        setAuthenticated(e.data.userId);
+        router.replace("/identify");
+      } else if (e.data?.type === "AUTH_ERROR") {
+        setGoogleLoading(false);
+        setErrors({ form: "Google sign in failed. Please try again." });
+      }
+    };
+    return () => channel.close();
+  }, []);
 
   async function handleRegister(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -181,9 +199,26 @@ export default function SignUpPage() {
 
             <div className={styles.divider}>or continue with</div>
 
-            <button type="button" className={styles.googleBtn} onClick={startGoogleSignIn}>
-              <GoogleIcon />
-              Continue with Google
+            <button
+              type="button"
+              className={styles.googleBtn}
+              disabled={googleLoading}
+              onClick={() => {
+                startGoogleSignIn();
+                setErrors({});
+                setGoogleLoading(true);
+                const onFocus = () => {
+                  window.removeEventListener("focus", onFocus);
+                  setTimeout(
+                    () => setGoogleLoading((v) => (v ? false : v)),
+                    2000,
+                  );
+                };
+                window.addEventListener("focus", onFocus);
+              }}
+            >
+              {googleLoading ? <GoogleSpinner /> : <GoogleIcon />}
+              {googleLoading ? "Signing in…" : "Continue with Google"}
             </button>
 
             <div className={styles.footer}>
@@ -229,6 +264,28 @@ export default function SignUpPage() {
         )}
       </div>
     </div>
+  );
+}
+
+function GoogleSpinner() {
+  return (
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 18 18"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      style={{ animation: "spin 0.75s linear infinite" }}
+    >
+      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+      <circle cx="9" cy="9" r="7" stroke="rgba(255,255,255,0.25)" strokeWidth="2" />
+      <path
+        d="M9 2a7 7 0 0 1 7 7"
+        stroke="rgba(255,255,255,0.75)"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+    </svg>
   );
 }
 

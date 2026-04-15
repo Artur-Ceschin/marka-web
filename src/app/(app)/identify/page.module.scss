@@ -6,27 +6,21 @@ $surface: rgba(255,255,255,0.05);
 .page {
   display: flex;
   flex-direction: column;
+  width: 100%;
   min-height: 100dvh;
+  background: $dark-forest;
 }
 
-.header {
-  padding: $space-8 $space-6 $space-6;
-  background: linear-gradient(170deg, #2a4025 0%, $dark-forest 100%);
-}
-
-.title {
-  font-family: $font-display;
-  font-size: clamp(28px, 4vw, 36px);
-  font-weight: 700;
-  color: $text-white;
-  letter-spacing: -0.02em;
-  line-height: 1.1;
-}
-
-.subtitle {
-  font-size: 14px;
-  color: rgba(250,248,244,0.55);
-  margin-top: 4px;
+.card {
+  flex: 1;
+  background: $dark-forest;
+  border-radius: 28px 28px 0 0;
+  margin-top: -28px;
+  padding: $space-5 $space-6 $space-6;
+  display: flex;
+  flex-direction: column;
+  gap: $space-4;
+  position: relative;
 }
 
 .content {
@@ -34,7 +28,6 @@ $surface: rgba(255,255,255,0.05);
   display: flex;
   flex-direction: column;
   gap: $space-4;
-  padding: $space-6;
   max-width: 560px;
   width: 100%;
   margin: 0 auto;
@@ -181,5 +174,187 @@ $surface: rgba(255,255,255,0.05);
 
   @media (min-width: $bp-md) {
     bottom: $space-6;
+  }
+}
+
+// ── Results list rows ─────────────────────────────────────────────────────────
+
+.resultRow {
+  display: flex;
+  align-items: center;
+  gap: $space-4;
+  width: 100%;
+  background: $surface;
+  border: 1px solid $border;
+  border-radius: $radius-xl;
+  padding: $space-3;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  text-align: left;
+  color: $text-white;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(74, 103, 65, 0.5);
+  }
+}
+
+.resultThumb {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  border-radius: $radius-lg;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.resultInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.resultName {
+  font-family: $font-display;
+  font-size: 17px;
+  font-weight: 600;
+  color: $text-white;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.resultLatin {
+  font-size: 12px;
+  color: rgba(250, 248, 244, 0.45);
+  font-style: italic;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+// ── Detail view ───────────────────────────────────────────────────────────────
+
+.detailPage {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  background: $dark-forest;
+  max-width: 560px;
+  width: 100%;
+  margin: 0 auto;
+  padding-bottom: 100px;
+}
+
+.detailBack {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  margin: $space-6 $space-6 0;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid $border;
+  border-radius: 50%;
+  color: $text-white;
+  cursor: pointer;
+  transition: background 0.15s;
+  flex-shrink: 0;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.14);
+  }
+}
+
+.detailHeader {
+  padding: $space-5 $space-6 $space-4;
+}
+
+.detailName {
+  font-family: $font-display;
+  font-size: clamp(32px, 5vw, 44px);
+  font-weight: 700;
+  color: $text-white;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+}
+
+.detailLatin {
+  font-size: 14px;
+  color: rgba(250, 248, 244, 0.5);
+  font-style: italic;
+  margin-top: $space-1;
+}
+
+.detailHero {
+  position: relative;
+  width: calc(100% - #{$space-6} * 2);
+  margin: 0 $space-6;
+  aspect-ratio: 4/3;
+  border-radius: $radius-xl;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.detailTags {
+  display: flex;
+  gap: $space-2;
+  padding: $space-4 $space-6 0;
+  flex-wrap: wrap;
+}
+
+.detailDescription {
+  font-size: 14px;
+  color: rgba(250, 248, 244, 0.6);
+  line-height: 1.65;
+  padding: $space-4 $space-6 0;
+}
+
+// ── Reference photos ──────────────────────────────────────────────────────────
+
+.refSection {
+  padding: $space-6 $space-6 0;
+}
+
+.refLabel {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(250, 248, 244, 0.4);
+  margin-bottom: $space-3;
+}
+
+.refGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: $space-2;
+}
+
+.refThumb {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: $radius-lg;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid $border;
+}
+
+// ── Save CTA ──────────────────────────────────────────────────────────────────
+
+.detailSave {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: $space-4 $space-6;
+  background: linear-gradient(to top, $dark-forest 70%, transparent);
+
+  @media (min-width: $bp-md) {
+    position: sticky;
+    margin-top: auto;
   }
 }

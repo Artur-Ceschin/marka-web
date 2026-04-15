@@ -1,16 +1,8 @@
-import { getValidToken } from "./auth";
+import { getCurrentSession } from "./auth";
 
 const BASE = process.env.NEXT_PUBLIC_REST_API_URL ?? "http://127.0.0.1:8080";
 
-async function authHeaders(): Promise<HeadersInit> {
-  const token = await getValidToken();
-  return {
-    "Content-Type": "application/json",
-    ...(token ? { Authorization: `Bearer ${token}` } : {}),
-  };
-}
-
-class ApiError extends Error {
+export class ApiError extends Error {
   constructor(
     public status: number,
     message: string,
@@ -20,12 +12,34 @@ class ApiError extends Error {
   }
 }
 
+function handleUnauthorized(): never {
+  if (typeof window !== "undefined") {
+    const { useAuthStore } = require("@/store/auth.store");
+    useAuthStore.getState().logout();
+    window.location.replace("/signin");
+  }
+  throw new ApiError(401, "Session expired");
+}
+
+async function ensureAuth(): Promise<string> {
+  const session = await getCurrentSession();
+  if (!session) handleUnauthorized();
+  return session.idToken;
+}
+
 async function request<T>(method: string, path: string, body?: unknown): Promise<T> {
+  const token = await ensureAuth();
+
   const res = await fetch(`${BASE}${path}`, {
     method,
-    headers: await authHeaders(),
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
     ...(body !== undefined ? { body: JSON.stringify(body) } : {}),
   });
+
+  if (res.status === 401) handleUnauthorized();
 
   if (!res.ok) {
     throw new ApiError(res.status, `API ${method} ${path} → ${res.status}`);
@@ -35,12 +49,16 @@ async function request<T>(method: string, path: string, body?: unknown): Promise
 }
 
 async function multipart<T>(path: string, formData: FormData): Promise<T> {
-  const token = await getValidToken();
+  const token = await ensureAuth();
+
   const res = await fetch(`${BASE}${path}`, {
     method: "POST",
-    headers: token ? { Authorization: `Bearer ${token}` } : {},
+    headers: { Authorization: `Bearer ${token}` },
     body: formData,
   });
+
+  if (res.status === 401) handleUnauthorized();
+
   if (!res.ok) {
     throw new ApiError(res.status, `API POST ${path} → ${res.status}`);
   }
