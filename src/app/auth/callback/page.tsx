@@ -40,12 +40,12 @@ function CallbackHandler() {
     }
 
     exchangeCodeForTokens(code)
-      .then(({ userId }) => {
+      .then(({ userId, picture }) => {
         if (isPopup) {
-          window.opener.postMessage({ type: "AUTH_SUCCESS", userId }, window.location.origin);
+          window.opener.postMessage({ type: "AUTH_SUCCESS", userId, picture }, window.location.origin);
           window.close();
         } else {
-          setAuthenticated(userId);
+          setAuthenticated(userId, null, picture);
           router.replace("/identify");
         }
       })

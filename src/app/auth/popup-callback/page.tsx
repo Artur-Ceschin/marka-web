@@ -31,8 +31,8 @@ function PopupCallbackHandler() {
     }
 
     exchangeCodeForTokens(code, `${window.location.origin}/auth/popup-callback`)
-      .then(({ userId }) => {
-        channel.postMessage({ type: "AUTH_SUCCESS", userId });
+      .then(({ userId, picture }) => {
+        channel.postMessage({ type: "AUTH_SUCCESS", userId, picture });
         channel.close();
         // Try popup close first; if this is a tab (Arc) it won't close — redirect instead
         window.close();

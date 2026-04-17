@@ -24,7 +24,7 @@ export default function SignInPage() {
     channel.onmessage = (e) => {
       if (e.data?.type === "AUTH_SUCCESS") {
         setGoogleLoading(false);
-        setAuthenticated(e.data.userId);
+        setAuthenticated(e.data.userId, null, e.data.picture ?? null);
         router.replace("/identify");
       } else if (e.data?.type === "AUTH_ERROR") {
         setGoogleLoading(false);

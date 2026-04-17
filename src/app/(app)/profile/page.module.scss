@@ -21,10 +21,16 @@ $surface:  rgba(255,255,255,0.05);
   flex-direction: column;
   gap: $space-6;
   position: relative;
-  max-width: 560px;
+}
+
+.inner {
   width: 100%;
+  max-width: 560px;
   margin-left: auto;
   margin-right: auto;
+  display: flex;
+  flex-direction: column;
+  gap: $space-6;
 }
 
 // ── Profile info ──────────────────────────────────────────────────────────────

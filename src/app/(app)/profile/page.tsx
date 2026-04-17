@@ -2,11 +2,11 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button, Input, Textarea, MarkaDialog } from "@/components/ui";
 import { PageHeader } from "@/components/PageHeader";
 import { useAuthStore } from "@/store/auth.store";
+import { toast } from "sonner";
 import { users, type UpdateProfileBody } from "@/lib/api";
 import styles from "./page.module.scss";
 
@@ -15,6 +15,7 @@ export default function ProfilePage() {
   const queryClient = useQueryClient();
   const logout = useAuthStore((s) => s.logout);
   const authEmail = useAuthStore((s) => s.email);
+  const authPicture = useAuthStore((s) => s.picture);
   const [editOpen, setEditOpen] = useState(false);
 
   const { data: profile } = useQuery({
@@ -40,12 +41,14 @@ export default function ProfilePage() {
       <PageHeader title="Profile" subtitle="Your account & preferences" />
 
       <div className={styles.card}>
+      <div className={styles.inner}>
         <div className={styles.profileInfo}>
           <div className={styles.avatar}>
-            {profile?.avatarUrl ? (
-              <Image src={profile.avatarUrl} alt="Profile" width={88} height={88} />
+            {profile?.avatarUrl || authPicture ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={profile?.avatarUrl ?? authPicture!} alt="Profile" />
             ) : (
-              <Image src="/images/bianca-profile.png" alt="Profile" width={88} height={88} />
+              <DefaultAvatar />
             )}
           </div>
           <h2 className={styles.name}>{profile?.name ?? "—"}</h2>
@@ -96,11 +99,12 @@ export default function ProfilePage() {
           </div>
         </div>
       </div>
+      </div>
 
       <EditProfileDialog
         open={editOpen}
         onOpenChange={setEditOpen}
-        profile={profile ? { name: profile.name, email: email ?? "", bio: profile.bio } : null}
+        profile={profile ? { name: profile.name, email: email ?? "", bio: profile.bio ?? null } : null}
         onSaved={() => {
           queryClient.invalidateQueries({ queryKey: ["users", "me"] });
           setEditOpen(false);
@@ -133,7 +137,10 @@ function EditProfileDialog({
 
   const { mutate, isPending } = useMutation({
     mutationFn: (body: UpdateProfileBody) => users.updateMe(body),
-    onSuccess: () => onSaved(),
+    onSuccess: () => {
+      toast.success("Profile updated.");
+      onSaved();
+    },
   });
 
   function handleSave() {
@@ -198,6 +205,16 @@ function EditProfileDialog({
         </div>
       </div>
     </MarkaDialog>
+  );
+}
+
+function DefaultAvatar() {
+  return (
+    <svg viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: "100%", height: "100%" }}>
+      <rect width="96" height="96" fill="rgba(74,103,65,0.25)" />
+      <circle cx="48" cy="36" r="20" fill="rgba(122,158,115,0.55)" />
+      <path d="M8 96c0-22.091 17.909-40 40-40s40 17.909 40 40" fill="rgba(122,158,115,0.55)" />
+    </svg>
   );
 }
 

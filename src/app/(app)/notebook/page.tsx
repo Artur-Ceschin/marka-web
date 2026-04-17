@@ -16,7 +16,7 @@ export default function NotebookPage() {
 
   const { data: entries = [], isLoading } = useQuery({
     queryKey: ["notebook"],
-    queryFn: notebook.list,
+    queryFn: () => notebook.list().then((r) => r.items),
   });
 
   const filtered = useMemo(() => {
@@ -25,11 +25,11 @@ export default function NotebookPage() {
     if (filter === "month") {
       const now = new Date();
       list = list.filter((e) => {
-        const d = new Date(e.createdAt);
+        const d = new Date(e.identifiedAt);
         return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
       });
     } else if (filter === "notes") {
-      list = list.filter((e) => e.note && e.note.trim().length > 0);
+      list = list.filter((e) => e.notes && e.notes.trim().length > 0);
     }
 
     if (search.trim()) {
@@ -87,7 +87,7 @@ export default function NotebookPage() {
                 key={entry.id}
                 name={entry.plantName}
                 latin={entry.latinName}
-                date={new Date(entry.createdAt).toLocaleDateString("en-US", {
+                date={new Date(entry.identifiedAt).toLocaleDateString("en-US", {
                   day: "numeric",
                   month: "short",
                 })}

@@ -12,6 +12,7 @@ export interface Session {
   idToken: string;
   userId: string;
   email: string | null;
+  picture: string | null;
 }
 
 function decodeJwtPayload(token: string): Record<string, unknown> {
@@ -44,6 +45,7 @@ function sessionFromToken(idToken: string): Session | null {
       idToken,
       userId: payload.sub as string,
       email: (payload.email as string) ?? null,
+      picture: (payload.picture as string) ?? null,
     };
   } catch {
     return null;
@@ -78,6 +80,7 @@ async function refreshWithCognito(refreshToken: string): Promise<Session | null>
       idToken,
       userId: payload.sub as string,
       email: (payload.email as string) ?? null,
+      picture: (payload.picture as string) ?? null,
     };
   } catch {
     return null;
@@ -99,6 +102,7 @@ export function getCurrentSession(): Promise<Session | null> {
           idToken: session.getIdToken().getJwtToken() as string,
           userId: p.sub as string,
           email: (p.email as string) ?? null,
+          picture: (p.picture as string) ?? null,
         });
       }
       resolve(await resolveFromStorage());

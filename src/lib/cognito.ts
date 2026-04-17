@@ -60,7 +60,7 @@ export function startGoogleSignIn(): void {
 export async function exchangeCodeForTokens(
   code: string,
   redirectUri?: string,
-): Promise<{ userId: string }> {
+): Promise<{ userId: string; picture: string | null }> {
   const callbackUrl = redirectUri ?? `${window.location.origin}/auth/callback`;
   const res = await fetch(`https://${COGNITO_DOMAIN}/oauth2/token`, {
     method: "POST",
@@ -84,7 +84,7 @@ export function storeTokens(
   idToken: string,
   accessToken: string,
   refreshToken: string,
-): { userId: string } {
+): { userId: string; picture: string | null } {
   const payload = JSON.parse(atob(idToken.split(".")[1].replace(/-/g, "+").replace(/_/g, "/")));
   const username = (payload["cognito:username"] ?? payload.sub) as string;
   const prefix = `CognitoIdentityServiceProvider.${CLIENT_ID}`;
@@ -95,7 +95,7 @@ export function storeTokens(
   localStorage.setItem(`${prefix}.${username}.refreshToken`, refreshToken);
   localStorage.setItem(`${prefix}.${username}.clockDrift`, "0");
 
-  return { userId: payload.sub as string };
+  return { userId: payload.sub as string, picture: (payload.picture as string) ?? null };
 }
 
 export function signIn(email: string, password: string): Promise<{ userId: string }> {
