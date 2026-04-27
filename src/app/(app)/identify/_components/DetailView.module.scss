@@ -1,0 +1,217 @@
+@use '@/styles/tokens' as *;
+
+$border: rgba(255,255,255,0.08);
+
+.page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  background: $dark-forest;
+  max-width: 560px;
+  width: 100%;
+  margin: 0 auto;
+  padding-bottom: calc(140px + env(safe-area-inset-bottom, 0px));
+  gap: 0;
+}
+
+.back {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  margin: $space-6 $space-6 0;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid $border;
+  border-radius: 50%;
+  color: $text-white;
+  cursor: pointer;
+  transition: background 0.15s;
+  flex-shrink: 0;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.14);
+  }
+}
+
+.header {
+  padding: $space-5 $space-6 $space-4;
+}
+
+.name {
+  font-family: $font-display;
+  font-size: clamp(32px, 5vw, 44px);
+  font-weight: 700;
+  color: $text-white;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+}
+
+.latin {
+  font-size: 14px;
+  color: rgba(250, 248, 244, 0.5);
+  font-style: italic;
+  margin-top: $space-1;
+}
+
+.authorship {
+  color: rgba(250, 248, 244, 0.35);
+  font-style: normal;
+  margin-left: 4px;
+}
+
+.hero {
+  position: relative;
+  display: block;
+  width: calc(100% - #{$space-6} * 2);
+  margin: 0 $space-6;
+  aspect-ratio: 4/3;
+  border: none;
+  border-radius: $radius-xl;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 0;
+  cursor: zoom-in;
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: scale(1.005);
+  }
+}
+
+.invasiveBadge {
+  position: absolute;
+  top: $space-3;
+  left: $space-3;
+  background: rgba(139, 79, 107, 0.92);
+  color: $text-white;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 6px 10px;
+  border-radius: $radius-full;
+  backdrop-filter: blur(6px);
+}
+
+.tags {
+  display: flex;
+  gap: $space-2;
+  padding: $space-4 $space-6 0;
+  flex-wrap: wrap;
+}
+
+// ── Facts ──────────────────────────────────────────────────────────────
+
+.facts {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding: $space-5 $space-6 0;
+}
+
+.fact {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: $space-3 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.factLabel {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(250, 248, 244, 0.4);
+}
+
+.factValue {
+  font-size: 14px;
+  color: rgba(250, 248, 244, 0.85);
+  line-height: 1.5;
+}
+
+// ── Reference photos ───────────────────────────────────────────────────
+
+.refSection {
+  padding: $space-6 $space-6 0;
+}
+
+.refLabel {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(250, 248, 244, 0.4);
+  margin-bottom: $space-3;
+}
+
+.refGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: $space-2;
+}
+
+.refThumb {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: $radius-lg;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid $border;
+  padding: 0;
+  cursor: zoom-in;
+  transition: transform 0.18s ease, border-color 0.18s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    border-color: rgba(122, 158, 115, 0.5);
+  }
+}
+
+.refOrgan {
+  position: absolute;
+  left: 6px;
+  bottom: 6px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: $text-white;
+  background: rgba(0, 0, 0, 0.55);
+  padding: 3px 7px;
+  border-radius: $radius-full;
+  backdrop-filter: blur(4px);
+}
+
+// ── Save CTA ───────────────────────────────────────────────────────────
+
+.saveBar {
+  position: fixed;
+  bottom: 82px; // sit above BottomNav on mobile (82px tall)
+  left: 0;
+  right: 0;
+  padding: $space-4 $space-6;
+  background: linear-gradient(to top, $dark-forest 55%, rgba(20, 27, 22, 0.8) 92%, transparent);
+  backdrop-filter: blur(8px);
+  z-index: 10;
+
+  @media (min-width: $bp-md) {
+    bottom: 0;
+    left: 220px;
+    padding: $space-5 $space-6 calc($space-5 + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+.saveBarInner {
+  max-width: 560px;
+  width: 100%;
+  margin: 0 auto;
+}

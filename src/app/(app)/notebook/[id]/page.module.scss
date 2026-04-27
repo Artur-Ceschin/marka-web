@@ -1,0 +1,254 @@
+@use "@/styles/tokens" as *;
+
+$border: rgba(255, 255, 255, 0.08);
+
+.page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  background: $dark-forest;
+  max-width: 560px;
+  width: 100%;
+  margin: 0 auto;
+  padding-bottom: calc(100px + env(safe-area-inset-bottom, 0px));
+}
+
+// ── Back button ────────────────────────────────────────────────────────
+
+.back {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  margin: $space-6 $space-6 0;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid $border;
+  border-radius: 50%;
+  color: $text-white;
+  cursor: pointer;
+  transition: background 0.15s;
+  flex-shrink: 0;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.14);
+  }
+}
+
+// ── Header ─────────────────────────────────────────────────────────────
+
+.header {
+  padding: $space-5 $space-6 $space-4;
+}
+
+.name {
+  font-family: $font-display;
+  font-size: clamp(28px, 5vw, 40px);
+  font-weight: 700;
+  color: $text-white;
+  letter-spacing: -0.02em;
+  line-height: 1.08;
+}
+
+.latin {
+  font-size: 14px;
+  color: rgba(250, 248, 244, 0.5);
+  font-style: italic;
+  margin-top: $space-1;
+}
+
+// ── Hero image ─────────────────────────────────────────────────────────
+
+.hero {
+  position: relative;
+  display: block;
+  width: calc(100% - #{$space-6} * 2);
+  margin: 0 $space-6;
+  aspect-ratio: 4/3;
+  border: none;
+  border-radius: $radius-xl;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 0;
+  cursor: zoom-in;
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: scale(1.005);
+  }
+}
+
+// ── Confidence bar ─────────────────────────────────────────────────────
+
+.confidence {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin: $space-4 $space-6 0;
+  height: 28px;
+  border-radius: $radius-full;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.07);
+
+  &[data-tone="high"] .confidenceFill {
+    background: #5a9a52;
+  }
+
+  &[data-tone="medium"] .confidenceFill {
+    background: #9a8a3a;
+  }
+
+  &[data-tone="low"] .confidenceFill {
+    background: #9a4a4a;
+  }
+}
+
+.confidenceFill {
+  position: absolute;
+  inset-y: 0;
+  left: 0;
+  border-radius: $radius-full;
+  transition: width 0.4s ease;
+  opacity: 0.5;
+}
+
+.confidenceLabel {
+  position: relative;
+  z-index: 1;
+  padding: 0 $space-4;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: $text-white;
+}
+
+// ── Tags ───────────────────────────────────────────────────────────────
+
+.tags {
+  display: flex;
+  gap: $space-2;
+  padding: $space-4 $space-6 0;
+  flex-wrap: wrap;
+}
+
+// ── Facts ──────────────────────────────────────────────────────────────
+
+.facts {
+  display: flex;
+  flex-direction: column;
+  padding: $space-5 $space-6 0;
+  gap: 1px;
+}
+
+.fact {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: $space-3 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.factLabel {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(250, 248, 244, 0.4);
+}
+
+.factValue {
+  font-size: 14px;
+  color: rgba(250, 248, 244, 0.85);
+  line-height: 1.5;
+}
+
+// ── Notes ──────────────────────────────────────────────────────────────
+
+.notesSection {
+  padding: $space-6 $space-6 0;
+}
+
+.notesHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $space-3;
+}
+
+.notesLabel {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(250, 248, 244, 0.4);
+}
+
+.editBtn {
+  font-size: 13px;
+  font-weight: 500;
+  color: $green-moss;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+
+  &:hover {
+    color: lighten($green-moss, 10%);
+  }
+}
+
+.notesEdit {
+  display: flex;
+  flex-direction: column;
+  gap: $space-3;
+}
+
+.notesActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: $space-2;
+}
+
+.notesText {
+  font-size: 15px;
+  line-height: 1.65;
+  color: rgba(250, 248, 244, 0.8);
+  white-space: pre-wrap;
+}
+
+.notesEmpty {
+  font-size: 14px;
+  color: rgba(250, 248, 244, 0.3);
+  font-style: italic;
+}
+
+// ── Danger zone ────────────────────────────────────────────────────────
+
+.danger {
+  padding: $space-8 $space-6 0;
+  display: flex;
+  justify-content: center;
+}
+
+// ── Dialog actions ─────────────────────────────────────────────────────
+
+.dialogActions {
+  display: flex;
+  gap: $space-3;
+  padding-top: $space-2;
+}
+
+// ── Loading / error state ──────────────────────────────────────────────
+
+.loading {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  color: rgba(250, 248, 244, 0.4);
+}

@@ -1,0 +1,8 @@
+@use '@/styles/tokens' as *;
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: $space-3;
+  margin-top: $space-4;
+}

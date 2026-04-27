@@ -1,0 +1,44 @@
+@use '@/styles/tokens' as *;
+
+.bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 26px;
+  border-radius: $radius-full;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+  margin-top: $space-1;
+
+  &[data-tone="high"] .fill {
+    background: rgba(122, 158, 115, 0.55);
+  }
+  &[data-tone="medium"] .fill {
+    background: rgba(201, 123, 58, 0.55);
+  }
+  &[data-tone="low"] .fill {
+    background: rgba(139, 79, 107, 0.55);
+  }
+}
+
+.fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  border-radius: $radius-full;
+  transition: width 0.35s ease;
+}
+
+.label {
+  position: relative;
+  z-index: 1;
+  font-family: $font-mono, $font-body;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: $text-white;
+  padding: 0 $space-3;
+  white-space: nowrap;
+}

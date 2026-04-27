@@ -1,0 +1,81 @@
+@use '@/styles/tokens' as *;
+
+$border: rgba(255,255,255,0.08);
+$surface: rgba(255,255,255,0.05);
+
+.photoArea {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4/3;
+  background: $surface;
+  border: 1px solid $border;
+  border-radius: $radius-xl;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.emptyState {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: $space-3;
+  padding: $space-8;
+  text-align: center;
+}
+
+.emptyIcon {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: rgba(74,103,65,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $green-sage;
+}
+
+.emptyTitle {
+  font-family: $font-display;
+  font-size: 18px;
+  color: $text-white;
+}
+
+.emptyHint {
+  font-size: 13px;
+  color: rgba(250,248,244,0.45);
+  line-height: 1.5;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: $space-3;
+}
+
+.clearBtn {
+  background: none;
+  border: none;
+  color: rgba(250,248,244,0.4);
+  font-family: $font-body;
+  font-size: 14px;
+  cursor: pointer;
+  text-align: center;
+  padding: $space-2;
+  transition: color 0.15s;
+
+  &:hover { color: rgba(250,248,244,0.7); }
+}
+
+.tip {
+  background: rgba(74,103,65,0.12);
+  border: 1px solid rgba(74,103,65,0.25);
+  border-radius: $radius-lg;
+  padding: $space-4 $space-5;
+  font-size: 13px;
+  color: rgba(250,248,244,0.55);
+  line-height: 1.6;
+  text-align: center;
+}

@@ -1,0 +1,59 @@
+@use '@/styles/tokens' as *;
+
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(10, 15, 12, 0.92);
+  backdrop-filter: blur(10px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: $space-6;
+  gap: $space-4;
+  animation: lightboxFade 0.18s ease-out;
+}
+
+@keyframes lightboxFade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.stage {
+  position: relative;
+  width: 100%;
+  max-width: 960px;
+  height: 100%;
+  max-height: 80vh;
+  flex: 1;
+}
+
+.close {
+  position: absolute;
+  top: calc($space-5 + env(safe-area-inset-top, 0px));
+  right: $space-5;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 50%;
+  color: $text-white;
+  cursor: pointer;
+  transition: background 0.15s;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+}
+
+.caption {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(250, 248, 244, 0.7);
+}

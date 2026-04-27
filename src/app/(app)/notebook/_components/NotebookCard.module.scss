@@ -1,0 +1,149 @@
+@use "@/styles/tokens" as *;
+
+.card {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  border-radius: 16px;
+  overflow: hidden;
+  background: rgba(29, 43, 26, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  text-align: left;
+  cursor: pointer;
+  padding: 0;
+  color: inherit;
+  transition: border-color 0.5s ease, box-shadow 0.5s ease;
+
+  &:hover {
+    border-color: rgba(74, 97, 65, 0.3);
+
+    .media img {
+      opacity: 1;
+      mix-blend-mode: normal;
+      transform: scale(1.05);
+    }
+  }
+}
+
+// ── Image area ─────────────────────────────────────────────────────────
+
+.media {
+  position: relative;
+  width: 100%;
+  height: 256px;
+  flex-shrink: 0;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.04);
+
+  img {
+    opacity: 0.8;
+    mix-blend-mode: luminosity;
+    transition: opacity 0.7s ease, mix-blend-mode 0.7s ease, transform 0.7s ease;
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, #0f140d 0%, transparent 60%);
+    opacity: 0.6;
+    pointer-events: none;
+  }
+}
+
+.rareBadge {
+  position: absolute;
+  top: $space-4;
+  left: $space-4;
+  z-index: 1;
+  padding: 3px 10px;
+  background: rgba(103, 56, 0, 0.4);
+  border: 1px solid rgba(103, 56, 0, 0.3);
+  border-radius: $radius-full;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #ffdcc0;
+  backdrop-filter: blur(8px);
+}
+
+// ── Body ───────────────────────────────────────────────────────────────
+
+.body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 24px;
+}
+
+.nameRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: $space-3;
+  margin-bottom: 6px;
+}
+
+.name {
+  font-family: $font-display;
+  font-size: 22px;
+  font-weight: 700;
+  color: #f2f0e9;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+}
+
+.time {
+  font-family: $font-mono, monospace;
+  font-size: 9px;
+  color: #b4cea7;
+  opacity: 0.6;
+  white-space: nowrap;
+  padding-top: 5px;
+  flex-shrink: 0;
+}
+
+.latin {
+  font-size: 13px;
+  font-style: italic;
+  color: #737373;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+
+// ── Meta grid at bottom ────────────────────────────────────────────────
+
+.meta {
+  margin-top: auto;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+.metaItem {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.metaLabel {
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #525252;
+}
+
+.metaValue {
+  font-family: $font-mono, monospace;
+  font-size: 12px;
+  color: #d4d4d4;
+}

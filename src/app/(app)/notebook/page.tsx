@@ -1,16 +1,23 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
-import { FindCard } from "@/components/ui";
 import { IoSearchOutline } from "react-icons/io5";
 import { notebook } from "@/lib/api";
-import { PageHeader } from "@/components/PageHeader";
+import { NotebookCard } from "./_components/NotebookCard";
 import styles from "./page.module.scss";
 
 type Filter = "all" | "month" | "notes";
 
+const FILTERS: { id: Filter; label: string }[] = [
+  { id: "all", label: "All Entries" },
+  { id: "month", label: "This Month" },
+  { id: "notes", label: "With Notes" },
+];
+
 export default function NotebookPage() {
+  const router = useRouter();
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState<Filter>("all");
 
@@ -42,29 +49,38 @@ export default function NotebookPage() {
     return list;
   }, [entries, filter, search]);
 
-  const FILTERS: { id: Filter; label: string }[] = [
-    { id: "all", label: "All" },
-    { id: "month", label: "This month" },
-    { id: "notes", label: "With notes" },
-  ];
-
   return (
     <div className={styles.page}>
-      <PageHeader title="Notebook" subtitle="Your field journal" />
+      {/* Editorial header */}
+      <header className={styles.header}>
+        <div className={styles.headerEyebrow}>
+          <span className={styles.headerLine} />
+          <span className={styles.headerLabel}>Your Field Journal</span>
+        </div>
+        <h1 className={styles.headerTitle}>
+          Field Observations:
+          <span className={styles.headerTitleItalic}>The Plant Archive</span>
+        </h1>
+        <p className={styles.headerSubtitle}>
+          A personal chronicle of flora identified and documented in the field.
+        </p>
+      </header>
 
-      <div className={styles.card}>
+      <div className={styles.content}>
+        {/* Search */}
         <label className={styles.search}>
-          <IoSearchOutline size={18} className={styles.searchIcon} />
+          <IoSearchOutline size={16} className={styles.searchIcon} />
           <input
             className={styles.searchInput}
             type="search"
-            placeholder="Search plants, notes…"
+            placeholder="Search archive…"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
         </label>
 
-        <div className={styles.filters}>
+        {/* Filters */}
+        <div className={styles.filtersRow}>
           {FILTERS.map((f) => (
             <button
               key={f.id}
@@ -76,6 +92,7 @@ export default function NotebookPage() {
           ))}
         </div>
 
+        {/* Grid */}
         {isLoading ? (
           <div className={styles.empty}>
             <p className={styles.emptyHint}>Loading…</p>
@@ -83,15 +100,10 @@ export default function NotebookPage() {
         ) : filtered.length > 0 ? (
           <div className={styles.grid}>
             {filtered.map((entry) => (
-              <FindCard
+              <NotebookCard
                 key={entry.id}
-                name={entry.plantName}
-                latin={entry.latinName}
-                date={new Date(entry.identifiedAt).toLocaleDateString("en-US", {
-                  day: "numeric",
-                  month: "short",
-                })}
-                imageUrl={entry.imageUrl ?? "/images/plant-sequoia.avif"}
+                entry={entry}
+                onClick={(e) => router.push(`/notebook/${e.id}`)}
               />
             ))}
           </div>
