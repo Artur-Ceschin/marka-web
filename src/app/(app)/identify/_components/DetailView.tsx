@@ -111,7 +111,7 @@ export function DetailView({
           className={styles.hero}
           onClick={() => setLightbox({ url: heroUrl, caption: result.name })}
         >
-          <Image src={heroUrl} alt={result.name} fill style={{ objectFit: "cover" }} />
+          <Image src={heroUrl} alt={result.name} fill unoptimized style={{ objectFit: "cover" }} />
           {isInvasive && <span className={styles.invasiveBadge}>Invasive species</span>}
         </button>
       )}
@@ -152,7 +152,7 @@ export function DetailView({
                 className={styles.refThumb}
                 onClick={() => setLightbox({ url: ref.url, caption: ref.organ })}
               >
-                <Image src={ref.url} alt={ref.organ} fill style={{ objectFit: "cover" }} />
+                <Image src={ref.url} alt={ref.organ} fill unoptimized style={{ objectFit: "cover" }} />
                 <span className={styles.refOrgan}>{ref.organ}</span>
               </button>
             ))}

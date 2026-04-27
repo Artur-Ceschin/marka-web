@@ -3,10 +3,9 @@
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { IoSunnyOutline, IoPrismOutline, IoSparklesOutline } from "react-icons/io5";
 
-import { PageHeader } from "@/components/PageHeader";
 import { identify, type IdentifyResult } from "@/lib/api";
-
 import { PhotoPicker } from "./_components/PhotoPicker";
 import { ResultsList } from "./_components/ResultsList";
 import { DetailView } from "./_components/DetailView";
@@ -64,10 +63,33 @@ export default function IdentifyPage() {
 
   return (
     <div className={styles.page}>
-      <PageHeader title="Identify" subtitle="Photograph a plant to discover its name." />
+      <div className={styles.grain} aria-hidden="true" />
 
-      <div className={styles.card}>
-        <div className={styles.content}>
+      <div className={styles.canvas}>
+        {/* Page heading */}
+        {step !== "results" && (
+          <div className={styles.heading}>
+            <h2 className={styles.headingTitle}>New Identification</h2>
+            <p className={styles.headingSubtitle}>
+              Align the specimen within the botanical grid or upload a high-resolution
+              plate for analysis.
+            </p>
+          </div>
+        )}
+
+        {/* Viewfinder / Results */}
+        {step === "results" ? (
+          <div className={styles.resultsWrapper}>
+            <ResultsList
+              results={identifyData?.results ?? []}
+              onSelect={(r) => {
+                setDetail(r);
+                setStep("detail");
+              }}
+              onBack={handleClear}
+            />
+          </div>
+        ) : (
           <PhotoPicker
             preview={preview}
             canIdentify={step === "preview"}
@@ -76,18 +98,50 @@ export default function IdentifyPage() {
             onIdentify={() => file && runIdentify(file)}
             onClear={handleClear}
           />
+        )}
 
-          {step === "results" && (
-            <ResultsList
-              results={identifyData?.results ?? []}
-              onSelect={(r) => {
-                setDetail(r);
-                setStep("detail");
-              }}
-            />
-          )}
-        </div>
+        {/* Contextual hints — only on upload step */}
+        {step !== "results" && (
+          <div className={styles.hints}>
+            <div className={styles.hintCard}>
+              <IoSunnyOutline size={22} className={styles.hintIcon} />
+              <div>
+                <p className={styles.hintTitle}>Optimal Lighting</p>
+                <p className={styles.hintText}>
+                  Shadowless environments yield 40% higher identification accuracy in fungi
+                  and flora.
+                </p>
+              </div>
+            </div>
+            <div className={styles.hintCard}>
+              <IoPrismOutline size={22} className={styles.hintIcon} />
+              <div>
+                <p className={styles.hintTitle}>Scale Reference</p>
+                <p className={styles.hintText}>
+                  Include an identifiable object for leaf-venation and size scaling.
+                </p>
+              </div>
+            </div>
+            <div className={styles.hintCard}>
+              <IoSparklesOutline size={22} className={styles.hintIcon} />
+              <div>
+                <p className={styles.hintTitle}>AI Enhancements</p>
+                <p className={styles.hintText}>
+                  Automatic chromatic correction and noise reduction applied on ingest.
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
+
+      <footer className={styles.footer}>
+        <span>© 2025 Marka — All Observations Logged</span>
+        <div className={styles.footerRight}>
+          <span>System 1.0 // Stable</span>
+          <span>Neural Net: Flora_V3</span>
+        </div>
+      </footer>
     </div>
   );
 }

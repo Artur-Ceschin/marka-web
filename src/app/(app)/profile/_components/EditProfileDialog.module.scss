@@ -1,0 +1,13 @@
+@use "@/styles/tokens" as *;
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.actions {
+  display: flex;
+  gap: $space-3;
+  padding-top: 8px;
+}

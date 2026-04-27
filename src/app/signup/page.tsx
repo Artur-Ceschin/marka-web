@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button, Input } from "@/components/ui";
 import { PasswordInput } from "../PasswordInput";
@@ -23,6 +23,7 @@ export default function SignUpPage() {
   const router = useRouter();
   const setAuthenticated = useAuthStore((s) => s.setAuthenticated);
 
+  const videoRef = useRef<HTMLVideoElement>(null);
   const [step, setStep] = useState<Step>("register");
   const [pendingEmail, setPendingEmail] = useState("");
   const [loading, setLoading] = useState(false);
@@ -43,6 +44,27 @@ export default function SignUpPage() {
       }
     };
     return () => channel.close();
+  }, []);
+
+  useEffect(() => {
+    const FADE = 0.7;
+    const MAX = 0.55;
+    let rafId: number;
+    function tick() {
+      const v = videoRef.current;
+      if (v && v.duration) {
+        const t = v.currentTime;
+        const rem = v.duration - t;
+        v.style.opacity = String(
+          t < FADE ? (t / FADE) * MAX :
+          rem < FADE ? (rem / FADE) * MAX :
+          MAX
+        );
+      }
+      rafId = requestAnimationFrame(tick);
+    }
+    rafId = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(rafId);
   }, []);
 
   async function handleRegister(e: React.FormEvent<HTMLFormElement>) {
@@ -115,9 +137,12 @@ export default function SignUpPage() {
 
   return (
     <div className={styles.page}>
+      <div className={styles.grain} aria-hidden="true" />
+
       {/* ── Brand panel (desktop left) ─────────────────── */}
       <div className={styles.brand}>
         <video
+          ref={videoRef}
           className={styles.brandVideo}
           src="/videos/signup-video.mp4"
           autoPlay
@@ -143,12 +168,21 @@ export default function SignUpPage() {
       <div className={styles.formPane}>
         {/* Mobile-only header */}
         <div className={styles.mobileHeader}>
-          <LeafMark size={52} />
+          <div className={styles.mobileEyebrow}>
+            <span className={styles.mobileEyebrowLine} />
+            <span className={styles.mobileEyebrowLabel}>Marka</span>
+            <span className={styles.mobileEyebrowLine} />
+          </div>
+          <LeafMark size={48} />
           <span className={styles.mobileWordmark}>marka</span>
         </div>
 
         {step === "register" ? (
           <div className={styles.formCard}>
+            <div className={styles.formEyebrow}>
+              <span className={styles.formEyebrowLine} />
+              <span className={styles.formEyebrowLabel}>Create account</span>
+            </div>
             <h1 className={styles.formTitle}>Create your account</h1>
             <p className={styles.formSub}>Free forever. Start your field journal today.</p>
 
@@ -228,9 +262,13 @@ export default function SignUpPage() {
           </div>
         ) : (
           <div className={styles.formCard}>
-            <h1 className={styles.formTitle}>Check your email</h1>
+            <div className={styles.formEyebrow}>
+              <span className={styles.formEyebrowLine} />
+              <span className={styles.formEyebrowLabel}>Verify email</span>
+            </div>
+            <h1 className={styles.formTitle}>Check your inbox</h1>
             <p className={styles.formSub}>
-              We sent a confirmation code to <strong>{pendingEmail}</strong>
+              We sent a 6-digit code to <strong>{pendingEmail}</strong>
             </p>
 
             <form className={styles.form} onSubmit={handleConfirm} noValidate>

@@ -37,10 +37,14 @@ function readStoredTokens(): { idToken: string; refreshToken: string; username: 
   }
 }
 
+// Refresh proactively if fewer than 5 minutes remain on the token.
+const REFRESH_BUFFER_MS = 5 * 60 * 1000;
+
 function sessionFromToken(idToken: string): Session | null {
   try {
     const payload = decodeJwtPayload(idToken);
-    if ((payload.exp as number) * 1000 < Date.now()) return null;
+    const expiresAt = (payload.exp as number) * 1000;
+    if (expiresAt - Date.now() < REFRESH_BUFFER_MS) return null;
     return {
       idToken,
       userId: payload.sub as string,

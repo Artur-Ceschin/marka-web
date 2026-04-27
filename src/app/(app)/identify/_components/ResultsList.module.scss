@@ -1,79 +1,140 @@
-@use '@/styles/tokens' as *;
-
-$border: rgba(255,255,255,0.08);
-$surface: rgba(255,255,255,0.05);
+@use "@/styles/tokens" as *;
 
 .results {
   display: flex;
   flex-direction: column;
-  gap: $space-5;
-  padding-top: $space-4;
-  border-top: 1px solid $border;
+  gap: 28px;
+  width: 100%;
+  max-width: 900px;
+}
+
+// ── Header ─────────────────────────────────────────────────────────────
+
+.resultsHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: $space-4;
+}
+
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.eyebrowLine {
+  height: 1px;
+  width: 32px;
+  background: rgba(74, 97, 65, 0.4);
+  flex-shrink: 0;
+}
+
+.eyebrowLabel {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: #b4cea7;
 }
 
 .title {
   font-family: $font-display;
-  font-size: 26px;
-  font-weight: 700;
-  color: $text-white;
-  letter-spacing: -0.02em;
+  font-size: clamp(28px, 4vw, 40px);
+  font-style: italic;
+  font-weight: 400;
+  color: #fcf9f0;
+  line-height: 1.1;
 }
 
 .subtitle {
   font-size: 13px;
-  color: rgba(250,248,244,0.5);
-  margin-top: -$space-3;
+  color: rgba(221, 218, 209, 0.55);
+  margin-top: 6px;
 }
+
+.backBtn {
+  flex-shrink: 0;
+  margin-top: 6px;
+  background: rgba(74, 97, 65, 0.08);
+  border: 1px solid rgba(74, 97, 65, 0.25);
+  border-radius: $radius-full;
+  padding: 8px 20px;
+  font-family: $font-body;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #b4cea7;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+
+  &:hover {
+    background: rgba(74, 97, 65, 0.18);
+    border-color: rgba(74, 97, 65, 0.5);
+  }
+}
+
+// ── Result list ────────────────────────────────────────────────────────
 
 .list {
   display: flex;
   flex-direction: column;
-  gap: $space-3;
+  gap: 10px;
 }
 
 .row {
   display: flex;
   align-items: center;
-  gap: $space-4;
+  gap: 16px;
   width: 100%;
-  background: $surface;
-  border: 1px solid $border;
-  border-radius: $radius-xl;
-  padding: $space-3;
+  background: rgba(29, 43, 26, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  padding: 14px;
   cursor: pointer;
-  transition: border-color 0.15s, background 0.15s;
+  transition: border-color 0.2s, background 0.2s;
   text-align: left;
-  color: $text-white;
+  color: #fcf9f0;
 
   &:hover {
-    background: rgba(255, 255, 255, 0.08);
-    border-color: rgba(74, 103, 65, 0.5);
+    background: rgba(74, 97, 65, 0.12);
+    border-color: rgba(74, 97, 65, 0.35);
   }
 }
 
 .thumb {
   position: relative;
-  width: 64px;
-  height: 64px;
-  border-radius: $radius-lg;
+  width: 72px;
+  height: 72px;
+  border-radius: 12px;
   overflow: hidden;
   flex-shrink: 0;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.04);
 }
 
 .info {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 3px;
   min-width: 0;
+}
+
+.rank {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #4a6141;
 }
 
 .name {
   font-family: $font-display;
-  font-size: 17px;
+  font-size: 18px;
   font-weight: 600;
-  color: $text-white;
+  color: #fcf9f0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -81,9 +142,10 @@ $surface: rgba(255,255,255,0.05);
 
 .latin {
   font-size: 12px;
-  color: rgba(250, 248, 244, 0.45);
+  color: rgba(221, 218, 209, 0.45);
   font-style: italic;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  margin-bottom: 6px;
 }

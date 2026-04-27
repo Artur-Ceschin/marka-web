@@ -1,60 +1,85 @@
 @use "@/styles/tokens" as *;
 
-$border: rgba(255, 255, 255, 0.08);
+// ── Page shell ─────────────────────────────────────────────────────────
 
 .page {
   display: flex;
   flex-direction: column;
   min-height: 100dvh;
-  background: $dark-forest;
-  max-width: 560px;
+  background: #0f140d;
   width: 100%;
-  margin: 0 auto;
+  position: relative;
   padding-bottom: calc(100px + env(safe-area-inset-bottom, 0px));
+
+  @media (min-width: $bp-md) {
+    padding-bottom: 64px;
+  }
+}
+
+.grain {
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.025;
+  pointer-events: none;
+  z-index: 0;
 }
 
 // ── Back button ────────────────────────────────────────────────────────
 
 .back {
+  position: relative;
+  z-index: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   margin: $space-6 $space-6 0;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid $border;
-  border-radius: 50%;
-  color: $text-white;
+  background: rgba(74, 97, 65, 0.12);
+  border: 1px solid rgba(74, 97, 65, 0.2);
+  border-radius: 10px;
+  color: #b4cea7;
   cursor: pointer;
   transition: background 0.15s;
   flex-shrink: 0;
 
   &:hover {
-    background: rgba(255, 255, 255, 0.14);
+    background: rgba(74, 97, 65, 0.2);
+  }
+
+  @media (min-width: $bp-md) {
+    margin: 48px 48px 0;
   }
 }
 
-// ── Header ─────────────────────────────────────────────────────────────
+// ── Two-column body ────────────────────────────────────────────────────
 
-.header {
-  padding: $space-5 $space-6 $space-4;
+.body {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+
+  @media (min-width: $bp-md) {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 48px;
+    padding: 0 48px;
+  }
 }
 
-.name {
-  font-family: $font-display;
-  font-size: clamp(28px, 5vw, 40px);
-  font-weight: 700;
-  color: $text-white;
-  letter-spacing: -0.02em;
-  line-height: 1.08;
+.colLeft {
+  @media (min-width: $bp-md) {
+    flex: 0 0 380px;
+    position: sticky;
+    top: 48px;
+  }
 }
 
-.latin {
-  font-size: 14px;
-  color: rgba(250, 248, 244, 0.5);
-  font-style: italic;
-  margin-top: $space-1;
+.colRight {
+  flex: 1;
+  min-width: 0;
 }
 
 // ── Hero image ─────────────────────────────────────────────────────────
@@ -63,63 +88,120 @@ $border: rgba(255, 255, 255, 0.08);
   position: relative;
   display: block;
   width: calc(100% - #{$space-6} * 2);
-  margin: 0 $space-6;
+  margin: $space-5 $space-6 $space-4;
   aspect-ratio: 4/3;
   border: none;
-  border-radius: $radius-xl;
+  border-radius: 16px;
   overflow: hidden;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(29, 43, 26, 0.5);
   padding: 0;
   cursor: zoom-in;
-  transition: transform 0.2s ease;
 
-  &:hover {
-    transform: scale(1.005);
+  &:hover .heroMedia img {
+    transform: scale(1.04);
+  }
+
+  @media (min-width: $bp-md) {
+    width: 100%;
+    margin: $space-8 0 $space-4;
+    aspect-ratio: 3/4;
   }
 }
 
-// ── Confidence bar ─────────────────────────────────────────────────────
+.heroMedia {
+  position: absolute;
+  inset: 0;
 
-.confidence {
-  position: relative;
+  img {
+    transition: transform 0.4s ease;
+  }
+}
+
+.heroGradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    transparent 50%,
+    rgba(15, 20, 13, 0.5) 100%
+  );
+  z-index: 1;
+  pointer-events: none;
+}
+
+// ── Reference images ───────────────────────────────────────────────────
+
+.refSection {
+  padding: 0 $space-6 $space-4;
+
+  @media (min-width: $bp-md) {
+    padding: 0 0 $space-4;
+  }
+}
+
+.refLabel {
   display: flex;
   align-items: center;
-  margin: $space-4 $space-6 0;
-  height: 28px;
-  border-radius: $radius-full;
-  overflow: hidden;
-  background: rgba(255, 255, 255, 0.07);
+  gap: 6px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: #4a6141;
+  margin-bottom: 10px;
+}
 
-  &[data-tone="high"] .confidenceFill {
-    background: #5a9a52;
-  }
+.refStrip {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding-bottom: 4px;
 
-  &[data-tone="medium"] .confidenceFill {
-    background: #9a8a3a;
-  }
-
-  &[data-tone="low"] .confidenceFill {
-    background: #9a4a4a;
+  &::-webkit-scrollbar {
+    display: none;
   }
 }
 
-.confidenceFill {
-  position: absolute;
-  inset-y: 0;
-  left: 0;
-  border-radius: $radius-full;
-  transition: width 0.4s ease;
-  opacity: 0.5;
-}
-
-.confidenceLabel {
+.refThumb {
   position: relative;
+  flex: 0 0 80px;
+  height: 80px;
+  border-radius: 10px;
+  overflow: hidden;
+  border: none;
+  padding: 0;
+  cursor: zoom-in;
+  background: rgba(29, 43, 26, 0.4);
+
+  &:hover .refThumbMedia img {
+    transform: scale(1.08);
+  }
+}
+
+.refThumbMedia {
+  position: absolute;
+  inset: 0;
+
+  img {
+    transition: transform 0.3s ease;
+  }
+}
+
+.refOrgan {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
   z-index: 1;
-  padding: 0 $space-4;
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  color: $text-white;
+  padding: 3px 6px;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.8);
+  background: linear-gradient(to top, rgba(0,0,0,0.6), transparent);
+  text-align: center;
 }
 
 // ── Tags ───────────────────────────────────────────────────────────────
@@ -127,79 +209,263 @@ $border: rgba(255, 255, 255, 0.08);
 .tags {
   display: flex;
   gap: $space-2;
-  padding: $space-4 $space-6 0;
+  padding: 0 $space-6 $space-5;
   flex-wrap: wrap;
+
+  @media (min-width: $bp-md) {
+    padding: 0 0 $space-5;
+  }
 }
 
-// ── Facts ──────────────────────────────────────────────────────────────
+// ── Editorial header ───────────────────────────────────────────────────
 
-.facts {
-  display: flex;
-  flex-direction: column;
-  padding: $space-5 $space-6 0;
-  gap: 1px;
+.header {
+  padding: $space-6 $space-6 $space-5;
+
+  @media (min-width: $bp-md) {
+    padding: $space-8 0 $space-5;
+  }
 }
 
-.fact {
+.eyebrow {
   display: flex;
-  flex-direction: column;
-  gap: 2px;
-  padding: $space-3 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.eyebrowLine {
+  height: 1px;
+  width: 36px;
+  background: rgba(74, 97, 65, 0.4);
+  flex-shrink: 0;
+}
+
+.eyebrowLabel {
+  font-family: $font-body;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #b4cea7;
+}
+
+.plantName {
+  font-family: $font-display;
+  font-size: clamp(32px, 6vw, 48px);
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.0;
+  letter-spacing: -0.02em;
+  margin-bottom: 6px;
+}
+
+.plantNameItalic {
+  font-weight: 300;
+  font-style: italic;
+  color: #b4cea7;
+}
+
+.latinName {
+  font-size: 13px;
+  color: #525252;
+  font-style: italic;
+  font-family: $font-mono, monospace;
+  margin-bottom: 12px;
+}
+
+.badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.confidenceBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  background: rgba(74, 97, 65, 0.15);
+  border: 1px solid rgba(74, 97, 65, 0.3);
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #b4cea7;
+}
+
+.invasiveBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  background: rgba(186, 26, 26, 0.1);
+  border: 1px solid rgba(186, 26, 26, 0.25);
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 120, 120, 0.9);
+}
+
+// ── Meta card ──────────────────────────────────────────────────────────
+
+.metaCard {
+  margin: 0 $space-6 $space-5;
+  background: rgba(29, 43, 26, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  overflow: hidden;
+
+  @media (min-width: $bp-md) {
+    margin: 0 0 $space-5;
+  }
+}
+
+.metaRow {
+  display: grid;
+  grid-template-columns: 20px 1fr auto;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
 
   &:last-child {
     border-bottom: none;
   }
 }
 
-.factLabel {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
+.metaIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #4a6141;
+}
+
+.metaLabel {
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: rgba(250, 248, 244, 0.4);
+  color: #525252;
 }
 
-.factValue {
-  font-size: 14px;
-  color: rgba(250, 248, 244, 0.85);
-  line-height: 1.5;
+.metaValue {
+  font-family: $font-mono, monospace;
+  font-size: 12px;
+  color: #d4d4d4;
+  text-align: right;
 }
 
-// ── Notes ──────────────────────────────────────────────────────────────
-
-.notesSection {
-  padding: $space-6 $space-6 0;
+.metaItalic {
+  font-style: italic;
+  color: rgba(180, 206, 167, 0.7);
 }
 
-.notesHeader {
+.tone_high  { color: #7ab86e; }
+.tone_medium { color: #b8a45e; }
+.tone_low   { color: #b87e7e; }
+
+// ── Section ────────────────────────────────────────────────────────────
+
+.section {
+  padding: 0 $space-6 $space-5;
+
+  @media (min-width: $bp-md) {
+    padding: 0 0 $space-5;
+  }
+}
+
+.sectionHeader {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: $space-3;
+  margin-bottom: 10px;
+  padding: 0 4px;
 }
 
-.notesLabel {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
+.sectionTitle {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.25em;
   text-transform: uppercase;
-  color: rgba(250, 248, 244, 0.4);
+  color: #4a6141;
 }
 
 .editBtn {
-  font-size: 13px;
-  font-weight: 500;
-  color: $green-moss;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: #b4cea7;
   background: none;
   border: none;
   cursor: pointer;
   padding: 0;
+  transition: color 0.15s;
 
   &:hover {
-    color: lighten($green-moss, 10%);
+    color: #d4e8cc;
   }
 }
+
+.sectionCard {
+  background: rgba(29, 43, 26, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  padding: 20px;
+}
+
+// ── Common names ───────────────────────────────────────────────────────
+
+.namesList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+}
+
+.commonName {
+  font-size: 13px;
+  color: rgba(221, 218, 209, 0.75);
+  font-style: italic;
+
+  &:not(:last-child)::after {
+    content: "·";
+    margin-left: 16px;
+    color: #333;
+  }
+}
+
+// ── Native regions ─────────────────────────────────────────────────────
+
+.regionChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 0 $space-6;
+
+  @media (min-width: $bp-md) {
+    padding: 0;
+  }
+}
+
+.regionChip {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 12px;
+  background: rgba(29, 43, 26, 0.4);
+  border: 1px solid rgba(74, 97, 65, 0.2);
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 500;
+  color: #b4cea7;
+  letter-spacing: 0.03em;
+}
+
+// ── Notes ──────────────────────────────────────────────────────────────
 
 .notesEdit {
   display: flex;
@@ -216,39 +482,120 @@ $border: rgba(255, 255, 255, 0.08);
 .notesText {
   font-size: 15px;
   line-height: 1.65;
-  color: rgba(250, 248, 244, 0.8);
+  color: rgba(221, 218, 209, 0.8);
   white-space: pre-wrap;
 }
 
 .notesEmpty {
-  font-size: 14px;
-  color: rgba(250, 248, 244, 0.3);
+  font-size: 13px;
+  color: #525252;
   font-style: italic;
+  line-height: 1.55;
 }
 
 // ── Danger zone ────────────────────────────────────────────────────────
 
-.danger {
-  padding: $space-8 $space-6 0;
+.dangerSection {
+  padding: $space-2 $space-6 $space-6;
   display: flex;
   justify-content: center;
+
+  @media (min-width: $bp-md) {
+    padding: $space-2 0 $space-6;
+    justify-content: flex-start;
+  }
 }
 
-// ── Dialog actions ─────────────────────────────────────────────────────
+.deleteBtn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: rgba(255, 120, 120, 0.6);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px 16px;
+  border-radius: 8px;
+  transition: color 0.15s, background 0.15s;
 
-.dialogActions {
+  &:hover {
+    color: rgba(255, 120, 120, 0.9);
+    background: rgba(186, 26, 26, 0.06);
+  }
+}
+
+// ── Modal actions ──────────────────────────────────────────────────────
+
+.modalActions {
   display: flex;
   gap: $space-3;
   padding-top: $space-2;
 }
 
+// ── Plant skeleton ─────────────────────────────────────────────────────
+
+.plantSkeleton {
+  padding: 0 $space-6 $space-5;
+
+  @media (min-width: $bp-md) {
+    padding: 0 0 $space-5;
+  }
+}
+
+.skeletonLabel {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: #4a6141;
+  padding: 0 4px;
+  margin-bottom: 10px;
+}
+
+.skeletonCard {
+  background: rgba(29, 43, 26, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: 16px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.skeletonRow {
+  height: 10px;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 5px;
+  animation: shimmer 1.6s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0%, 100% { opacity: 0.4; }
+  50%       { opacity: 0.9; }
+}
+
+.skeletonHint {
+  font-size: 11px;
+  color: #333;
+  font-style: italic;
+  margin-top: 8px;
+  padding: 0 4px;
+}
+
 // ── Loading / error state ──────────────────────────────────────────────
 
 .loading {
+  position: relative;
+  z-index: 1;
   flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 15px;
-  color: rgba(250, 248, 244, 0.4);
+  color: #525252;
+  font-style: italic;
 }

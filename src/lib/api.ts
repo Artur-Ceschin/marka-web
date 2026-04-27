@@ -135,6 +135,11 @@ export interface NotebookEntry {
   entityType: "NOTEBOOK_ENTRY";
 }
 
+/** Enriched response returned by GET /notebook/:id */
+export interface NotebookEntryDetail extends NotebookEntry {
+  plant: Plant | null;
+}
+
 export interface NotebookListResponse {
   items: NotebookEntry[];
   cursor: string | null;
@@ -245,7 +250,7 @@ export const notebook = {
       `/notebook?limit=${limit}${cursor ? `&cursor=${cursor}` : ""}`,
     ),
 
-  getById: (id: string) => request<NotebookEntry>("GET", `/notebook/${id}`),
+  getById: (id: string) => request<NotebookEntryDetail>("GET", `/notebook/${id}`),
 
   save: (body: SaveNotebookBody) => request<NotebookEntry>("POST", "/notebook", body),
 

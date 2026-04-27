@@ -1,7 +1,7 @@
 @use '@/styles/tokens' as *;
 @use '@/styles/mixins' as *;
 
-$surface:    #1e231d;
+$surface:    #0f140d;
 $border:     rgba(255,255,255,0.07);
 $border-mid: rgba(255,255,255,0.10);
 $text-dim:   rgba(250,248,244,0.52);
@@ -12,14 +12,22 @@ $text-faint: rgba(250,248,244,0.28);
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
-  background: $surface;
-
+  background: #0f140d;
   @include respond(md) {
     flex-direction: row;
   }
 }
 
-// ── Brand panel (desktop left) ────────────────────────────────────────────────
+.grain {
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.025;
+  pointer-events: none;
+  z-index: 0;
+}
+
+
 .brand {
   display: none;
 
@@ -41,22 +49,15 @@ $text-faint: rgba(250,248,244,0.28);
   }
 }
 
-// Video background inside brand panel
-@keyframes videoFadeIn {
-  from { opacity: 0; }
-  to   { opacity: 0.55; }
-}
-
 .brandVideo {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: 0.55;
+  opacity: 0;
   pointer-events: none;
   z-index: 0;
-  animation: videoFadeIn 1.4s ease-in-out forwards;
 }
 
 // Dark overlay so text stays readable
@@ -82,11 +83,12 @@ $text-faint: rgba(250,248,244,0.28);
   a {
     font-family: $font-mono;
     font-size: 11px;
+    font-weight: 600;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: rgba(250,248,244,0.35);
+    color: rgba(250,248,244,0.82);
     transition: color 0.15s;
-    &:hover { color: rgba(250,248,244,0.7); }
+    &:hover { color: #faf8f4; }
   }
 }
 
@@ -136,13 +138,18 @@ $text-faint: rgba(250,248,244,0.28);
 // ── Form pane (right / mobile full) ──────────────────────────────────────────
 .formPane {
   flex: 1;
+  position: relative;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: $space-10 $space-6 $space-12;
+  padding: $space-8 $space-4 $space-12;
   min-height: 100dvh;
-  background: $surface;
+
+  @include respond(md) {
+    padding: $space-10 $space-6 $space-12;
+  }
 }
 
 // Mobile-only brand header
@@ -150,12 +157,35 @@ $text-faint: rgba(250,248,244,0.28);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: $space-3;
-  margin-bottom: $space-10;
+  gap: $space-2;
+  margin-bottom: $space-8;
 
   @include respond(md) {
     display: none;
   }
+}
+
+.mobileEyebrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: $space-1;
+}
+
+.mobileEyebrowLine {
+  height: 1px;
+  width: 28px;
+  background: rgba(74, 97, 65, 0.45);
+  flex-shrink: 0;
+}
+
+.mobileEyebrowLabel {
+  font-family: $font-mono;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: #b4cea7;
 }
 
 .mobileWordmark {
@@ -174,9 +204,33 @@ $text-faint: rgba(250,248,244,0.28);
   flex-direction: column;
 }
 
+// ── Form eyebrow (editorial line + label above title) ─────────────────────────
+.formEyebrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.formEyebrowLine {
+  height: 1px;
+  width: 32px;
+  background: rgba(74, 97, 65, 0.4);
+  flex-shrink: 0;
+}
+
+.formEyebrowLabel {
+  font-family: $font-mono;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #b4cea7;
+}
+
 .formTitle {
   font-family: $font-display;
-  font-size: clamp(26px, 3vw, 34px);
+  font-size: clamp(24px, 3vw, 32px);
   font-weight: 700;
   color: $text-white;
   letter-spacing: -0.03em;
@@ -186,14 +240,14 @@ $text-faint: rgba(250,248,244,0.28);
 .formSub {
   font-size: 14px;
   color: $text-dim;
-  margin-bottom: $space-8;
+  margin-bottom: $space-6;
 }
 
 .form {
   display: flex;
   flex-direction: column;
-  gap: $space-5;
-  margin-bottom: $space-5;
+  gap: $space-4;
+  margin-bottom: $space-4;
 }
 
 .forgotRow {
@@ -214,7 +268,7 @@ $text-faint: rgba(250,248,244,0.28);
   display: flex;
   align-items: center;
   gap: $space-3;
-  margin: $space-6 0;
+  margin: $space-5 0;
   font-family: $font-mono;
   font-size: 10px;
   letter-spacing: 0.14em;
@@ -264,7 +318,7 @@ $text-faint: rgba(250,248,244,0.28);
   justify-content: center;
   align-items: center;
   gap: $space-2;
-  margin-top: $space-8;
+  margin-top: $space-6;
   font-size: 14px;
   color: $text-dim;
 

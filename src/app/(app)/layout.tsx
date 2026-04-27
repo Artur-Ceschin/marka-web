@@ -3,13 +3,20 @@
 import { useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
-import { BottomNav, type NavItem } from "@/components/ui";
 import { useAuthStore } from "@/store/auth.store";
 import { LeafMark } from "@/components/MarkaLogo";
-import { IoCompassOutline, IoBookOutline, IoPersonOutline } from "react-icons/io5";
+import { IoCompassOutline, IoBookOutline, IoPersonOutline, IoScanOutline } from "react-icons/io5";
+import { MobileNav } from "./_components/MobileNav";
+import { useInactivityTimer } from "@/lib/useInactivityTimer";
 import styles from "./layout.module.scss";
 
-const NAV_ITEMS: NavItem[] = [
+const NAV_ITEMS = [
+  { id: "identify", label: "Scan", icon: <IoScanOutline size={22} /> },
+  { id: "notebook", label: "Journal", icon: <IoBookOutline size={22} /> },
+  { id: "profile", label: "Profile", icon: <IoPersonOutline size={22} /> },
+];
+
+const SIDEBAR_ITEMS = [
   { id: "identify", label: "Identify", icon: <IoCompassOutline size={22} /> },
   { id: "notebook", label: "Notebook", icon: <IoBookOutline size={22} /> },
   { id: "profile", label: "Profile", icon: <IoPersonOutline size={22} /> },
@@ -19,6 +26,8 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
   const { isAuthenticated, hasHydrated, hydrate } = useAuthStore();
+
+  useInactivityTimer();
 
   useEffect(() => {
     if (!hasHydrated) hydrate();
@@ -43,7 +52,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         </Link>
 
         <nav className={styles.sidebarNav}>
-          {NAV_ITEMS.map((item) => (
+          {SIDEBAR_ITEMS.map((item) => (
             <Link
               key={item.id}
               href={`/${item.id}`}
@@ -60,13 +69,13 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       <main className={styles.main}>{children}</main>
 
       {/* ── Mobile bottom nav ─────────────────── */}
-      <BottomNav
-        items={NAV_ITEMS}
-        activeId={activeId}
-        onSelect={(id) => router.push(`/${id}`)}
-        theme="dark"
-        className={styles.mobileNav}
-      />
+      <div className={styles.mobileNav}>
+        <MobileNav
+          items={NAV_ITEMS}
+          activeId={activeId}
+          onSelect={(id) => router.push(`/${id}`)}
+        />
+      </div>
     </div>
   );
 }

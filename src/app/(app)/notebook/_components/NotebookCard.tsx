@@ -30,8 +30,8 @@ export function NotebookCard({
           src={imageUrl}
           alt={entry.plantName}
           fill
+          unoptimized
           style={{ objectFit: "cover" }}
-          sizes="(max-width: 480px) 100vw, (max-width: 768px) 50vw, 33vw"
         />
         {isHighConfidence && (
           <span className={styles.rareBadge}>High Match</span>

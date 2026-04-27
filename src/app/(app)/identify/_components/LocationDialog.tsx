@@ -1,6 +1,7 @@
 "use client";
 
-import { Button, MarkaDialog } from "@/components/ui";
+import { Button } from "@/components/ui";
+import { Modal } from "@/components/Modal";
 import styles from "./LocationDialog.module.scss";
 
 export function LocationDialog({
@@ -21,9 +22,9 @@ export function LocationDialog({
   const busy = locating || saving;
 
   return (
-    <MarkaDialog
+    <Modal
       open={open}
-      onOpenChange={(v) => !busy && onOpenChange(v)}
+      onClose={() => !busy && onOpenChange(false)}
       title="Include your location?"
       description="Save where you found this plant so you can remember later. We'll ask your browser for permission."
     >
@@ -49,6 +50,6 @@ export function LocationDialog({
           Skip, save without location
         </Button>
       </div>
-    </MarkaDialog>
+    </Modal>
   );
 }

@@ -4,9 +4,10 @@ import { useEffect, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-import { Button, Input, MarkaDialog, Textarea } from "@/components/ui";
+import { Button, Input, Textarea } from "@/components/ui";
+import { Modal } from "@/components/Modal";
 import { users, type UpdateProfileBody } from "@/lib/api";
-import styles from "../page.module.scss";
+import styles from "./EditProfileDialog.module.scss";
 
 type ProfileData = { name: string; email: string; bio: string | null };
 
@@ -51,14 +52,13 @@ export function EditProfileDialog({
   }
 
   return (
-    <MarkaDialog
+    <Modal
+      open={open}
+      onClose={() => !isPending && onOpenChange(false)}
       title="Edit profile"
       description="Update your name and bio."
-      open={open}
-      onOpenChange={onOpenChange}
-      className={styles.editDialog}
     >
-      <div className={styles.editForm}>
+      <div className={styles.form}>
         <Input label="Email" value={profile?.email ?? ""} disabled />
         <Input
           label="Name"
@@ -75,7 +75,7 @@ export function EditProfileDialog({
           showCount
           rows={3}
         />
-        <div className={styles.editActions}>
+        <div className={styles.actions}>
           <Button
             variant="secondary"
             size="lg"
@@ -96,6 +96,6 @@ export function EditProfileDialog({
           </Button>
         </div>
       </div>
-    </MarkaDialog>
+    </Modal>
   );
 }

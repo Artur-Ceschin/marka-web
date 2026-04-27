@@ -1,0 +1,58 @@
+@use "@/styles/tokens" as *;
+
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  background: #1c1c17;
+  padding: 12px 8px calc(12px + env(safe-area-inset-bottom, 0px));
+  border-top: 1px solid rgba(74, 97, 65, 0.12);
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 12px;
+  min-width: 56px;
+  transition: opacity 0.15s;
+
+  &:active {
+    opacity: 0.7;
+  }
+}
+
+// Active item: squircle container
+.iconWrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  color: rgba(221, 218, 209, 0.35);
+  transition: background 0.2s, color 0.2s;
+}
+
+.iconWrapActive {
+  background: #4a6141;
+  color: #fcf9f0;
+}
+
+.label {
+  font-family: $font-body;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(221, 218, 209, 0.35);
+  line-height: 1;
+
+  .itemActive & {
+    color: #fcf9f0;
+  }
+}

@@ -4,7 +4,6 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 
-import { PageHeader } from "@/components/PageHeader";
 import {
   BellIcon,
   ChevronRightIcon,
@@ -39,75 +38,107 @@ export default function ProfilePage() {
   }
 
   const stats = [
-    { label: "PLANTS", value: profile?.plantCount ?? "—" },
-    { label: "THIS WEEK", value: profile?.weekCount ?? "—" },
-    { label: "SEASON", value: profile?.seasonCount ?? "—" },
+    { label: "Plants", value: profile?.plantCount ?? "—" },
+    { label: "This Week", value: profile?.weekCount ?? "—" },
+    { label: "Season", value: profile?.seasonCount ?? "—" },
   ];
 
   return (
     <div className={styles.page}>
-      <PageHeader title="Profile" subtitle="Your account & preferences" />
+      <div className={styles.grain} aria-hidden="true" />
 
-      <div className={styles.card}>
-        <div className={styles.inner}>
-          <div className={styles.profileInfo}>
-            <div className={styles.avatar}>
-              {profile?.avatarUrl || authPicture ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src={profile?.avatarUrl ?? authPicture!} alt="Profile" />
+      {/* Editorial header */}
+      <header className={styles.header}>
+        <div className={styles.headerEyebrow}>
+          <span className={styles.headerLine} />
+          <span className={styles.headerLabel}>Your Account</span>
+        </div>
+
+        <div className={styles.headerMeta}>
+          <div className={styles.avatar}>
+            {profile?.avatarUrl || authPicture ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={profile?.avatarUrl ?? authPicture!} alt="Profile" />
+            ) : (
+              <DefaultAvatar />
+            )}
+          </div>
+
+          <div className={styles.headerText}>
+            <h1 className={styles.headerTitle}>
+              {profile?.name ? (
+                <>
+                  {profile.name.split(" ")[0]}
+                  {profile.name.split(" ").length > 1 && (
+                    <span className={styles.headerTitleItalic}>
+                      {" "}
+                      {profile.name.split(" ").slice(1).join(" ")}
+                    </span>
+                  )}
+                </>
               ) : (
-                <DefaultAvatar />
+                <span className={styles.headerTitleItalic}>Field Naturalist</span>
               )}
-            </div>
-            <h2 className={styles.name}>{profile?.name ?? "—"}</h2>
-            {email && <p className={styles.email}>{email}</p>}
-            {profile?.bio && <p className={styles.bio}>{profile.bio}</p>}
+            </h1>
+            {email && <p className={styles.headerEmail}>{email}</p>}
           </div>
+        </div>
 
-          <div className={styles.stats}>
-            {stats.map((s) => (
-              <div key={s.label} className={styles.stat}>
-                <span className={styles.statValue}>{s.value}</span>
-                <span className={styles.statLabel}>{s.label}</span>
-              </div>
-            ))}
+        {profile?.bio && <p className={styles.headerBio}>{profile.bio}</p>}
+      </header>
+
+      <div className={styles.content}>
+        {/* Stats */}
+        <div className={styles.statsCard}>
+          {stats.map((s) => (
+            <div key={s.label} className={styles.stat}>
+              <span className={styles.statValue}>{s.value}</span>
+              <span className={styles.statLabel}>{s.label}</span>
+            </div>
+          ))}
+        </div>
+
+        {/* Account section */}
+        <div className={styles.sectionGroup}>
+          <p className={styles.sectionTitle}>Account</p>
+          <div className={styles.sectionCard}>
+            <button className={styles.row} onClick={() => setEditOpen(true)}>
+              <span className={styles.rowIcon}><PersonIcon /></span>
+              <span>Edit profile</span>
+              <ChevronRightIcon className={styles.rowChevron} />
+            </button>
+            <div className={styles.divider} />
+            <button className={styles.row} disabled>
+              <span className={styles.rowIcon}><BellIcon /></span>
+              <span>Notifications</span>
+              <span className={styles.rowBadge}>Soon</span>
+            </button>
           </div>
+        </div>
 
-          <div className={styles.sections}>
-            <p className={styles.sectionTitle}>ACCOUNT</p>
-            <div className={styles.section}>
-              <button className={styles.row} onClick={() => setEditOpen(true)}>
-                <PersonIcon />
-                <span>Edit profile</span>
-                <ChevronRightIcon />
-              </button>
-              <div className={styles.divider} />
-              <button className={styles.row} disabled>
-                <BellIcon />
-                <span>Notifications</span>
-                <span className={styles.rowBadge}>Coming soon</span>
-              </button>
-            </div>
+        {/* Preferences section */}
+        <div className={styles.sectionGroup}>
+          <p className={styles.sectionTitle}>Preferences</p>
+          <div className={styles.sectionCard}>
+            <button className={styles.row} disabled>
+              <span className={styles.rowIcon}><MoonIcon /></span>
+              <span>Appearance</span>
+              <span className={styles.rowBadge}>Dark</span>
+            </button>
+          </div>
+        </div>
 
-            <p className={styles.sectionTitle}>PREFERENCES</p>
-            <div className={styles.section}>
-              <button className={styles.row} disabled>
-                <MoonIcon />
-                <span>Appearance</span>
-                <span className={styles.rowBadge}>Dark</span>
-              </button>
-            </div>
-
-            <p className={styles.sectionTitle}>SESSION</p>
-            <div className={styles.section}>
-              <button
-                className={`${styles.row} ${styles.rowDanger}`}
-                onClick={handleLogout}
-              >
-                <LogoutIcon />
-                <span>Sign out</span>
-              </button>
-            </div>
+        {/* Session section */}
+        <div className={styles.sectionGroup}>
+          <p className={styles.sectionTitle}>Session</p>
+          <div className={styles.sectionCard}>
+            <button
+              className={`${styles.row} ${styles.rowDanger}`}
+              onClick={handleLogout}
+            >
+              <span className={styles.rowIcon}><LogoutIcon /></span>
+              <span>Sign out</span>
+            </button>
           </div>
         </div>
       </div>
@@ -131,15 +162,10 @@ export default function ProfilePage() {
 
 function DefaultAvatar() {
   return (
-    <svg
-      viewBox="0 0 96 96"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      style={{ width: "100%", height: "100%" }}
-    >
-      <rect width="96" height="96" fill="rgba(74,103,65,0.25)" />
-      <circle cx="48" cy="36" r="20" fill="rgba(122,158,115,0.55)" />
-      <path d="M8 96c0-22.091 17.909-40 40-40s40 17.909 40 40" fill="rgba(122,158,115,0.55)" />
+    <svg viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: "100%", height: "100%" }}>
+      <rect width="96" height="96" fill="rgba(74,97,65,0.2)" />
+      <circle cx="48" cy="36" r="20" fill="rgba(180,206,167,0.35)" />
+      <path d="M8 96c0-22.091 17.909-40 40-40s40 17.909 40 40" fill="rgba(180,206,167,0.35)" />
     </svg>
   );
 }
