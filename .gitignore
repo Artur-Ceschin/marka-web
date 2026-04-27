@@ -4,3 +4,6 @@ node_modules/
 .env*.local
 out/
 CLAUDE.md
+
+# Large video assets — host on CDN, not in git
+public/videos/

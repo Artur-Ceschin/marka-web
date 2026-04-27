@@ -1,0 +1,5 @@
+echo "▶ type check…"
+pnpm tsc --noEmit
+
+echo "▶ tests…"
+pnpm test:run
