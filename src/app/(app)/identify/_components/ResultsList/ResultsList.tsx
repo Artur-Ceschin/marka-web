@@ -3,7 +3,7 @@
 import Image from "next/image";
 import type { IdentifyResult } from "@/lib/api";
 import { ChevronRightIcon } from "@/components/icons";
-import { ConfidenceBar } from "./ConfidenceBar";
+import { ConfidenceBar } from "../ConfidenceBar";
 import styles from "./ResultsList.module.scss";
 
 export function ResultsList({

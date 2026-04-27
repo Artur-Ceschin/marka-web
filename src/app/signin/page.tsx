@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button, Input } from "@/components/ui";
-import { PasswordInput } from "../PasswordInput";
+import { PasswordInput } from "@/components/PasswordInput";
 import { LeafMark } from "@/components/MarkaLogo";
 import { signIn, startGoogleSignIn, CognitoError } from "@/lib/cognito";
 import { useAuthStore } from "@/store/auth.store";

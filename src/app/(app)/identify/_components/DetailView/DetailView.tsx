@@ -12,8 +12,8 @@ import { Lightbox, type LightboxItem } from "@/components/Lightbox";
 import { identify, plants, type IdentifyResult, type Plant } from "@/lib/api";
 import { getCurrentLocation, type LocationInfo } from "@/lib/geolocation";
 
-import { ConfidenceBar } from "./ConfidenceBar";
-import { LocationDialog } from "./LocationDialog";
+import { ConfidenceBar } from "../ConfidenceBar";
+import { LocationDialog } from "../LocationDialog";
 import styles from "./DetailView.module.scss";
 
 export function DetailView({

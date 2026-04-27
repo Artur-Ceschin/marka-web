@@ -1,0 +1,1 @@
+export { LeafMark } from './MarkaLogo';
