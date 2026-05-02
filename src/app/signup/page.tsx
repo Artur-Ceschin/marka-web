@@ -56,9 +56,7 @@ export default function SignUpPage() {
         const t = v.currentTime;
         const rem = v.duration - t;
         v.style.opacity = String(
-          t < FADE ? (t / FADE) * MAX :
-          rem < FADE ? (rem / FADE) * MAX :
-          MAX
+          t < FADE ? (t / FADE) * MAX : rem < FADE ? (rem / FADE) * MAX : MAX,
         );
       }
       rafId = requestAnimationFrame(tick);
@@ -144,7 +142,7 @@ export default function SignUpPage() {
         <video
           ref={videoRef}
           className={styles.brandVideo}
-          src="/videos/signup-video.mp4"
+          src={`${process.env.NEXT_PUBLIC_ASSETS_URL}/videos/signup-video.mp4`}
           autoPlay
           muted
           loop
@@ -243,10 +241,7 @@ export default function SignUpPage() {
                 setGoogleLoading(true);
                 const onFocus = () => {
                   window.removeEventListener("focus", onFocus);
-                  setTimeout(
-                    () => setGoogleLoading((v) => (v ? false : v)),
-                    2000,
-                  );
+                  setTimeout(() => setGoogleLoading((v) => (v ? false : v)), 2000);
                 };
                 window.addEventListener("focus", onFocus);
               }}

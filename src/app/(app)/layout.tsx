@@ -12,12 +12,14 @@ import styles from "./layout.module.scss";
 
 const NAV_ITEMS = [
   { id: "identify", label: "Scan", icon: <IoScanOutline size={22} /> },
+  { id: "explore", label: "Explore", icon: <IoCompassOutline size={22} /> },
   { id: "notebook", label: "Journal", icon: <IoBookOutline size={22} /> },
   { id: "profile", label: "Profile", icon: <IoPersonOutline size={22} /> },
 ];
 
 const SIDEBAR_ITEMS = [
-  { id: "identify", label: "Identify", icon: <IoCompassOutline size={22} /> },
+  { id: "identify", label: "Identify", icon: <IoScanOutline size={22} /> },
+  { id: "explore", label: "Explore", icon: <IoCompassOutline size={22} /> },
   { id: "notebook", label: "Notebook", icon: <IoBookOutline size={22} /> },
   { id: "profile", label: "Profile", icon: <IoPersonOutline size={22} /> },
 ];
@@ -70,13 +72,8 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
       {/* ── Mobile bottom nav ─────────────────── */}
       <div className={styles.mobileNav}>
-        <MobileNav
-          items={NAV_ITEMS}
-          activeId={activeId}
-          onSelect={(id) => router.push(`/${id}`)}
-        />
+        <MobileNav items={NAV_ITEMS} activeId={activeId} onSelect={(id) => router.push(`/${id}`)} />
       </div>
     </div>
   );
 }
-

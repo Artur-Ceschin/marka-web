@@ -45,9 +45,7 @@ export default function SignInPage() {
         const t = v.currentTime;
         const rem = v.duration - t;
         v.style.opacity = String(
-          t < FADE ? (t / FADE) * MAX :
-          rem < FADE ? (rem / FADE) * MAX :
-          MAX
+          t < FADE ? (t / FADE) * MAX : rem < FADE ? (rem / FADE) * MAX : MAX,
         );
       }
       rafId = requestAnimationFrame(tick);
@@ -97,7 +95,7 @@ export default function SignInPage() {
         <video
           ref={videoRef}
           className={styles.brandVideo}
-          src="/videos/signin-video.mp4"
+          src={`${process.env.NEXT_PUBLIC_ASSETS_URL}/videos/signin-video.mp4`}
           autoPlay
           muted
           loop

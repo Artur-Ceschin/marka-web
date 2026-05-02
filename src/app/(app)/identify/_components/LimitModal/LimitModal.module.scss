@@ -1,0 +1,15 @@
+@use 'styles/tokens' as *;
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: $space-3;
+  margin-top: $space-4;
+}
+
+.hint {
+  font-size: 12px;
+  color: rgba(221, 218, 209, 0.45);
+  line-height: 1.5;
+  text-align: center;
+}

@@ -11,6 +11,17 @@ $text:      $text-charcoal;
 $text-sub:  $text-stone;
 $text-muted:#A5A09A;
 
+// ── Animations ────────────────────────────────────────────────────────────────
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(22px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
 // ── Page shell ────────────────────────────────────────────────────────────────
 .page {
   min-height: 100dvh;
@@ -177,10 +188,11 @@ $text-muted:#A5A09A;
   text-shadow:
     0 2px 32px rgba(0,0,0,0.85),
     0 1px 8px rgba(0,0,0,0.6);
+  animation: fadeUp 1s ease-out 1.4s both;
 
   em {
     font-style: italic;
-    color: #fff; // pure white — the italic weight carries the contrast
+    color: #fff;
   }
 }
 
@@ -190,6 +202,7 @@ $text-muted:#A5A09A;
   line-height: 1.65;
   max-width: 44ch;
   text-shadow: 0 1px 12px rgba(0,0,0,0.75);
+  animation: fadeUp 1s ease-out 1.75s both;
 }
 
 .heroActions {
@@ -200,6 +213,7 @@ $text-muted:#A5A09A;
   justify-content: center;
   padding-top: $space-2;
   filter: drop-shadow(0 2px 12px rgba(0,0,0,0.5));
+  animation: fadeUp 1s ease-out 2.1s both;
 }
 
 .heroBtnPrimary {
@@ -236,6 +250,67 @@ $text-muted:#A5A09A;
     background: rgba(255,255,255,0.18);
     border-color: rgba(255,255,255,0.5);
   }
+}
+
+// ── Value props ───────────────────────────────────────────────────────────────
+.valueProps {
+  background: #0f140d;
+  border-bottom: 1px solid rgba(74, 97, 65, 0.15);
+}
+
+.valuePropsInner {
+  @include container;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1px;
+  background: rgba(74, 97, 65, 0.12);
+
+  @include respond(md) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.valueProp {
+  background: #0f140d;
+  padding: 40px 36px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  animation: fadeUp 0.8s ease-out both;
+  transition: background 0.2s;
+
+  &:hover {
+    background: #141a12;
+  }
+}
+
+.vpIcon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: rgba(74, 97, 65, 0.15);
+  border: 1px solid rgba(74, 97, 65, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #b4cea7;
+  flex-shrink: 0;
+}
+
+.vpTitle {
+  font-family: $font-display;
+  font-size: 17px;
+  font-weight: 700;
+  color: #f2f0e9;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.vpBody {
+  font-size: 14px;
+  color: rgba(221, 218, 209, 0.5);
+  line-height: 1.65;
+  max-width: 32ch;
 }
 
 // ── Main layout ───────────────────────────────────────────────────────────────
@@ -306,11 +381,16 @@ $text-muted:#A5A09A;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  transition: box-shadow 0.2s, transform 0.2s;
+  transition: box-shadow 0.25s, transform 0.25s;
+  animation: fadeUp 0.6s ease-out both;
+
+  @for $i from 1 through 6 {
+    &:nth-child(#{$i}) { animation-delay: #{0.05 * $i}s; }
+  }
 
   &:hover {
     box-shadow: $shadow-md;
-    transform: translateY(-2px);
+    transform: translateY(-3px);
   }
 }
 

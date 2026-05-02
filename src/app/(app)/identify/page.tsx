@@ -5,10 +5,11 @@ import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { IoSunnyOutline, IoPrismOutline, IoSparklesOutline } from "react-icons/io5";
 
-import { identify, type IdentifyResult } from "@/lib/api";
+import { identify, type IdentifyResult, ApiError } from "@/lib/api";
 import { PhotoPicker } from "./_components/PhotoPicker";
 import { ResultsList } from "./_components/ResultsList";
 import { DetailView } from "./_components/DetailView";
+import { LimitModal } from "./_components/LimitModal";
 import styles from "./page.module.scss";
 
 type Step = "upload" | "preview" | "results" | "detail";
@@ -18,6 +19,7 @@ export default function IdentifyPage() {
   const [preview, setPreview] = useState<string | null>(null);
   const [file, setFile] = useState<File | null>(null);
   const [detail, setDetail] = useState<IdentifyResult | null>(null);
+  const [limitError, setLimitError] = useState<{ code: string; message: string } | null>(null);
 
   const {
     mutate: runIdentify,
@@ -33,6 +35,11 @@ export default function IdentifyPage() {
           ? `Found ${count} match${count > 1 ? "es" : ""}!`
           : "No matches found. Try a clearer photo.",
       );
+    },
+    onError: (err) => {
+      if (err instanceof ApiError && err.code) {
+        setLimitError({ code: err.code, message: err.message });
+      }
     },
   });
 
@@ -71,8 +78,8 @@ export default function IdentifyPage() {
           <div className={styles.heading}>
             <h2 className={styles.headingTitle}>New Identification</h2>
             <p className={styles.headingSubtitle}>
-              Align the specimen within the botanical grid or upload a high-resolution
-              plate for analysis.
+              Align the specimen within the botanical grid or upload a high-resolution plate for
+              analysis.
             </p>
           </div>
         )}
@@ -108,8 +115,8 @@ export default function IdentifyPage() {
               <div>
                 <p className={styles.hintTitle}>Optimal Lighting</p>
                 <p className={styles.hintText}>
-                  Shadowless environments yield 40% higher identification accuracy in fungi
-                  and flora.
+                  Shadowless environments yield 40% higher identification accuracy in fungi and
+                  flora.
                 </p>
               </div>
             </div>
@@ -135,8 +142,15 @@ export default function IdentifyPage() {
         )}
       </div>
 
+      <LimitModal
+        open={limitError !== null}
+        code={limitError?.code ?? ""}
+        message={limitError?.message ?? ""}
+        onClose={() => setLimitError(null)}
+      />
+
       <footer className={styles.footer}>
-        <span>© 2025 Marka — All Observations Logged</span>
+        <span>© 2026 Marka — All Observations Logged</span>
         <div className={styles.footerRight}>
           <span>System 1.0 // Stable</span>
           <span>Neural Net: Flora_V3</span>

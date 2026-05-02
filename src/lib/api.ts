@@ -7,6 +7,7 @@ export class ApiError extends Error {
   constructor(
     public status: number,
     message: string,
+    public code?: string,
   ) {
     super(message);
     this.name = "ApiError";
@@ -37,7 +38,12 @@ async function ensureAuth(): Promise<string> {
   return session.idToken;
 }
 
-async function request<T>(method: string, path: string, body?: unknown): Promise<T> {
+async function request<T>(
+  method: string,
+  path: string,
+  body?: unknown,
+  opts: { silent404?: boolean } = {},
+): Promise<T> {
   const token = await ensureAuth();
 
   let res: Response;
@@ -58,8 +64,17 @@ async function request<T>(method: string, path: string, body?: unknown): Promise
   if (res.status === 401) handleUnauthorized();
 
   if (!res.ok) {
+    if (res.status === 429) {
+      let body: { message?: string; code?: string } = {};
+      try {
+        body = await res.json();
+      } catch {}
+      const msg = body.message ?? friendlyError(429);
+      if (!body.code) toast.error(msg);
+      throw new ApiError(429, msg, body.code);
+    }
     const msg = friendlyError(res.status);
-    toast.error(msg);
+    if (!(opts.silent404 && res.status === 404)) toast.error(msg);
     throw new ApiError(res.status, msg);
   }
 
@@ -115,7 +130,7 @@ export interface UpdateProfileBody {
 
 export interface AvatarUploadResponse {
   uploadUrl: string;
-  imageUrl: string;
+  avatarUrl: string;
 }
 
 export interface NotebookEntry {
@@ -191,7 +206,6 @@ export interface IdentifyResponse {
   imageUrl: string;
 }
 
-
 export interface SubmitResponse {
   imageUrl: string;
   displayUrl?: string;
@@ -218,6 +232,7 @@ export interface NearbyPlant {
   latin: string;
   common: string;
   family: string;
+  biomes?: string[];
   imageUrl?: string;
   occurrenceCount: number;
 }
@@ -305,7 +320,7 @@ export const identify = {
 
 export const plants = {
   getByLatin: (latin: string) =>
-    request<Plant>("GET", `/plants/${encodeURIComponent(latin)}`),
+    request<Plant>("GET", `/plants/${encodeURIComponent(latin)}`, undefined, { silent404: true }),
 };
 
 // ─── Explore ──────────────────────────────────────────────────────────────────

@@ -48,6 +48,75 @@ const PLANTS = [
   },
 ];
 
+const VALUE_PROPS = [
+  {
+    title: "Honest Free Alternative",
+    body: "Plant ID journal that's actually free. No subscriptions, no dark patterns.",
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+        <path
+          d="M11 2C11 2 5 6.5 5 12a6 6 0 0 0 12 0c0-5.5-6-10-6-10Z"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M8.5 12l2 2 3.5-3.5"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+    ),
+  },
+  {
+    title: "Field Journal for Nature Lovers",
+    body: "Document plants you find in the wild. GPS, photos, notes, and species data in one place.",
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+        <circle cx="11" cy="9.5" r="3" stroke="currentColor" strokeWidth="1.5" />
+        <path
+          d="M11 2.5C7.41 2.5 4.5 5.41 4.5 9c0 5.25 6.5 10.5 6.5 10.5S17.5 14.25 17.5 9c0-3.59-2.91-6.5-6.5-6.5Z"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinejoin="round"
+        />
+      </svg>
+    ),
+  },
+  {
+    title: "Personal Botanical Archive",
+    body: "Your lifetime plant collection. Track every species you encounter.",
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+        <rect
+          x="3.5"
+          y="4"
+          width="15"
+          height="14"
+          rx="1.5"
+          stroke="currentColor"
+          strokeWidth="1.5"
+        />
+        <path d="M3.5 8h15" stroke="currentColor" strokeWidth="1.5" />
+        <path
+          d="M7.5 4V2.5M14.5 4V2.5"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+        />
+        <path
+          d="M7.5 12h7M7.5 15h4.5"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+        />
+      </svg>
+    ),
+  },
+];
+
 const GUIDES = [
   {
     title: "Temperate Deciduous",
@@ -154,7 +223,10 @@ export default function HomePage() {
       {/* ── Hero video ───────────────────────────────────── */}
       <section className={styles.hero}>
         <video autoPlay muted loop playsInline className={styles.heroVideo}>
-          <source src="/videos/hero-forest.mp4" type="video/mp4" />
+          <source
+            src={`${process.env.NEXT_PUBLIC_ASSETS_URL}/videos/hero-forest.mp4`}
+            type="video/mp4"
+          />
         </video>
         <div className={styles.heroOverlay} />
         <div className={styles.heroLoopFade} />
@@ -176,6 +248,23 @@ export default function HomePage() {
               Sign in
             </Link>
           </div>
+        </div>
+      </section>
+
+      {/* ── Value props ──────────────────────────────────── */}
+      <section className={styles.valueProps}>
+        <div className={styles.valuePropsInner}>
+          {VALUE_PROPS.map((vp, i) => (
+            <div
+              key={vp.title}
+              className={styles.valueProp}
+              style={{ animationDelay: `${0.15 + i * 0.15}s` }}
+            >
+              <span className={styles.vpIcon}>{vp.icon}</span>
+              <h3 className={styles.vpTitle}>{vp.title}</h3>
+              <p className={styles.vpBody}>{vp.body}</p>
+            </div>
+          ))}
         </div>
       </section>
 

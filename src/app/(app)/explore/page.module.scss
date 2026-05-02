@@ -1,0 +1,347 @@
+@use 'styles/tokens' as *;
+
+.page {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 100dvh;
+  background: #0f140d;
+  position: relative;
+}
+
+.page::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.025;
+  pointer-events: none;
+  z-index: 0;
+}
+
+
+.header {
+  position: relative;
+  z-index: 1;
+  padding: $space-10 $space-6 $space-8;
+
+  @media (min-width: $bp-md) {
+    padding: 64px 48px 48px;
+  }
+}
+
+.headerEyebrow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.headerLine {
+  height: 1px;
+  width: 48px;
+  background: rgba(74, 97, 65, 0.4);
+  flex-shrink: 0;
+}
+
+.headerLabel {
+  font-family: $font-body;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #b4cea7;
+}
+
+.headerTitle {
+  font-family: $font-display;
+  font-size: clamp(36px, 6vw, 64px);
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.headerTitleItalic {
+  display: block;
+  font-weight: 300;
+  font-style: italic;
+  color: #b4cea7;
+}
+
+.headerPlace {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 20px;
+  font-size: 13px;
+  color: rgba(250, 248, 244, 0.4);
+}
+
+// ── Content ────────────────────────────────────────────────────────────
+
+.content {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  padding: 0 $space-6 $space-10;
+
+  @media (min-width: $bp-md) {
+    padding: 0 48px 64px;
+  }
+}
+
+// ── Radius filters ─────────────────────────────────────────────────────
+
+.filtersRow {
+  display: flex;
+  gap: 12px;
+  padding-bottom: 32px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  margin-bottom: 32px;
+}
+
+.filterBtn {
+  padding: 8px 24px;
+  border-radius: $radius-full;
+  border: none;
+  background: transparent;
+  font-family: $font-body;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #737373;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+
+  &:hover:not(.filterBtnActive) {
+    background: rgba(255, 255, 255, 0.05);
+    color: #d4d4d4;
+  }
+}
+
+.filterBtnActive {
+  background: #4a6141;
+  color: #f2f0e9;
+}
+
+// ── Masonry layout ─────────────────────────────────────────────────────
+
+.masonry {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  @media (min-width: $bp-md) {
+    display: block;
+    columns: 2;
+    column-gap: 14px;
+  }
+
+  @media (min-width: 900px) {
+    columns: 3;
+  }
+
+  @media (min-width: 1280px) {
+    columns: 4;
+    column-gap: 16px;
+  }
+}
+
+.masonryItem {
+  @media (min-width: $bp-md) {
+    break-inside: avoid;
+    margin-bottom: 14px;
+  }
+}
+
+// ── Skeleton ───────────────────────────────────────────────────────────
+
+.skeleton {
+  border-radius: $radius-lg;
+  background: rgba(255, 255, 255, 0.04);
+  animation: pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+// ── Empty / sentinel ───────────────────────────────────────────────────
+
+.sentinel {
+  display: flex;
+  justify-content: center;
+  padding: $space-8 0;
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: $space-3;
+  padding: $space-16;
+  text-align: center;
+  min-height: 300px;
+}
+
+.emptyIcon {
+  color: rgba(250, 248, 244, 0.2);
+  margin-bottom: $space-2;
+}
+
+.emptyTitle {
+  font-family: $font-display;
+  font-size: 22px;
+  color: #f2f0e9;
+}
+
+.emptyHint {
+  font-size: 14px;
+  color: #525252;
+  max-width: 280px;
+  line-height: 1.6;
+}
+
+// ── Blocked state (GPS failed) ─────────────────────────────────────────
+
+.blockedState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  padding: $space-8 0 $space-10;
+  max-width: 360px;
+}
+
+.blockedSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $space-3;
+  text-align: center;
+  padding-bottom: $space-8;
+}
+
+.divider {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: $space-4;
+  margin-bottom: $space-8;
+
+  &::before,
+  &::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.07);
+  }
+}
+
+.dividerText {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(250, 248, 244, 0.2);
+  white-space: nowrap;
+}
+
+.cityForm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $space-3;
+  width: 100%;
+}
+
+.cityInput {
+  display: flex;
+  align-items: center;
+  gap: $space-3;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: $radius-full;
+  padding: 12px 20px;
+  cursor: text;
+
+  &:focus-within {
+    background: rgba(74, 97, 65, 0.1);
+    border-color: rgba(74, 97, 65, 0.35);
+  }
+}
+
+.cityInputIcon {
+  color: rgba(250, 248, 244, 0.25);
+  flex-shrink: 0;
+}
+
+.cityInputField {
+  flex: 1;
+  background: none;
+  border: none;
+  outline: none;
+  font-family: $font-body;
+  font-size: 14px;
+  color: #f2f0e9;
+
+  &::placeholder {
+    color: rgba(250, 248, 244, 0.25);
+  }
+}
+
+.cityError {
+  font-size: 12px;
+  color: #f87171;
+  text-align: center;
+}
+
+.locationBtnOutline {
+  padding: 10px 28px;
+  border-radius: $radius-full;
+  border: 1px solid rgba(74, 97, 65, 0.4);
+  background: transparent;
+  font-family: $font-body;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #b4cea7;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  margin-top: $space-1;
+
+  &:hover {
+    background: rgba(74, 97, 65, 0.1);
+    border-color: rgba(74, 97, 65, 0.6);
+  }
+}
+
+.locationBtn {
+  margin-top: $space-4;
+  padding: 12px 32px;
+  border-radius: $radius-full;
+  border: none;
+  background: #4a6141;
+  font-family: $font-body;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #f2f0e9;
+  cursor: pointer;
+  transition: background 0.15s, opacity 0.15s;
+
+  &:hover {
+    background: #5a7450;
+  }
+
+  &:active {
+    opacity: 0.8;
+  }
+}

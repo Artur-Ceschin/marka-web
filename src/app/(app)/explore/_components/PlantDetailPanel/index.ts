@@ -1,0 +1,1 @@
+export { PlantDetailPanel } from "./PlantDetailPanel";

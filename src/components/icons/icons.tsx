@@ -86,6 +86,14 @@ export function MoonIcon(props: IconProps) {
   );
 }
 
+export function PencilIcon(props: IconProps) {
+  return (
+    <SvgBase size={14} strokeWidth={2} {...props}>
+      <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
+    </SvgBase>
+  );
+}
+
 export function LogoutIcon(props: IconProps) {
   return (
     <SvgBase {...props}>

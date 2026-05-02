@@ -1,0 +1,329 @@
+@use 'styles/tokens' as *;
+
+// ── Overlay ────────────────────────────────────────────────────────────
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(0, 0, 0, 0);
+  pointer-events: none;
+  transition: background 0.3s;
+}
+
+.overlayOpen {
+  background: rgba(0, 0, 0, 0.55);
+  pointer-events: all;
+}
+
+// ── Panel — mobile: bottom sheet / desktop: right panel ────────────────
+
+.panel {
+  position: absolute;
+  background: #141a12;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  transition: transform 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+
+  // Mobile: slide up from bottom
+  bottom: 0;
+  left: 0;
+  right: 0;
+  max-height: 92dvh;
+  border-radius: 20px 20px 0 0;
+  transform: translateY(100%);
+
+  @media (min-width: $bp-md) {
+    // Desktop: slide in from right
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: auto;
+    width: 460px;
+    max-height: 100%;
+    border-radius: 0;
+    transform: translateX(100%);
+  }
+}
+
+.panelOpen {
+  transform: translateY(0);
+
+  @media (min-width: $bp-md) {
+    transform: translateX(0);
+  }
+}
+
+// ── Close button ───────────────────────────────────────────────────────
+
+.close {
+  position: absolute;
+  top: $space-4;
+  right: $space-4;
+  z-index: 10;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(8px);
+  color: rgba(250, 248, 244, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.15s;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.65);
+  }
+}
+
+// ── Hero image ─────────────────────────────────────────────────────────
+
+.hero {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: rgba(255, 255, 255, 0.04);
+  flex-shrink: 0;
+}
+
+.heroImg {
+  object-fit: cover;
+}
+
+.heroFallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  color: rgba(180, 206, 167, 0.15);
+}
+
+// ── Body ───────────────────────────────────────────────────────────────
+
+.body {
+  padding: $space-6;
+  display: flex;
+  flex-direction: column;
+  gap: $space-4;
+}
+
+.badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.badgeFamily {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(250, 248, 244, 0.3);
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: $radius-full;
+  padding: 3px 10px;
+}
+
+.badgeInvasive {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #fca5a5;
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  border-radius: $radius-full;
+  padding: 3px 10px;
+}
+
+.commonName {
+  font-family: $font-display;
+  font-size: clamp(24px, 5vw, 32px);
+  font-weight: 700;
+  color: #f2f0e9;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.latinName {
+  font-family: $font-display;
+  font-style: italic;
+  font-size: 16px;
+  color: #b4cea7;
+  margin-top: -$space-2;
+}
+
+.authorship {
+  font-size: 11px;
+  color: rgba(250, 248, 244, 0.25);
+  margin-top: -$space-3;
+}
+
+.description {
+  font-size: 14px;
+  line-height: 1.7;
+  color: rgba(250, 248, 244, 0.55);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  padding-top: $space-4;
+}
+
+// ── Sections ───────────────────────────────────────────────────────────
+
+.section {
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  padding-top: $space-4;
+  display: flex;
+  flex-direction: column;
+  gap: $space-3;
+}
+
+.sectionLabel {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(250, 248, 244, 0.25);
+}
+
+.tagList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tag {
+  font-size: 12px;
+  font-weight: 500;
+  color: #b4cea7;
+  background: rgba(74, 97, 65, 0.15);
+  border: 1px solid rgba(74, 97, 65, 0.25);
+  border-radius: $radius-full;
+  padding: 4px 12px;
+}
+
+.tagRegion {
+  font-size: 12px;
+  color: rgba(250, 248, 244, 0.5);
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: $radius-full;
+  padding: 4px 12px;
+}
+
+// ── Biome badge (fallback) ─────────────────────────────────────────────
+
+.badgeBiome {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #b4cea7;
+  background: rgba(74, 97, 65, 0.2);
+  border: 1px solid rgba(74, 97, 65, 0.3);
+  border-radius: $radius-full;
+  padding: 3px 10px;
+}
+
+// ── Sightings row (fallback) ───────────────────────────────────────────
+
+.sightingsRow {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  padding-top: $space-4;
+}
+
+.sightingsNum {
+  font-family: $font-display;
+  font-size: 32px;
+  font-weight: 700;
+  color: #b4cea7;
+  line-height: 1;
+}
+
+.sightingsLbl {
+  font-size: 12px;
+  color: rgba(250, 248, 244, 0.35);
+}
+
+.notInCatalog {
+  font-size: 13px;
+  color: rgba(250, 248, 244, 0.3);
+  line-height: 1.5;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  padding-top: $space-4;
+}
+
+// ── Reference photos ───────────────────────────────────────────────────
+
+.refGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.refWrap {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: $radius-md;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.refImg {
+  object-fit: cover;
+}
+
+.refOrgan {
+  position: absolute;
+  bottom: 4px;
+  left: 4px;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: capitalize;
+  color: rgba(250, 248, 244, 0.8);
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 4px;
+  padding: 2px 5px;
+}
+
+// ── Loading skeleton ───────────────────────────────────────────────────
+
+.loading {
+  display: flex;
+  flex-direction: column;
+}
+
+.skeletonImg {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: rgba(255, 255, 255, 0.06);
+  animation: pulse 1.4s ease-in-out infinite;
+}
+
+.skeletonBody {
+  padding: $space-6;
+  display: flex;
+  flex-direction: column;
+  gap: $space-3;
+}
+
+.skeletonLine {
+  height: 14px;
+  border-radius: $radius-full;
+  background: rgba(255, 255, 255, 0.06);
+  animation: pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
