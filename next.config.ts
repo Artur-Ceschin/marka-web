@@ -7,6 +7,9 @@ const nextConfig: NextConfig = {
     includePaths: [path.join(process.cwd(), "src")],
   },
   images: {
+    localPatterns: [
+      { pathname: '/images/**' },
+    ],
     remotePatterns: [
       {
         protocol: "https",
@@ -27,6 +30,10 @@ const nextConfig: NextConfig = {
       {
         protocol: "https",
         hostname: "lh3.googleusercontent.com",
+      },
+      {
+        protocol: "https",
+        hostname: "**.cloudfront.net",
       },
     ],
   },

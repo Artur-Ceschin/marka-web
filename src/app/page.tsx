@@ -1,6 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import { LeafMark } from "@/components/MarkaLogo";
+import { Marquee } from "@/components/Marquee";
+import { Reveal } from "@/components/Reveal";
+import { HeroVideo } from "./_components/HeroVideo";
+import { ScrolledHeader } from "./_components/ScrolledHeader";
+import { StatsCounter } from "./_components/StatsCounter";
 import styles from "./page.module.scss";
 
 const PLANTS = [
@@ -199,7 +204,7 @@ export default function HomePage() {
   return (
     <div className={styles.page}>
       {/* ── Nav ──────────────────────────────────────────── */}
-      <header className={styles.nav}>
+      <ScrolledHeader className={styles.nav}>
         <div className={styles.navInner}>
           {/* Logo */}
           <Link href="/" className={styles.logo}>
@@ -218,16 +223,11 @@ export default function HomePage() {
             </Link>
           </div>
         </div>
-      </header>
+      </ScrolledHeader>
 
       {/* ── Hero video ───────────────────────────────────── */}
       <section className={styles.hero}>
-        <video autoPlay muted loop playsInline className={styles.heroVideo}>
-          <source
-            src={`${process.env.NEXT_PUBLIC_ASSETS_URL}/videos/hero-forest.mp4`}
-            type="video/mp4"
-          />
-        </video>
+        <HeroVideo src={`${process.env.NEXT_PUBLIC_ASSETS_URL}/videos/hero-forest.mp4`} />
         <div className={styles.heroOverlay} />
         <div className={styles.heroLoopFade} />
         <div className={styles.heroFadeIn} />
@@ -251,22 +251,28 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* ── Marquee ──────────────────────────────────────── */}
+      <div className={styles.marqueeBand}>
+        <Marquee />
+      </div>
+
       {/* ── Value props ──────────────────────────────────── */}
       <section className={styles.valueProps}>
         <div className={styles.valuePropsInner}>
           {VALUE_PROPS.map((vp, i) => (
-            <div
-              key={vp.title}
-              className={styles.valueProp}
-              style={{ animationDelay: `${0.15 + i * 0.15}s` }}
-            >
+            <Reveal key={vp.title} className={styles.valueProp} delay={i * 120}>
               <span className={styles.vpIcon}>{vp.icon}</span>
               <h3 className={styles.vpTitle}>{vp.title}</h3>
               <p className={styles.vpBody}>{vp.body}</p>
-            </div>
+            </Reveal>
           ))}
         </div>
       </section>
+
+      {/* ── Stats ────────────────────────────────────────── */}
+      <Reveal>
+        <StatsCounter />
+      </Reveal>
 
       {/* ── Main content ─────────────────────────────────── */}
       <main className={styles.main}>
@@ -282,23 +288,25 @@ export default function HomePage() {
 
             <div className={styles.discoveryGrid}>
               {PLANTS.map((plant, i) => (
-                <Link href="/signup" key={`${plant.name}-${i}`} className={styles.plantCard}>
-                  <div className={styles.plantImgWrap}>
-                    <Image
-                      src={plant.img}
-                      alt={plant.name}
-                      fill
-                      className={styles.plantImg}
-                      sizes="(max-width: 768px) 50vw, 280px"
-                    />
-                    <span className={styles.matchBadge}>{plant.match}% match</span>
-                  </div>
-                  <div className={styles.plantInfo}>
-                    <h3 className={styles.plantName}>{plant.name}</h3>
-                    <p className={styles.plantLatin}>{plant.latin}</p>
-                    <p className={styles.plantDesc}>{plant.desc}</p>
-                  </div>
-                </Link>
+                <Reveal key={`${plant.name}-${i}`} delay={i * 70}>
+                  <Link href="/signup" className={styles.plantCard}>
+                    <div className={styles.plantImgWrap}>
+                      <Image
+                        src={plant.img}
+                        alt={plant.name}
+                        fill
+                        className={styles.plantImg}
+                        sizes="(max-width: 768px) 50vw, 280px"
+                      />
+                      <span className={styles.matchBadge}>{plant.match}% match</span>
+                    </div>
+                    <div className={styles.plantInfo}>
+                      <h3 className={styles.plantName}>{plant.name}</h3>
+                      <p className={styles.plantLatin}>{plant.latin}</p>
+                      <p className={styles.plantDesc}>{plant.desc}</p>
+                    </div>
+                  </Link>
+                </Reveal>
               ))}
             </div>
           </section>
@@ -306,7 +314,7 @@ export default function HomePage() {
           {/* Right: Sidebar */}
           <aside className={styles.sidebar}>
             {/* Field Guides */}
-            <div className={styles.sideSection}>
+            <Reveal className={styles.sideSection}>
               <h2 className={styles.sectionTitle}>Field Guides</h2>
               <div className={styles.guideList}>
                 {GUIDES.map((g) => (
@@ -319,9 +327,9 @@ export default function HomePage() {
                   </Link>
                 ))}
               </div>
-            </div>
+            </Reveal>
             {/* Community Highlights */}
-            <div className={styles.sideSection}>
+            <Reveal className={styles.sideSection} delay={80}>
               <h2 className={styles.sectionTitle}>Community Highlights</h2>
               <div className={styles.communityCard}>
                 <div className={styles.communityUser}>
@@ -345,22 +353,24 @@ export default function HomePage() {
                   <HeartIcon /> 124 likes
                 </p>
               </div>
-            </div>
+            </Reveal>
 
             {/* CTA card */}
-            <div className={styles.ctaCard}>
-              <h3 className={styles.ctaTitle}>
-                <em>Start Your Journal</em>
-              </h3>
-              <p className={styles.ctaBody}>
-                Join over 50,000 nature enthusiasts cataloging the beauty of the wild. Record
-                observations, get AI-assisted identification, and contribute to global biodiversity
-                data.
-              </p>
-              <Link href="/signup" className={styles.ctaBtn}>
-                Join the Community
-              </Link>
-            </div>
+            <Reveal delay={160}>
+              <div className={styles.ctaCard}>
+                <h3 className={styles.ctaTitle}>
+                  <em>Start Your Journal</em>
+                </h3>
+                <p className={styles.ctaBody}>
+                  Join over 50,000 nature enthusiasts cataloging the beauty of the wild. Record
+                  observations, get AI-assisted identification, and contribute to global
+                  biodiversity data.
+                </p>
+                <Link href="/signup" className={styles.ctaBtn}>
+                  Join the Community
+                </Link>
+              </div>
+            </Reveal>
           </aside>
         </div>
       </main>

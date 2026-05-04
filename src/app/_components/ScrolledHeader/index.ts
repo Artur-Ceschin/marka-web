@@ -1,0 +1,1 @@
+export { ScrolledHeader } from "./ScrolledHeader";
