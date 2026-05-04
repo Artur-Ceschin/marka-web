@@ -70,7 +70,6 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       {/* ── Main content ──────────────────────── */}
       <main className={styles.main}>{children}</main>
 
-      {/* ── Mobile bottom nav ─────────────────── */}
       <div className={styles.mobileNav}>
         <MobileNav items={NAV_ITEMS} activeId={activeId} onSelect={(id) => router.push(`/${id}`)} />
       </div>

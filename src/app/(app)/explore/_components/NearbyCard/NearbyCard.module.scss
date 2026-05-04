@@ -1,37 +1,56 @@
 @use 'styles/tokens' as *;
 
 .card {
-  display: flex;
-  flex-direction: column;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: $radius-lg;
+  position: relative;
   overflow: hidden;
+  border-radius: $radius-lg;
   cursor: pointer;
-  transition: border-color 0.15s, transform 0.15s;
+  display: block;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
 
-  &:hover {
-    border-color: rgba(74, 97, 65, 0.35);
-    transform: translateY(-2px);
+  &[data-size='tall']   { aspect-ratio: 9 / 16; }
+  &[data-size='medium'] { aspect-ratio: 3 / 4; }
+  &[data-size='short']  { aspect-ratio: 1 / 1; }
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      transparent 20%,
+      rgba(6, 12, 5, 0.1) 50%,
+      rgba(6, 12, 5, 0.88) 100%
+    );
+    z-index: 1;
+    pointer-events: none;
   }
 
-  &:active {
-    transform: translateY(0);
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow:
+      0 24px 56px rgba(0, 0, 0, 0.3),
+      0 0 0 1.5px rgba(74, 145, 65, 0.4);
   }
 }
 
 // ── Image ──────────────────────────────────────────────────────────────
 
 .imageWrap {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 4 / 3;
-  background: rgba(255, 255, 255, 0.04);
-  flex-shrink: 0;
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.03);
 }
 
 .image {
   object-fit: cover;
+  transition: transform 0.55s ease;
+  filter: saturate(1.12) brightness(1.02);
+}
+
+.card:hover .image {
+  transform: scale(1.07);
 }
 
 .imageFallback {
@@ -40,94 +59,98 @@
   justify-content: center;
   width: 100%;
   height: 100%;
-  color: rgba(180, 206, 167, 0.2);
+  color: rgba(180, 206, 167, 0.15);
 }
 
-// ── Sightings badge (overlaid on image bottom-right) ──────────────────
+// ── Sightings badge ────────────────────────────────────────────────────
 
 .countBadge {
   position: absolute;
-  bottom: $space-3;
+  top: $space-3;
   right: $space-3;
+  z-index: 3;
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: rgba(15, 20, 13, 0.72);
-  backdrop-filter: blur(6px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(8, 14, 6, 0.72);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: $radius-md;
-  padding: 6px 10px;
+  padding: 5px 10px;
   line-height: 1;
   gap: 2px;
 }
 
 .countNum {
   font-family: $font-display;
-  font-size: 20px;
+  font-size: 17px;
   font-weight: 700;
   color: #b4cea7;
 }
 
 .countLbl {
-  font-size: 8px;
+  font-size: 7px;
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: rgba(250, 248, 244, 0.35);
+  color: rgba(250, 248, 244, 0.3);
 }
 
-// ── Body ───────────────────────────────────────────────────────────────
+// ── Overlaid body ──────────────────────────────────────────────────────
 
 .body {
-  padding: $space-4;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: $space-8 $space-4 $space-4;
+  z-index: 2;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 2px;
 }
 
 .tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
-  margin-bottom: 4px;
+  gap: 5px;
+  margin-bottom: 6px;
 }
 
 .family {
-  display: inline-block;
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 0.12em;
+  font-family: $font-mono;
+  font-size: 8px;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: rgba(250, 248, 244, 0.3);
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: $radius-full;
-  padding: 3px 8px;
+  color: #9de89d;
+  opacity: 0.9;
 }
 
 .biome {
-  display: inline-block;
-  font-size: 9px;
+  font-size: 8px;
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: #b4cea7;
-  background: rgba(74, 97, 65, 0.2);
-  border: 1px solid rgba(74, 97, 65, 0.3);
+  color: rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.08);
   border-radius: $radius-full;
-  padding: 3px 8px;
+  padding: 2px 7px;
 }
 
 .common {
-  font-family: $font-body;
-  font-size: 16px;
-  font-weight: 600;
-  color: #f2f0e9;
-  line-height: 1.2;
+  font-family: $font-display;
+  font-size: 17px;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.4);
 }
 
 .latin {
-  font-family: $font-display;
   font-style: italic;
-  font-size: 13px;
-  color: rgba(180, 206, 167, 0.7);
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.48);
+  margin-top: 2px;
 }

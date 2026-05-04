@@ -5,15 +5,21 @@ import { IoLeafOutline } from "react-icons/io5";
 import type { NearbyPlant } from "@/lib/api";
 import styles from "./NearbyCard.module.scss";
 
+const SIZES = ["tall", "short", "medium"] as const;
+
 interface Props {
   plant: NearbyPlant;
+  index: number;
   onClick?: (plant: NearbyPlant) => void;
 }
 
-export function NearbyCard({ plant, onClick }: Props) {
+export function NearbyCard({ plant, index, onClick }: Props) {
+  const size = SIZES[index % 3];
+
   return (
     <article
       className={styles.card}
+      data-size={size}
       onClick={() => onClick?.(plant)}
       role={onClick ? "button" : undefined}
       tabIndex={onClick ? 0 : undefined}
@@ -33,11 +39,11 @@ export function NearbyCard({ plant, onClick }: Props) {
             <IoLeafOutline size={36} />
           </span>
         )}
+      </div>
 
-        <div className={styles.countBadge}>
-          <span className={styles.countNum}>{plant.occurrenceCount}</span>
-          <span className={styles.countLbl}>sightings</span>
-        </div>
+      <div className={styles.countBadge}>
+        <span className={styles.countNum}>{plant.occurrenceCount}</span>
+        <span className={styles.countLbl}>sightings</span>
       </div>
 
       <div className={styles.body}>

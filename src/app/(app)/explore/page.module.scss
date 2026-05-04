@@ -153,6 +153,8 @@
   @media (min-width: $bp-md) {
     break-inside: avoid;
     margin-bottom: 14px;
+    display: inline-block;
+    width: 100%;
   }
 }
 

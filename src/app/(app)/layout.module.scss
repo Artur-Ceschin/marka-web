@@ -1,6 +1,6 @@
 @use 'styles/tokens' as *;
 
-$sidebar-w: 220px;
+$sidebar-w: 280px;
 $nav-h: 88px;
 $border: rgba(255,255,255,0.07);
 
@@ -55,7 +55,7 @@ $border: rgba(255,255,255,0.07);
 .sidebarNav {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 6px;
   padding: 0 $space-3;
   flex: 1;
 }

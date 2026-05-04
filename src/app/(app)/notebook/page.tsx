@@ -58,7 +58,7 @@ export default function NotebookPage() {
           <span className={styles.headerLabel}>Your Field Journal</span>
         </div>
         <h1 className={styles.headerTitle}>
-          Field Observations:
+          Field Observations
           <span className={styles.headerTitleItalic}>The Plant Archive</span>
         </h1>
         <p className={styles.headerSubtitle}>

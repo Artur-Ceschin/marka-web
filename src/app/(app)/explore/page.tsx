@@ -279,7 +279,7 @@ export default function ExplorePage() {
           <div className={styles.masonry}>
             {plants.map((plant, i) => (
               <div key={`${plant.latin}-${i}`} className={styles.masonryItem}>
-                <NearbyCard plant={plant} onClick={(p) => setSelectedPlant(p)} />
+                <NearbyCard plant={plant} index={i} onClick={(p) => setSelectedPlant(p)} />
               </div>
             ))}
           </div>

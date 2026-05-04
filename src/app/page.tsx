@@ -12,42 +12,54 @@ const PLANTS = [
   {
     name: "Araucaria araucana",
     latin: "Monkey Puzzle Tree",
+    tag: "Conifer",
     match: 97,
+    size: "tall",
     desc: "Ancient conifer native to the southern Andes. Its interlocking scale-like leaves and towering silhouette make it unmistakable against mountain skies.",
     img: "/images/plant-araucaria.jpg",
   },
   {
     name: "Mycena galopus",
     latin: "Milking Bonnet",
+    tag: "Fungi",
     match: 94,
+    size: "short",
     desc: "Delicate white fungi found clustered on decaying bark. Exudes a milky sap when broken — a key identification trait.",
     img: "/images/plant-mycena.jpg",
   },
   {
     name: "Lupinus polyphyllus",
     latin: "Large-leaved Lupin",
+    tag: "Wildflower",
     match: 91,
+    size: "medium",
     desc: "Dense spires of violet-blue flowers, naturalised across temperate meadows. Rich in nitrogen-fixing root nodules.",
     img: "/images/plant-lupin.jpg",
   },
   {
     name: "Sequoiadendron giganteum",
     latin: "Giant Sequoia",
+    tag: "Conifer",
     match: 88,
+    size: "short",
     desc: "The largest tree by volume on Earth. Towering trunks with cinnamon-red bark can reach over 84 metres, living for thousands of years.",
     img: "/images/plant-sequoia.avif",
   },
   {
     name: "Arctic Poppy",
     latin: "Papaver radicatum",
+    tag: "Alpine",
     match: 97,
+    size: "short",
     desc: "Observed in the rocky alpine tundra. Known for its resilient, vibrantly veined petals that track the path of the sun throughout the day.",
     img: "/images/plant-poppy.png",
   },
   {
     name: "Common Juniper",
     latin: "Juniperus communis",
+    tag: "Shrub",
     match: 92,
+    size: "tall",
     desc: "A hardy evergreen shrub found across diverse northern latitudes. Berries exhibit a unique dusty blue-green bloom when ripe.",
     img: "/images/plant-juniper.png",
   },
@@ -113,6 +125,21 @@ const VALUE_PROPS = [
         />
         <path
           d="M7.5 12h7M7.5 15h4.5"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+        />
+      </svg>
+    ),
+  },
+  {
+    title: "AI-Powered Identification",
+    body: "Snap a photo and get instant species recognition with confidence scores and detailed info.",
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+        <circle cx="11" cy="11" r="3" stroke="currentColor" strokeWidth="1.5" />
+        <path
+          d="M11 2v2M11 18v2M2 11h2M18 11h2M4.93 4.93l1.41 1.41M15.66 15.66l1.41 1.41M4.93 17.07l1.41-1.41M15.66 6.34l1.41-1.41"
           stroke="currentColor"
           strokeWidth="1.5"
           strokeLinecap="round"
@@ -206,7 +233,6 @@ export default function HomePage() {
       {/* ── Nav ──────────────────────────────────────────── */}
       <ScrolledHeader className={styles.nav}>
         <div className={styles.navInner}>
-          {/* Logo */}
           <Link href="/" className={styles.logo}>
             <span className={styles.logoBadge}>
               <LeafMark size={18} />
@@ -214,11 +240,17 @@ export default function HomePage() {
             <span className={styles.logoText}>Marka</span>
           </Link>
 
+          <nav className={styles.navLinks}>
+            <span className={styles.navItem}>Explore</span>
+            <span className={styles.navItem}>Identify</span>
+            <span className={styles.navItem}>Journal</span>
+          </nav>
+
           <div className={styles.navRight}>
-            <Link href="/signin" className={styles.navLink}>
+            <Link href="/signin" className={styles.navSignIn}>
               Sign in
             </Link>
-            <Link href="/signup" className={styles.navSignUp}>
+            <Link href="/signup" className={styles.navGetStarted}>
               Get started
             </Link>
           </div>
@@ -261,7 +293,10 @@ export default function HomePage() {
         <div className={styles.valuePropsInner}>
           {VALUE_PROPS.map((vp, i) => (
             <Reveal key={vp.title} className={styles.valueProp} delay={i * 120}>
-              <span className={styles.vpIcon}>{vp.icon}</span>
+              <div className={styles.vpHeader}>
+                <span className={styles.vpIcon}>{vp.icon}</span>
+                <span className={styles.vpNum}>{String(i + 1).padStart(2, "0")}</span>
+              </div>
               <h3 className={styles.vpTitle}>{vp.title}</h3>
               <p className={styles.vpBody}>{vp.body}</p>
             </Reveal>
@@ -279,6 +314,10 @@ export default function HomePage() {
         <div className={styles.mainInner}>
           {/* Left: Recent Discoveries */}
           <section className={styles.content}>
+            <p className={styles.sectionMeta}>
+              <span className={styles.liveDot} />
+              Field Log · {PLANTS.length} species
+            </p>
             <div className={styles.sectionHeader}>
               <h2 className={styles.sectionTitle}>Recent Discoveries</h2>
               <Link href="/signup" className={styles.viewAll}>
@@ -287,26 +326,43 @@ export default function HomePage() {
             </div>
 
             <div className={styles.discoveryGrid}>
-              {PLANTS.map((plant, i) => (
-                <Reveal key={`${plant.name}-${i}`} delay={i * 70}>
-                  <Link href="/signup" className={styles.plantCard}>
-                    <div className={styles.plantImgWrap}>
-                      <Image
-                        src={plant.img}
-                        alt={plant.name}
-                        fill
-                        className={styles.plantImg}
-                        sizes="(max-width: 768px) 50vw, 280px"
-                      />
-                      <span className={styles.matchBadge}>{plant.match}% match</span>
-                    </div>
-                    <div className={styles.plantInfo}>
-                      <h3 className={styles.plantName}>{plant.name}</h3>
-                      <p className={styles.plantLatin}>{plant.latin}</p>
-                      <p className={styles.plantDesc}>{plant.desc}</p>
-                    </div>
-                  </Link>
-                </Reveal>
+              {[0, 1].map((col) => (
+                <div key={col} className={styles.discoveryCol}>
+                  {PLANTS.filter((_, i) => i % 2 === col).map((plant) => {
+                    const i = PLANTS.indexOf(plant);
+                    return (
+                      <Reveal key={`${plant.name}-${i}`} delay={i * 70}>
+                        <Link href="/signup" className={styles.plantCard} data-size={plant.size}>
+                          <div className={styles.plantImgWrap}>
+                            <Image
+                              src={plant.img}
+                              alt={plant.name}
+                              fill
+                              className={styles.plantImg}
+                              sizes="(max-width: 768px) 50vw, 280px"
+                            />
+                          </div>
+                          <span className={styles.cardNum}>{String(i + 1).padStart(2, "0")}</span>
+                          <span className={styles.matchBadge}>
+                            <span
+                              className={styles.matchDot}
+                              data-tier={
+                                plant.match >= 90 ? "high" : plant.match >= 80 ? "mid" : "low"
+                              }
+                            />
+                            {plant.match}%
+                          </span>
+                          <div className={styles.plantInfo}>
+                            <span className={styles.plantTag}>{plant.tag}</span>
+                            <h3 className={styles.plantName}>{plant.name}</h3>
+                            <p className={styles.plantLatin}>{plant.latin}</p>
+                            <p className={styles.plantDesc}>{plant.desc}</p>
+                          </div>
+                        </Link>
+                      </Reveal>
+                    );
+                  })}
+                </div>
               ))}
             </div>
           </section>
@@ -380,50 +436,51 @@ export default function HomePage() {
         <div className={styles.footerTop}>
           <div className={styles.footerBrand}>
             <Link href="/" className={styles.footerLogo}>
-              <LeafMark size={22} />
+              <span className={styles.footerLogoBadge}>
+                <LeafMark size={16} />
+              </span>
               <span>Marka</span>
             </Link>
             <p className={styles.footerTagline}>
-              Dedicated to the documentation and preservation of global biodiversity through the
-              eyes of citizen scientists.
+              Your field journal for the modern naturalist. Document every species you encounter.
             </p>
           </div>
 
           <div className={styles.footerCol}>
-            <p className={styles.footerColHead}>Explore</p>
-            <Link href="/signup">Global Map</Link>
+            <p className={styles.footerColHead}>Product</p>
+            <Link href="/signup">Identify</Link>
+            <Link href="/signup">Explore</Link>
+            <Link href="/signup">Field Journal</Link>
             <Link href="/signup">Species Database</Link>
-            <Link href="/signup">Citizen Science Projects</Link>
           </div>
 
           <div className={styles.footerCol}>
-            <p className={styles.footerColHead}>Notebook</p>
-            <Link href="/signup">Observation Logs</Link>
-            <Link href="/signup">Drafts</Link>
-            <Link href="/signup">Equipment Guide</Link>
+            <p className={styles.footerColHead}>Community</p>
+            <Link href="/signup">Global Map</Link>
+            <Link href="/signup">Citizen Science</Link>
+            <Link href="/signup">Guides</Link>
           </div>
 
           <div className={styles.footerCol}>
-            <p className={styles.footerColHead}>Connect</p>
-            <div className={styles.socialRow}>
-              <a href="#" aria-label="Website">
-                <GlobeIcon />
-              </a>
-              <a href="#" aria-label="Email">
-                <MailIcon />
-              </a>
-              <a href="#" aria-label="Community">
-                <ChatIcon />
-              </a>
-            </div>
+            <p className={styles.footerColHead}>Company</p>
+            <Link href="#">About</Link>
+            <Link href="#">Privacy Policy</Link>
+            <Link href="#">Terms of Service</Link>
           </div>
         </div>
 
         <div className={styles.footerBottom}>
-          <span>© 2026 Marka Inc. All rights reserved.</span>
-          <div className={styles.footerLegal}>
-            <Link href="#">Privacy Policy</Link>
-            <Link href="#">Terms of Service</Link>
+          <span>© 2026 Marka Inc.</span>
+          <div className={styles.socialRow}>
+            <a href="#" aria-label="Website">
+              <GlobeIcon />
+            </a>
+            <a href="#" aria-label="Email">
+              <MailIcon />
+            </a>
+            <a href="#" aria-label="Community">
+              <ChatIcon />
+            </a>
           </div>
         </div>
       </footer>
