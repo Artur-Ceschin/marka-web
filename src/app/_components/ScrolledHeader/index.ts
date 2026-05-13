@@ -1,1 +1,1 @@
-export { ScrolledHeader } from "./ScrolledHeader";
+export { ScrolledHeader } from './ScrolledHeader';

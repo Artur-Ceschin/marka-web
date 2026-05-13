@@ -1,1 +1,1 @@
-export { PlantDetailPanel } from "./PlantDetailPanel";
+export { PlantDetailPanel } from './PlantDetailPanel';

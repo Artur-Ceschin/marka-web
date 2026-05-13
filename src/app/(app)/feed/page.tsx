@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import styles from "./page.module.scss";
+import styles from './page.module.scss';
 
 export default function FeedPage() {
   return (

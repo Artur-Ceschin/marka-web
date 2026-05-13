@@ -1,20 +1,20 @@
-"use client";
+'use client';
 
-import Image from "next/image";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
+import Image from 'next/image';
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
 
-import { Button, Tag } from "@/components/ui";
-import { BackArrowIcon } from "@/components/icons";
-import { Lightbox, type LightboxItem } from "@/components/Lightbox";
-import { identify, plants, type IdentifyResult, type Plant } from "@/lib/api";
-import { getCurrentLocation, type LocationInfo } from "@/lib/geolocation";
+import { Button, Tag } from '@/components/ui';
+import { BackArrowIcon } from '@/components/icons';
+import { Lightbox, type LightboxItem } from '@/components/Lightbox';
+import { identify, plants, type IdentifyResult, type Plant } from '@/lib/api';
+import { getCurrentLocation, type LocationInfo } from '@/lib/geolocation';
 
-import { ConfidenceBar } from "../ConfidenceBar";
-import { LocationDialog } from "../LocationDialog";
-import styles from "./DetailView.module.scss";
+import { ConfidenceBar } from '../ConfidenceBar';
+import { LocationDialog } from '../LocationDialog';
+import styles from './DetailView.module.scss';
 
 export function DetailView({
   result,
@@ -38,7 +38,7 @@ export function DetailView({
   const heroUrl = photoUrl ?? result.imageUrl;
 
   const { data: plant } = useQuery<Plant | null>({
-    queryKey: ["plant", result.latin],
+    queryKey: ['plant', result.latin],
     queryFn: async () => {
       try {
         return await plants.getByLatin(result.latin);
@@ -51,7 +51,7 @@ export function DetailView({
 
   const { mutate: saveEntry, isPending: isSaving } = useMutation({
     mutationFn: (location: LocationInfo | null) => {
-      if (!imageUrlToSave) throw new Error("Missing image");
+      if (!imageUrlToSave) throw new Error('Missing image');
       return identify.save({
         plantName: result.name,
         latinName: result.latin,
@@ -63,12 +63,10 @@ export function DetailView({
       });
     },
     onSuccess: (_data, location) => {
-      toast.success(
-        location ? `Saved to notebook · ${location.place}` : "Saved to notebook",
-      );
-      queryClient.invalidateQueries({ queryKey: ["notebook"] });
+      toast.success(location ? `Saved to notebook · ${location.place}` : 'Saved to notebook');
+      queryClient.invalidateQueries({ queryKey: ['notebook'] });
       setDialogOpen(false);
-      router.push("/notebook");
+      router.push('/notebook');
     },
   });
 
@@ -76,7 +74,7 @@ export function DetailView({
     setLocating(true);
     const location = await getCurrentLocation();
     setLocating(false);
-    if (!location) toast.message("Location unavailable — saving without it.");
+    if (!location) toast.message('Location unavailable — saving without it.');
     saveEntry(location);
   }
 
@@ -111,7 +109,7 @@ export function DetailView({
           className={styles.hero}
           onClick={() => setLightbox({ url: heroUrl, caption: result.name })}
         >
-          <Image src={heroUrl} alt={result.name} fill unoptimized style={{ objectFit: "cover" }} />
+          <Image src={heroUrl} alt={result.name} fill unoptimized style={{ objectFit: 'cover' }} />
           {isInvasive && <span className={styles.invasiveBadge}>Invasive species</span>}
         </button>
       )}
@@ -134,10 +132,10 @@ export function DetailView({
         {family && <Fact label="Family" value={family} />}
         {genus && <Fact label="Genus" value={genus} />}
         {otherCommonNames.length > 0 && (
-          <Fact label="Also known as" value={otherCommonNames.slice(0, 5).join(" · ")} />
+          <Fact label="Also known as" value={otherCommonNames.slice(0, 5).join(' · ')} />
         )}
         {nativeRegions.length > 0 && (
-          <Fact label="Native to" value={nativeRegions.slice(0, 8).join(", ")} />
+          <Fact label="Native to" value={nativeRegions.slice(0, 8).join(', ')} />
         )}
       </div>
 
@@ -152,7 +150,13 @@ export function DetailView({
                 className={styles.refThumb}
                 onClick={() => setLightbox({ url: ref.url, caption: ref.organ })}
               >
-                <Image src={ref.url} alt={ref.organ} fill unoptimized style={{ objectFit: "cover" }} />
+                <Image
+                  src={ref.url}
+                  alt={ref.organ}
+                  fill
+                  unoptimized
+                  style={{ objectFit: 'cover' }}
+                />
                 <span className={styles.refOrgan}>{ref.organ}</span>
               </button>
             ))}

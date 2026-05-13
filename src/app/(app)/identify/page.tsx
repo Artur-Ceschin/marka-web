@@ -1,21 +1,21 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useMutation } from "@tanstack/react-query";
-import { toast } from "sonner";
-import { IoSunnyOutline, IoPrismOutline, IoSparklesOutline } from "react-icons/io5";
+import { useState } from 'react';
+import { useMutation } from '@tanstack/react-query';
+import { toast } from 'sonner';
+import { IoSunnyOutline, IoPrismOutline, IoSparklesOutline } from 'react-icons/io5';
 
-import { identify, type IdentifyResult, ApiError } from "@/lib/api";
-import { PhotoPicker } from "./_components/PhotoPicker";
-import { ResultsList } from "./_components/ResultsList";
-import { DetailView } from "./_components/DetailView";
-import { LimitModal } from "./_components/LimitModal";
-import styles from "./page.module.scss";
+import { identify, type IdentifyResult, ApiError } from '@/lib/api';
+import { PhotoPicker } from './_components/PhotoPicker';
+import { ResultsList } from './_components/ResultsList';
+import { DetailView } from './_components/DetailView';
+import { LimitModal } from './_components/LimitModal';
+import styles from './page.module.scss';
 
-type Step = "upload" | "preview" | "results" | "detail";
+type Step = 'upload' | 'preview' | 'results' | 'detail';
 
 export default function IdentifyPage() {
-  const [step, setStep] = useState<Step>("upload");
+  const [step, setStep] = useState<Step>('upload');
   const [preview, setPreview] = useState<string | null>(null);
   const [file, setFile] = useState<File | null>(null);
   const [detail, setDetail] = useState<IdentifyResult | null>(null);
@@ -28,12 +28,12 @@ export default function IdentifyPage() {
   } = useMutation({
     mutationFn: (f: File) => identify.submit(f),
     onSuccess: (data) => {
-      setStep("results");
+      setStep('results');
       const count = data.results?.length ?? 0;
       toast.success(
         count > 0
-          ? `Found ${count} match${count > 1 ? "es" : ""}!`
-          : "No matches found. Try a clearer photo.",
+          ? `Found ${count} match${count > 1 ? 'es' : ''}!`
+          : 'No matches found. Try a clearer photo.',
       );
     },
     onError: (err) => {
@@ -46,24 +46,24 @@ export default function IdentifyPage() {
   function handleFile(picked: File) {
     setFile(picked);
     setPreview(URL.createObjectURL(picked));
-    setStep("preview");
+    setStep('preview');
     setDetail(null);
   }
 
   function handleClear() {
     setPreview(null);
     setFile(null);
-    setStep("upload");
+    setStep('upload');
     setDetail(null);
   }
 
-  if (step === "detail" && detail) {
+  if (step === 'detail' && detail) {
     return (
       <DetailView
         result={detail}
         photoUrl={identifyData?.displayUrl ?? identifyData?.imageUrl}
         savedImageUrl={identifyData?.imageUrl}
-        onBack={() => setStep("results")}
+        onBack={() => setStep('results')}
       />
     );
   }
@@ -74,7 +74,7 @@ export default function IdentifyPage() {
 
       <div className={styles.canvas}>
         {/* Page heading */}
-        {step !== "results" && (
+        {step !== 'results' && (
           <div className={styles.heading}>
             <h2 className={styles.headingTitle}>New Identification</h2>
             <p className={styles.headingSubtitle}>
@@ -85,13 +85,13 @@ export default function IdentifyPage() {
         )}
 
         {/* Viewfinder / Results */}
-        {step === "results" ? (
+        {step === 'results' ? (
           <div className={styles.resultsWrapper}>
             <ResultsList
               results={identifyData?.results ?? []}
               onSelect={(r) => {
                 setDetail(r);
-                setStep("detail");
+                setStep('detail');
               }}
               onBack={handleClear}
             />
@@ -99,7 +99,7 @@ export default function IdentifyPage() {
         ) : (
           <PhotoPicker
             preview={preview}
-            canIdentify={step === "preview"}
+            canIdentify={step === 'preview'}
             isIdentifying={isPending}
             onSelect={handleFile}
             onIdentify={() => file && runIdentify(file)}
@@ -108,7 +108,7 @@ export default function IdentifyPage() {
         )}
 
         {/* Contextual hints — only on upload step */}
-        {step !== "results" && (
+        {step !== 'results' && (
           <div className={styles.hints}>
             <div className={styles.hintCard}>
               <IoSunnyOutline size={22} className={styles.hintIcon} />
@@ -144,8 +144,8 @@ export default function IdentifyPage() {
 
       <LimitModal
         open={limitError !== null}
-        code={limitError?.code ?? ""}
-        message={limitError?.message ?? ""}
+        code={limitError?.code ?? ''}
+        message={limitError?.message ?? ''}
         onClose={() => setLimitError(null)}
       />
 

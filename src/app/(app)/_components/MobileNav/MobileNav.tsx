@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import styles from "./MobileNav.module.scss";
+import styles from './MobileNav.module.scss';
 
 interface NavItem {
   id: string;
@@ -24,11 +24,11 @@ export function MobileNav({
         return (
           <button
             key={item.id}
-            className={`${styles.item} ${isActive ? styles.itemActive : ""}`}
+            className={`${styles.item} ${isActive ? styles.itemActive : ''}`}
             onClick={() => onSelect(item.id)}
-            aria-current={isActive ? "page" : undefined}
+            aria-current={isActive ? 'page' : undefined}
           >
-            <span className={`${styles.iconWrap} ${isActive ? styles.iconWrapActive : ""}`}>
+            <span className={`${styles.iconWrap} ${isActive ? styles.iconWrapActive : ''}`}>
               {item.icon}
             </span>
             <span className={styles.label}>{item.label}</span>

@@ -1,18 +1,18 @@
-import styles from "./AppPhone.module.scss";
+import styles from './AppPhone.module.scss';
 
-type Theme = "dark" | "light";
+type Theme = 'dark' | 'light';
 
 interface AppPhoneProps {
   theme?: Theme;
 }
 
-export function AppPhone({ theme = "dark" }: AppPhoneProps) {
+export function AppPhone({ theme = 'dark' }: AppPhoneProps) {
   return (
-    <div className={`${styles.shell} ${theme === "light" ? styles.shellLight : ""}`}>
+    <div className={`${styles.shell} ${theme === 'light' ? styles.shellLight : ''}`}>
       <div className={styles.notch} />
 
       {/* Status */}
-      <div className={`${styles.status} ${theme === "light" ? styles.statusLight : ""}`}>
+      <div className={`${styles.status} ${theme === 'light' ? styles.statusLight : ''}`}>
         <span>18:53</span>
         <span className={styles.statusRight}>
           <SignalIcon />
@@ -24,7 +24,7 @@ export function AppPhone({ theme = "dark" }: AppPhoneProps) {
       <div className={styles.header}>
         <div className={styles.headerBg} />
         <div className={styles.headerContent}>
-          {theme === "dark" ? (
+          {theme === 'dark' ? (
             <>
               <p className={styles.headerTitle}>Feed</p>
               <p className={styles.headerSub}>What&apos;s sprouting in the wild</p>
@@ -39,16 +39,16 @@ export function AppPhone({ theme = "dark" }: AppPhoneProps) {
       </div>
 
       {/* Body */}
-      {theme === "dark" ? <DarkBody /> : <LightBody />}
+      {theme === 'dark' ? <DarkBody /> : <LightBody />}
 
       {/* Bottom nav */}
-      <div className={`${styles.nav} ${theme === "light" ? styles.navLight : ""}`}>
-        {(["Feed", "Identify", "Notebook", "Profile"] as const).map((label, i) => {
-          const active = theme === "dark" ? i === 0 : i === 2;
+      <div className={`${styles.nav} ${theme === 'light' ? styles.navLight : ''}`}>
+        {(['Feed', 'Identify', 'Notebook', 'Profile'] as const).map((label, i) => {
+          const active = theme === 'dark' ? i === 0 : i === 2;
           return (
             <div
               key={label}
-              className={`${styles.navItem} ${active ? (theme === "dark" ? styles.navItemActiveDark : styles.navItemActiveLight) : ""}`}
+              className={`${styles.navItem} ${active ? (theme === 'dark' ? styles.navItemActiveDark : styles.navItemActiveLight) : ''}`}
             >
               <div className={styles.navDot} />
               <span>{label}</span>
@@ -89,7 +89,7 @@ function DarkBody() {
           <p className={styles.feedLatin}>Lagenaria siceraria (Molina) Standl.</p>
           <div className={styles.confRow}>
             <div className={styles.confBar}>
-              <div className={styles.confFill} style={{ width: "82%" }} />
+              <div className={styles.confFill} style={{ width: '82%' }} />
             </div>
             <span className={styles.confPct}>82%</span>
           </div>

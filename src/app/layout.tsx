@@ -1,24 +1,24 @@
-import type { Metadata } from "next";
-import { Playfair_Display, DM_Sans } from "next/font/google";
-import { Providers } from "./providers";
-import "@marka-app/ui/styles";
-import "@/styles/globals.scss";
+import type { Metadata } from 'next';
+import { Playfair_Display, DM_Sans } from 'next/font/google';
+import { Providers } from './providers';
+import '@marka-app/ui/styles';
+import '@/styles/globals.scss';
 
 const playfair = Playfair_Display({
-  subsets: ["latin"],
-  variable: "--font-display",
-  display: "swap",
+  subsets: ['latin'],
+  variable: '--font-display',
+  display: 'swap',
 });
 
 const dmSans = DM_Sans({
-  subsets: ["latin"],
-  variable: "--font-body",
-  display: "swap",
+  subsets: ['latin'],
+  variable: '--font-body',
+  display: 'swap',
 });
 
 export const metadata: Metadata = {
-  title: { default: "Marka", template: "%s | Marka" },
-  description: "Identify and track the plants around you.",
+  title: { default: 'Marka', template: '%s | Marka' },
+  description: 'Identify and track the plants around you.',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

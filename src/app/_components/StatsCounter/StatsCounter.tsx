@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { useEffect, useRef, useState } from "react";
-import styles from "./StatsCounter.module.scss";
+import { useEffect, useRef, useState } from 'react';
+import styles from './StatsCounter.module.scss';
 
 const FACTS = [
-  { value: "5", label: "Free IDs per day", animate: true, end: 5 },
-  { value: "Free", label: "No credit card, ever", animate: false, end: 0 },
-  { value: "GPS", label: "Location tagging", animate: false, end: 0 },
-  { value: "Yours", label: "Your data, always", animate: false, end: 0 },
+  { value: '5', label: 'Free IDs per day', animate: true, end: 5 },
+  { value: 'Free', label: 'No credit card, ever', animate: false, end: 0 },
+  { value: 'GPS', label: 'Location tagging', animate: false, end: 0 },
+  { value: 'Yours', label: 'Your data, always', animate: false, end: 0 },
 ];
 
 function easeOutQuart(t: number): number {

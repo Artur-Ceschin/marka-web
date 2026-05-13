@@ -7,3 +7,5 @@ CLAUDE.md
 
 # Large video assets — host on CDN, not in git
 public/videos/
+
+.claude

@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import { useEffect } from "react";
-import { createPortal } from "react-dom";
-import Image from "next/image";
-import { useQuery } from "@tanstack/react-query";
-import { IoCloseOutline, IoLeafOutline, IoWarningOutline } from "react-icons/io5";
-import { plants, type NearbyPlant } from "@/lib/api";
-import styles from "./PlantDetailPanel.module.scss";
+import { useEffect } from 'react';
+import { createPortal } from 'react-dom';
+import Image from 'next/image';
+import { useQuery } from '@tanstack/react-query';
+import { IoCloseOutline, IoLeafOutline, IoWarningOutline } from 'react-icons/io5';
+import { plants, type NearbyPlant } from '@/lib/api';
+import styles from './PlantDetailPanel.module.scss';
 
 interface Props {
   latin: string | null;
@@ -22,7 +22,7 @@ export function PlantDetailPanel({ latin, fallback, onClose }: Props) {
     isLoading,
     isError,
   } = useQuery({
-    queryKey: ["plant", latin],
+    queryKey: ['plant', latin],
     queryFn: () => plants.getByLatin(latin!),
     enabled: !!latin,
     staleTime: 1000 * 60 * 10,
@@ -31,21 +31,21 @@ export function PlantDetailPanel({ latin, fallback, onClose }: Props) {
 
   useEffect(() => {
     if (!open) return;
-    const handler = (e: KeyboardEvent) => e.key === "Escape" && onClose();
-    document.addEventListener("keydown", handler);
-    document.body.style.overflow = "hidden";
+    const handler = (e: KeyboardEvent) => e.key === 'Escape' && onClose();
+    document.addEventListener('keydown', handler);
+    document.body.style.overflow = 'hidden';
     return () => {
-      document.removeEventListener("keydown", handler);
-      document.body.style.overflow = "";
+      document.removeEventListener('keydown', handler);
+      document.body.style.overflow = '';
     };
   }, [open, onClose]);
 
-  if (typeof document === "undefined") return null;
+  if (typeof document === 'undefined') return null;
 
   return createPortal(
-    <div className={`${styles.overlay} ${open ? styles.overlayOpen : ""}`} onClick={onClose}>
+    <div className={`${styles.overlay} ${open ? styles.overlayOpen : ''}`} onClick={onClose}>
       <aside
-        className={`${styles.panel} ${open ? styles.panelOpen : ""}`}
+        className={`${styles.panel} ${open ? styles.panelOpen : ''}`}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close */}
@@ -57,10 +57,10 @@ export function PlantDetailPanel({ latin, fallback, onClose }: Props) {
           <div className={styles.loading}>
             <div className={styles.skeletonImg} />
             <div className={styles.skeletonBody}>
-              <div className={styles.skeletonLine} style={{ width: "60%" }} />
-              <div className={styles.skeletonLine} style={{ width: "40%" }} />
-              <div className={styles.skeletonLine} style={{ width: "80%", marginTop: 16 }} />
-              <div className={styles.skeletonLine} style={{ width: "70%" }} />
+              <div className={styles.skeletonLine} style={{ width: '60%' }} />
+              <div className={styles.skeletonLine} style={{ width: '40%' }} />
+              <div className={styles.skeletonLine} style={{ width: '80%', marginTop: 16 }} />
+              <div className={styles.skeletonLine} style={{ width: '70%' }} />
             </div>
           </div>
         )}

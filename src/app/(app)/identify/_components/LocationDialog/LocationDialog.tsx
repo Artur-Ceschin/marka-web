@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { Button } from "@/components/ui";
-import { Modal } from "@/components/Modal";
-import styles from "./LocationDialog.module.scss";
+import { Button } from '@/components/ui';
+import { Modal } from '@/components/Modal';
+import styles from './LocationDialog.module.scss';
 
 export function LocationDialog({
   open,
@@ -37,7 +37,7 @@ export function LocationDialog({
           disabled={saving}
           onClick={onIncludeLocation}
         >
-          {locating ? "Getting your location…" : "Yes, include location"}
+          {locating ? 'Getting your location…' : 'Yes, include location'}
         </Button>
         <Button
           variant="ghost"

@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 export {
   Button,
@@ -17,7 +17,7 @@ export {
   MarkaSelect,
   SelectSeparator,
   MarkaDialog,
-} from "@marka-app/ui";
+} from '@marka-app/ui';
 
 export type {
   ButtonProps,
@@ -44,4 +44,4 @@ export type {
   SelectOption,
   SelectGroup,
   MarkaDialogProps,
-} from "@marka-app/ui";
+} from '@marka-app/ui';

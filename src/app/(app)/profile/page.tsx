@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useRef, useState } from "react";
-import { useRouter } from "next/navigation";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useRef, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 import {
   BellIcon,
@@ -11,13 +11,13 @@ import {
   MoonIcon,
   PencilIcon,
   PersonIcon,
-} from "@/components/icons";
-import { useAuthStore } from "@/store/auth.store";
-import { users, type UserProfile } from "@/lib/api";
-import { cdnUrl } from "@/lib/cdn";
+} from '@/components/icons';
+import { useAuthStore } from '@/store/auth.store';
+import { users, type UserProfile } from '@/lib/api';
+import { cdnUrl } from '@/lib/cdn';
 
-import { EditProfileDialog } from "./_components/EditProfileDialog";
-import styles from "./page.module.scss";
+import { EditProfileDialog } from './_components/EditProfileDialog';
+import styles from './page.module.scss';
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -34,26 +34,26 @@ export default function ProfilePage() {
     if (!file) return;
     const raw = file.type.toLowerCase();
     const mimeType =
-      raw === "image/jpeg" || raw === "image/png" || raw === "image/webp"
-        ? (raw as "image/jpeg" | "image/png" | "image/webp")
-        : "image/jpeg";
+      raw === 'image/jpeg' || raw === 'image/png' || raw === 'image/webp'
+        ? (raw as 'image/jpeg' | 'image/png' | 'image/webp')
+        : 'image/jpeg';
     setUploading(true);
     try {
       const { uploadUrl, avatarUrl } = await users.avatarUploadUrl(mimeType);
-      await fetch(uploadUrl, { method: "PUT", body: file, headers: { "Content-Type": mimeType } });
+      await fetch(uploadUrl, { method: 'PUT', body: file, headers: { 'Content-Type': mimeType } });
       const versionedUrl = `${avatarUrl}?v=${Date.now()}`;
       await users.updateMe({ avatarUrl: versionedUrl });
-      queryClient.setQueryData<UserProfile>(["users", "me"], (old) =>
+      queryClient.setQueryData<UserProfile>(['users', 'me'], (old) =>
         old ? { ...old, avatarUrl: versionedUrl } : old,
       );
     } finally {
       setUploading(false);
-      e.target.value = "";
+      e.target.value = '';
     }
   }
 
   const { data: profile } = useQuery({
-    queryKey: ["users", "me"],
+    queryKey: ['users', 'me'],
     queryFn: users.me,
   });
 
@@ -61,13 +61,13 @@ export default function ProfilePage() {
 
   function handleLogout() {
     logout();
-    router.replace("/signin");
+    router.replace('/signin');
   }
 
   const stats = [
-    { label: "Plants", value: profile?.plantCount ?? "—" },
-    { label: "This Week", value: profile?.weekCount ?? "—" },
-    { label: "Season", value: profile?.seasonCount ?? "—" },
+    { label: 'Plants', value: profile?.plantCount ?? '—' },
+    { label: 'This Week', value: profile?.weekCount ?? '—' },
+    { label: 'Season', value: profile?.seasonCount ?? '—' },
   ];
 
   return (
@@ -90,7 +90,6 @@ export default function ProfilePage() {
           >
             <div className={styles.avatar}>
               {profile?.avatarUrl || authPicture ? (
-                // eslint-disable-next-line @next/next/no-img-element
                 <img src={cdnUrl(profile?.avatarUrl) ?? authPicture!} alt="Profile" />
               ) : (
                 <DefaultAvatar />
@@ -112,11 +111,11 @@ export default function ProfilePage() {
             <h1 className={styles.headerTitle}>
               {profile?.name ? (
                 <>
-                  {profile.name.split(" ")[0]}
-                  {profile.name.split(" ").length > 1 && (
+                  {profile.name.split(' ')[0]}
+                  {profile.name.split(' ').length > 1 && (
                     <span className={styles.headerTitleItalic}>
-                      {" "}
-                      {profile.name.split(" ").slice(1).join(" ")}
+                      {' '}
+                      {profile.name.split(' ').slice(1).join(' ')}
                     </span>
                   )}
                 </>
@@ -196,10 +195,10 @@ export default function ProfilePage() {
         open={editOpen}
         onOpenChange={setEditOpen}
         profile={
-          profile ? { name: profile.name, email: email ?? "", bio: profile.bio ?? null } : null
+          profile ? { name: profile.name, email: email ?? '', bio: profile.bio ?? null } : null
         }
         onSaved={() => {
-          queryClient.invalidateQueries({ queryKey: ["users", "me"] });
+          queryClient.invalidateQueries({ queryKey: ['users', 'me'] });
           setEditOpen(false);
         }}
       />
@@ -213,7 +212,7 @@ function DefaultAvatar() {
       viewBox="0 0 96 96"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      style={{ width: "100%", height: "100%" }}
+      style={{ width: '100%', height: '100%' }}
     >
       <rect width="96" height="96" fill="rgba(74,97,65,0.2)" />
       <circle cx="48" cy="36" r="20" fill="rgba(180,206,167,0.35)" />

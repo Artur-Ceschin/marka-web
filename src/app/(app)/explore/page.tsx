@@ -1,34 +1,36 @@
-"use client";
+'use client';
 
-import { useEffect, useRef, useState, useCallback } from "react";
-import { useInfiniteQuery } from "@tanstack/react-query";
-import { IoLocationOutline, IoWarningOutline, IoSearchOutline } from "react-icons/io5";
-import type { LocationInfo } from "@/lib/geolocation";
-import { explore } from "@/lib/api";
-import { NearbyCard } from "./_components/NearbyCard";
-import { PlantDetailPanel } from "./_components/PlantDetailPanel";
-import styles from "./page.module.scss";
+import { useEffect, useRef, useState, useCallback } from 'react';
+import { useInfiniteQuery } from '@tanstack/react-query';
+import { IoLocationOutline, IoWarningOutline, IoSearchOutline } from 'react-icons/io5';
+import type { LocationInfo } from '@/lib/geolocation';
+import { explore } from '@/lib/api';
+import { NearbyCard } from './_components/NearbyCard';
+import { PlantDetailPanel } from './_components/PlantDetailPanel';
+import styles from './page.module.scss';
 
 type LocationState =
-  | { status: "checking" }
-  | { status: "prompt" }
-  | { status: "requesting" }
-  | { status: "blocked" } // GPS failed — show city fallback
-  | { status: "ready"; info: LocationInfo };
+  | { status: 'checking' }
+  | { status: 'prompt' }
+  | { status: 'requesting' }
+  | { status: 'blocked' } // GPS failed — show city fallback
+  | { status: 'ready'; info: LocationInfo };
 
 const RADIUS_OPTIONS = [5, 10, 25, 50];
+
+const NOMINATIM_EMAIL = process.env.NEXT_PUBLIC_NOMINATIM_EMAIL ?? 'contact@marka.app';
 
 async function reverseGeocode(lat: number, lng: number): Promise<string> {
   try {
     const res = await fetch(
-      `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=12`,
-      { headers: { Accept: "application/json" } },
+      `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=12&email=${encodeURIComponent(NOMINATIM_EMAIL)}`,
+      { headers: { Accept: 'application/json' } },
     );
     if (!res.ok) return `${lat.toFixed(3)}, ${lng.toFixed(3)}`;
     const data = await res.json();
     const a = data.address ?? {};
     return (
-      [a.city ?? a.town ?? a.village ?? a.suburb, a.state, a.country].filter(Boolean).join(", ") ||
+      [a.city ?? a.town ?? a.village ?? a.suburb, a.state, a.country].filter(Boolean).join(', ') ||
       data.display_name ||
       `${lat.toFixed(3)}, ${lng.toFixed(3)}`
     );
@@ -40,8 +42,8 @@ async function reverseGeocode(lat: number, lng: number): Promise<string> {
 async function geocodeCity(city: string): Promise<LocationInfo | null> {
   try {
     const res = await fetch(
-      `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(city)}&format=json&limit=1`,
-      { headers: { Accept: "application/json" } },
+      `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(city)}&format=json&limit=1&email=${encodeURIComponent(NOMINATIM_EMAIL)}`,
+      { headers: { Accept: 'application/json' } },
     );
     if (!res.ok) return null;
     const [hit] = await res.json();
@@ -49,7 +51,7 @@ async function geocodeCity(city: string): Promise<LocationInfo | null> {
     return {
       lat: parseFloat(hit.lat),
       lng: parseFloat(hit.lon),
-      place: hit.display_name.split(",").slice(0, 2).join(", "),
+      place: hit.display_name.split(',').slice(0, 2).join(', '),
     };
   } catch {
     return null;
@@ -67,73 +69,73 @@ function fetchPosition(): Promise<GeolocationPosition> {
 }
 
 export default function ExplorePage() {
-  const [location, setLocation] = useState<LocationState>({ status: "checking" });
+  const [location, setLocation] = useState<LocationState>({ status: 'checking' });
   const [radius, setRadius] = useState(10);
-  const [selectedPlant, setSelectedPlant] = useState<import("@/lib/api").NearbyPlant | null>(null);
-  const [city, setCity] = useState("");
-  const [cityError, setCityError] = useState("");
+  const [selectedPlant, setSelectedPlant] = useState<import('@/lib/api').NearbyPlant | null>(null);
+  const [city, setCity] = useState('');
+  const [cityError, setCityError] = useState('');
   const [cityLoading, setCityLoading] = useState(false);
   const sentinelRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!("geolocation" in navigator)) {
-      setLocation({ status: "blocked" });
+    if (!('geolocation' in navigator)) {
+      setLocation({ status: 'blocked' });
       return;
     }
-    if (!("permissions" in navigator)) {
-      setLocation({ status: "prompt" });
+    if (!('permissions' in navigator)) {
+      setLocation({ status: 'prompt' });
       return;
     }
     navigator.permissions
-      .query({ name: "geolocation" })
+      .query({ name: 'geolocation' })
       .then(({ state }) => {
-        if (state === "granted") doRequest();
-        else if (state === "denied") setLocation({ status: "blocked" });
-        else setLocation({ status: "prompt" });
+        if (state === 'granted') doRequest();
+        else if (state === 'denied') setLocation({ status: 'blocked' });
+        else setLocation({ status: 'prompt' });
       })
-      .catch(() => setLocation({ status: "prompt" }));
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+      .catch(() => setLocation({ status: 'prompt' }));
+  }, []);
 
   async function doRequest() {
-    setLocation({ status: "requesting" });
+    setLocation({ status: 'requesting' });
     const [result] = await Promise.allSettled([
       fetchPosition(),
       new Promise((r) => setTimeout(r, 900)),
     ]);
-    if (result.status === "fulfilled") {
+    if (result.status === 'fulfilled') {
       const pos = result.value as GeolocationPosition;
       const { latitude: lat, longitude: lng } = pos.coords;
       const place = await reverseGeocode(lat, lng);
-      setLocation({ status: "ready", info: { lat, lng, place } });
+      setLocation({ status: 'ready', info: { lat, lng, place } });
     } else {
-      setLocation({ status: "blocked" });
+      setLocation({ status: 'blocked' });
     }
   }
 
   async function searchCity(e: React.FormEvent) {
     e.preventDefault();
     if (!city.trim()) return;
-    setCityError("");
+    setCityError('');
     setCityLoading(true);
     const info = await geocodeCity(city.trim());
     setCityLoading(false);
     if (info) {
-      setLocation({ status: "ready", info });
+      setLocation({ status: 'ready', info });
     } else {
-      setCityError("City not found. Try a different name.");
+      setCityError('City not found. Try a different name.');
     }
   }
 
-  const lat = location.status === "ready" ? location.info.lat : 0;
-  const lng = location.status === "ready" ? location.info.lng : 0;
-  const place = location.status === "ready" ? location.info.place : "";
+  const lat = location.status === 'ready' ? location.info.lat : 0;
+  const lng = location.status === 'ready' ? location.info.lng : 0;
+  const place = location.status === 'ready' ? location.info.place : '';
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useInfiniteQuery({
-    queryKey: ["explore", "nearby", lat, lng, radius],
+    queryKey: ['explore', 'nearby', lat, lng, radius],
     queryFn: ({ pageParam }) => explore.nearby(lat, lng, pageParam, radius),
     initialPageParam: 0,
     getNextPageParam: (last) => (last.hasMore ? last.page + 1 : undefined),
-    enabled: location.status === "ready",
+    enabled: location.status === 'ready',
   });
 
   const plants = data?.pages.flatMap((p) => p.plants) ?? [];
@@ -150,7 +152,7 @@ export default function ExplorePage() {
   useEffect(() => {
     const el = sentinelRef.current;
     if (!el) return;
-    const observer = new IntersectionObserver(onIntersect, { rootMargin: "200px" });
+    const observer = new IntersectionObserver(onIntersect, { rootMargin: '200px' });
     observer.observe(el);
     return () => observer.disconnect();
   }, [onIntersect]);
@@ -180,7 +182,7 @@ export default function ExplorePage() {
           {RADIUS_OPTIONS.map((r) => (
             <button
               key={r}
-              className={`${styles.filterBtn} ${radius === r ? styles.filterBtnActive : ""}`}
+              className={`${styles.filterBtn} ${radius === r ? styles.filterBtnActive : ''}`}
               onClick={() => setRadius(r)}
             >
               {r} km
@@ -189,15 +191,15 @@ export default function ExplorePage() {
         </div>
 
         {/* States */}
-        {(location.status === "checking" || location.status === "requesting") && (
+        {(location.status === 'checking' || location.status === 'requesting') && (
           <div className={styles.empty}>
             <p className={styles.emptyHint}>
-              {location.status === "checking" ? "Checking permissions…" : "Locating you…"}
+              {location.status === 'checking' ? 'Checking permissions…' : 'Locating you…'}
             </p>
           </div>
         )}
 
-        {location.status === "prompt" && (
+        {location.status === 'prompt' && (
           <div className={styles.empty}>
             <IoLocationOutline size={32} className={styles.emptyIcon} />
             <p className={styles.emptyTitle}>Find plants near you</p>
@@ -210,13 +212,13 @@ export default function ExplorePage() {
           </div>
         )}
 
-        {location.status === "blocked" && (
+        {location.status === 'blocked' && (
           <div className={styles.blockedState}>
             <div className={styles.blockedSection}>
               <IoWarningOutline size={28} className={styles.emptyIcon} />
               <p className={styles.emptyTitle}>Location unavailable</p>
               <p className={styles.emptyHint}>
-                Enable Location Services in{" "}
+                Enable Location Services in{' '}
                 <strong>System Settings → Privacy &amp; Security → Location Services</strong> or
                 allow this site in browser settings.
               </p>
@@ -238,7 +240,7 @@ export default function ExplorePage() {
                   value={city}
                   onChange={(e) => {
                     setCity(e.target.value);
-                    setCityError("");
+                    setCityError('');
                   }}
                   className={styles.cityInputField}
                   autoComplete="off"
@@ -250,13 +252,13 @@ export default function ExplorePage() {
                 className={styles.locationBtn}
                 disabled={cityLoading || !city.trim()}
               >
-                {cityLoading ? "Searching…" : "Search"}
+                {cityLoading ? 'Searching…' : 'Search'}
               </button>
             </form>
           </div>
         )}
 
-        {location.status === "ready" && isLoading && (
+        {location.status === 'ready' && isLoading && (
           <div className={styles.masonry}>
             {[220, 300, 260, 340, 200, 280, 320, 240, 300, 260, 200, 350].map((h, i) => (
               <div key={i} className={styles.masonryItem}>
@@ -266,7 +268,7 @@ export default function ExplorePage() {
           </div>
         )}
 
-        {location.status === "ready" && !isLoading && plants.length === 0 && (
+        {location.status === 'ready' && !isLoading && plants.length === 0 && (
           <div className={styles.empty}>
             <p className={styles.emptyTitle}>No plants found</p>
             <p className={styles.emptyHint}>

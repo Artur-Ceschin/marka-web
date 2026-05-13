@@ -6,7 +6,7 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint src",
     "format": "prettier --write \"src/**/*.{ts,tsx}\"",
     "test": "vitest",
     "test:run": "vitest run",
@@ -16,9 +16,6 @@
     "@marka-app/tokens": "^0.1.1",
     "@marka-app/ui": "^0.1.1",
     "@tanstack/react-query": "^5.80.7",
-    "@trpc/client": "^11.4.3",
-    "@trpc/react-query": "^11.4.3",
-    "@trpc/server": "^11.4.3",
     "amazon-cognito-identity-js": "^6.3.16",
     "next": "^15.3.3",
     "react": "^19.1.0",
@@ -37,18 +34,25 @@
     "@types/react": "^19.1.6",
     "@types/react-dom": "^19.1.5",
     "@vitejs/plugin-react": "^6.0.1",
+    "eslint": "^9.39.4",
+    "eslint-config-next": "^16.2.6",
+    "eslint-config-prettier": "^10.1.8",
+    "globals": "^17.6.0",
+    "husky": "^9.1.7",
     "jsdom": "^29.1.0",
+    "lint-staged": "^16.4.0",
     "prettier": "^3.8.2",
     "typescript": "^5.8.3",
-    "vitest": "^4.1.5",
-    "husky": "^9.1.7",
-    "lint-staged": "^16.4.0"
+    "vitest": "^4.1.5"
   },
   "engines": {
     "node": ">=22"
   },
   "packageManager": "pnpm@9.15.9+sha512.68046141893c66fad01c079231128e9afb89ef87e2691d69e4d40eee228988295fd4682181bae55b58418c3a253bde65a505ec7c5f9403ece5cc3cd37dcf2531",
   "lint-staged": {
-    "src/**/*.{ts,tsx}": ["prettier --write"]
+    "src/**/*.{ts,tsx}": [
+      "prettier --write",
+      "eslint --fix"
+    ]
   }
 }

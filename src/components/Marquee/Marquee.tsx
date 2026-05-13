@@ -1,20 +1,20 @@
-"use client";
+'use client';
 
-import styles from "./Marquee.module.scss";
+import styles from './Marquee.module.scss';
 
 const PLANTS = [
-  "Araucaria angustifolia",
-  "Lagenaria siceraria",
-  "Dryopteris filix‑mas",
-  "Rosa canina",
-  "Cantharellus cibarius",
-  "Atropa belladonna",
-  "Taraxacum officinale",
-  "Sambucus nigra",
-  "Urtica dioica",
-  "Quercus robur",
-  "Betula pendula",
-  "Acer palmatum",
+  'Araucaria angustifolia',
+  'Lagenaria siceraria',
+  'Dryopteris filix‑mas',
+  'Rosa canina',
+  'Cantharellus cibarius',
+  'Atropa belladonna',
+  'Taraxacum officinale',
+  'Sambucus nigra',
+  'Urtica dioica',
+  'Quercus robur',
+  'Betula pendula',
+  'Acer palmatum',
 ];
 
 export function Marquee() {

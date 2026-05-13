@@ -1,7 +1,8 @@
-import { toast } from "sonner";
-import { getCurrentSession } from "./auth";
+import { toast } from 'sonner';
+import { getCurrentSession } from './auth';
+import { useAuthStore } from '@/store/auth.store';
 
-const BASE = process.env.NEXT_PUBLIC_REST_API_URL ?? "http://127.0.0.1:8080";
+const BASE = process.env.NEXT_PUBLIC_REST_API_URL ?? 'http://127.0.0.1:8080';
 
 export class ApiError extends Error {
   constructor(
@@ -10,31 +11,41 @@ export class ApiError extends Error {
     public code?: string,
   ) {
     super(message);
-    this.name = "ApiError";
+    this.name = 'ApiError';
   }
 }
 
 function friendlyError(status: number): string {
-  if (status === 403) return "You don't have permission to do that.";
-  if (status === 404) return "The requested resource was not found.";
-  if (status === 429) return "Too many requests. Please wait a moment.";
-  if (status >= 500) return "Something went wrong on our end. Please try again.";
-  return "Something went wrong. Please try again.";
+  if (status === 403) {
+    // eslint-disable-next-line quotes
+    return "You don't have permission to do that.";
+  }
+  if (status === 404) {
+    return 'The requested resource was not found.';
+  }
+  if (status === 429) {
+    return 'Too many requests. Please wait a moment.';
+  }
+  if (status >= 500) {
+    return 'Something went wrong on our end. Please try again.';
+  }
+  return 'Something went wrong. Please try again.';
 }
 
 function handleUnauthorized(): never {
-  if (typeof window !== "undefined") {
-    const { useAuthStore } = require("@/store/auth.store");
+  if (typeof window !== 'undefined') {
     useAuthStore.getState().logout();
-    toast.error("Session expired. Please sign in again.");
-    window.location.replace("/signin");
+    toast.error('Session expired. Please sign in again.');
+    window.location.replace('/signin');
   }
-  throw new ApiError(401, "Session expired");
+  throw new ApiError(401, 'Session expired');
 }
 
 async function ensureAuth(): Promise<string> {
   const session = await getCurrentSession();
-  if (!session) handleUnauthorized();
+  if (!session) {
+    handleUnauthorized();
+  }
   return session.idToken;
 }
 
@@ -51,17 +62,19 @@ async function request<T>(
     res = await fetch(`${BASE}${path}`, {
       method,
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
       ...(body !== undefined ? { body: JSON.stringify(body) } : {}),
     });
   } catch {
-    toast.error("Network error. Check your connection and try again.");
-    throw new ApiError(0, "Network error");
+    toast.error('Network error. Check your connection and try again.');
+    throw new ApiError(0, 'Network error');
   }
 
-  if (res.status === 401) handleUnauthorized();
+  if (res.status === 401) {
+    handleUnauthorized();
+  }
 
   if (!res.ok) {
     if (res.status === 429) {
@@ -70,39 +83,18 @@ async function request<T>(
         body = await res.json();
       } catch {}
       const msg = body.message ?? friendlyError(429);
-      if (!body.code) toast.error(msg);
+      if (!body.code) {
+        toast.error(msg);
+      }
       throw new ApiError(429, msg, body.code);
     }
     const msg = friendlyError(res.status);
-    if (!(opts.silent404 && res.status === 404)) toast.error(msg);
+    if (!(opts.silent404 && res.status === 404)) {
+      toast.error(msg);
+    }
     throw new ApiError(res.status, msg);
   }
 
-  return res.json() as Promise<T>;
-}
-
-async function multipart<T>(path: string, formData: FormData): Promise<T> {
-  const token = await ensureAuth();
-
-  let res: Response;
-  try {
-    res = await fetch(`${BASE}${path}`, {
-      method: "POST",
-      headers: { Authorization: `Bearer ${token}` },
-      body: formData,
-    });
-  } catch {
-    toast.error("Network error. Check your connection and try again.");
-    throw new ApiError(0, "Network error");
-  }
-
-  if (res.status === 401) handleUnauthorized();
-
-  if (!res.ok) {
-    const msg = friendlyError(res.status);
-    toast.error(msg);
-    throw new ApiError(res.status, msg);
-  }
   return res.json() as Promise<T>;
 }
 
@@ -147,7 +139,7 @@ export interface NotebookEntry {
   location?: { lat: number; lng: number; place: string };
   likeCount: number;
   identifiedAt: string;
-  entityType: "NOTEBOOK_ENTRY";
+  entityType: 'NOTEBOOK_ENTRY';
 }
 
 /** Enriched response returned by GET /notebook/:id */
@@ -185,7 +177,7 @@ export interface FeedItem {
   location?: { lat: number; lng: number; place: string };
   likeCount: number;
   identifiedAt: string;
-  entityType: "NOTEBOOK_ENTRY";
+  entityType: 'NOTEBOOK_ENTRY';
 }
 
 export interface IdentifyResult {
@@ -225,7 +217,7 @@ export interface Plant {
   isInvasive?: boolean;
   imageUrl?: string;
   referenceImages?: Array<{ url: string; organ: string }>;
-  entityType: "PLANT";
+  entityType: 'PLANT';
 }
 
 export interface NearbyPlant {
@@ -246,14 +238,14 @@ export interface NearbyPlantsPage {
 // ─── Users ────────────────────────────────────────────────────────────────────
 
 export const users = {
-  me: () => request<UserProfile>("GET", "/users/me"),
+  me: () => request<UserProfile>('GET', '/users/me'),
 
-  updateMe: (body: UpdateProfileBody) => request<UserProfile>("PUT", "/users/me", body),
+  updateMe: (body: UpdateProfileBody) => request<UserProfile>('PUT', '/users/me', body),
 
   avatarUploadUrl: (mimeType: string) =>
-    request<AvatarUploadResponse>("POST", "/users/me/avatar", { mimeType }),
+    request<AvatarUploadResponse>('POST', '/users/me/avatar', { mimeType }),
 
-  getById: (id: string) => request<UserProfile>("GET", `/users/${id}`),
+  getById: (id: string) => request<UserProfile>('GET', `/users/${id}`),
 };
 
 // ─── Notebook ─────────────────────────────────────────────────────────────────
@@ -261,18 +253,18 @@ export const users = {
 export const notebook = {
   list: (cursor?: string, limit = 20) =>
     request<NotebookListResponse>(
-      "GET",
-      `/notebook?limit=${limit}${cursor ? `&cursor=${cursor}` : ""}`,
+      'GET',
+      `/notebook?limit=${limit}${cursor ? `&cursor=${cursor}` : ''}`,
     ),
 
-  getById: (id: string) => request<NotebookEntryDetail>("GET", `/notebook/${id}`),
+  getById: (id: string) => request<NotebookEntryDetail>('GET', `/notebook/${id}`),
 
-  save: (body: SaveNotebookBody) => request<NotebookEntry>("POST", "/notebook", body),
+  save: (body: SaveNotebookBody) => request<NotebookEntry>('POST', '/notebook', body),
 
   updateNotes: (id: string, notes: string) =>
-    request<NotebookEntry>("PUT", `/notebook/${id}/notes`, { notes }),
+    request<NotebookEntry>('PUT', `/notebook/${id}/notes`, { notes }),
 
-  delete: (id: string) => request<void>("DELETE", `/notebook/${id}`),
+  delete: (id: string) => request<void>('DELETE', `/notebook/${id}`),
 };
 
 // ─── Feed ─────────────────────────────────────────────────────────────────────
@@ -280,12 +272,12 @@ export const notebook = {
 export const feed = {
   list: (cursor?: string, limit = 20) =>
     request<{ items: FeedItem[]; cursor: string | null }>(
-      "GET",
-      `/feed?limit=${limit}${cursor ? `&cursor=${cursor}` : ""}`,
+      'GET',
+      `/feed?limit=${limit}${cursor ? `&cursor=${cursor}` : ''}`,
     ),
 
   like: (entryId: string, entryOwnerId: string) =>
-    request<{ liked: boolean; likeCount: number }>("POST", `/feed/${entryId}/like`, {
+    request<{ liked: boolean; likeCount: number }>('POST', `/feed/${entryId}/like`, {
       entryOwnerId,
     }),
 };
@@ -294,33 +286,32 @@ export const feed = {
 
 export const identify = {
   // Submit a local File: converts to base64 and sends to API in one step
-  submit: async (file: File, lang = "en"): Promise<SubmitResponse> => {
-    const raw = file.type?.toLowerCase() ?? "";
+  submit: async (file: File, lang = 'en'): Promise<SubmitResponse> => {
+    const raw = file.type?.toLowerCase() ?? '';
     const mimeType =
-      raw === "image/jpeg" || raw === "image/png" || raw === "image/webp"
-        ? (raw as "image/jpeg" | "image/png" | "image/webp")
-        : "image/jpeg";
+      raw === 'image/jpeg' || raw === 'image/png' || raw === 'image/webp'
+        ? (raw as 'image/jpeg' | 'image/png' | 'image/webp')
+        : 'image/jpeg';
     const base64 = await new Promise<string>((resolve, reject) => {
       const reader = new FileReader();
-      reader.onload = () => resolve((reader.result as string).split(",")[1]);
+      reader.onload = () => resolve((reader.result as string).split(',')[1]);
       reader.onerror = reject;
       reader.readAsDataURL(file);
     });
-    return request<SubmitResponse>("POST", "/identify/submit", { base64, mimeType, lang });
+    return request<SubmitResponse>('POST', '/identify/submit', { base64, mimeType, lang });
   },
 
-  save: (body: SaveNotebookBody) => request<NotebookEntry>("POST", "/identify/save", body),
+  save: (body: SaveNotebookBody) => request<NotebookEntry>('POST', '/identify/save', body),
 
-  // Public one-shot (no auth, no rate limit)
-  fromUrl: (imageUrl: string, lang = "en") =>
-    request<IdentifyResponse>("POST", "/identify", { type: "url", imageUrl, lang }),
+  fromUrl: (imageUrl: string, lang = 'en') =>
+    request<IdentifyResponse>('POST', '/identify', { type: 'url', imageUrl, lang }),
 };
 
 // ─── Plants ───────────────────────────────────────────────────────────────────
 
 export const plants = {
   getByLatin: (latin: string) =>
-    request<Plant>("GET", `/plants/${encodeURIComponent(latin)}`, undefined, { silent404: true }),
+    request<Plant>('GET', `/plants/${encodeURIComponent(latin)}`, undefined, { silent404: true }),
 };
 
 // ─── Explore ──────────────────────────────────────────────────────────────────
@@ -328,7 +319,7 @@ export const plants = {
 export const explore = {
   nearby: (lat: number, lng: number, page = 0, radius = 10) =>
     request<NearbyPlantsPage>(
-      "GET",
+      'GET',
       `/explore/nearby?lat=${lat}&lng=${lng}&radius=${radius}&page=${page}`,
     ),
 };

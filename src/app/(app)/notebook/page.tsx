@@ -1,41 +1,41 @@
-"use client";
+'use client';
 
-import { useState, useMemo } from "react";
-import { useRouter } from "next/navigation";
-import { useQuery } from "@tanstack/react-query";
-import { IoSearchOutline } from "react-icons/io5";
-import { notebook } from "@/lib/api";
-import { NotebookCard } from "./_components/NotebookCard";
-import styles from "./page.module.scss";
+import { useState, useMemo } from 'react';
+import { useRouter } from 'next/navigation';
+import { useQuery } from '@tanstack/react-query';
+import { IoSearchOutline } from 'react-icons/io5';
+import { notebook } from '@/lib/api';
+import { NotebookCard } from './_components/NotebookCard';
+import styles from './page.module.scss';
 
-type Filter = "all" | "month" | "notes";
+type Filter = 'all' | 'month' | 'notes';
 
 const FILTERS: { id: Filter; label: string }[] = [
-  { id: "all", label: "All Entries" },
-  { id: "month", label: "This Month" },
-  { id: "notes", label: "With Notes" },
+  { id: 'all', label: 'All Entries' },
+  { id: 'month', label: 'This Month' },
+  { id: 'notes', label: 'With Notes' },
 ];
 
 export default function NotebookPage() {
   const router = useRouter();
-  const [search, setSearch] = useState("");
-  const [filter, setFilter] = useState<Filter>("all");
+  const [search, setSearch] = useState('');
+  const [filter, setFilter] = useState<Filter>('all');
 
   const { data: entries = [], isLoading } = useQuery({
-    queryKey: ["notebook"],
+    queryKey: ['notebook'],
     queryFn: () => notebook.list().then((r) => r.items),
   });
 
   const filtered = useMemo(() => {
     let list = entries;
 
-    if (filter === "month") {
+    if (filter === 'month') {
       const now = new Date();
       list = list.filter((e) => {
         const d = new Date(e.identifiedAt);
         return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
       });
-    } else if (filter === "notes") {
+    } else if (filter === 'notes') {
       list = list.filter((e) => e.notes && e.notes.trim().length > 0);
     }
 
@@ -84,7 +84,7 @@ export default function NotebookPage() {
           {FILTERS.map((f) => (
             <button
               key={f.id}
-              className={`${styles.filterBtn} ${filter === f.id ? styles.filterBtnActive : ""}`}
+              className={`${styles.filterBtn} ${filter === f.id ? styles.filterBtnActive : ''}`}
               onClick={() => setFilter(f.id)}
             >
               {f.label}
@@ -109,11 +109,11 @@ export default function NotebookPage() {
           </div>
         ) : (
           <div className={styles.empty}>
-            <p className={styles.emptyTitle}>{search ? "No results" : "No plants yet"}</p>
+            <p className={styles.emptyTitle}>{search ? 'No results' : 'No plants yet'}</p>
             <p className={styles.emptyHint}>
               {search
-                ? "Try a different search term."
-                : "Identify a plant and save it to your notebook."}
+                ? 'Try a different search term.'
+                : 'Identify a plant and save it to your notebook.'}
             </p>
           </div>
         )}

@@ -1,3 +1,3 @@
-import { PhoneTilt } from "./PhoneTilt";
+import { PhoneTilt } from './PhoneTilt';
 
-export default PhoneTilt
+export default PhoneTilt;

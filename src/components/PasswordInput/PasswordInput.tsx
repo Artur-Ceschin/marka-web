@@ -1,23 +1,23 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { Input, type InputProps } from "@/components/ui";
-import styles from "./PasswordInput.module.scss";
+import { useState } from 'react';
+import { Input, type InputProps } from '@/components/ui';
+import styles from './PasswordInput.module.scss';
 
-type Props = Omit<InputProps, "type" | "iconRight">;
+type Props = Omit<InputProps, 'type' | 'iconRight'>;
 
 export function PasswordInput(props: Props) {
   const [visible, setVisible] = useState(false);
 
   return (
     <div className={styles.wrapper}>
-      <Input {...props} type={visible ? "text" : "password"} iconRight={<span />} />
+      <Input {...props} type={visible ? 'text' : 'password'} iconRight={<span />} />
       <button
         type="button"
         className={styles.toggle}
         onClick={() => setVisible((v) => !v)}
         tabIndex={-1}
-        aria-label={visible ? "Hide password" : "Show password"}
+        aria-label={visible ? 'Hide password' : 'Show password'}
       >
         {visible ? <EyeOff /> : <Eye />}
       </button>

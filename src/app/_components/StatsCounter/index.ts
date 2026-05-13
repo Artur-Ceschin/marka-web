@@ -1,1 +1,1 @@
-export { StatsCounter } from "./StatsCounter";
+export { StatsCounter } from './StatsCounter';

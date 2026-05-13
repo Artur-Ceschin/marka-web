@@ -1,17 +1,17 @@
-import styles from "./ConfidenceBar.module.scss";
+import styles from './ConfidenceBar.module.scss';
 
-type Tone = "high" | "medium" | "low";
+type Tone = 'high' | 'medium' | 'low';
 
 function toneFor(pct: number): Tone {
-  if (pct >= 80) return "high";
-  if (pct >= 50) return "medium";
-  return "low";
+  if (pct >= 80) return 'high';
+  if (pct >= 50) return 'medium';
+  return 'low';
 }
 
 function labelFor(pct: number) {
-  if (pct >= 80) return "High Confidence";
-  if (pct >= 50) return "Medium Confidence";
-  return "Low Confidence";
+  if (pct >= 80) return 'High Confidence';
+  if (pct >= 50) return 'Medium Confidence';
+  return 'Low Confidence';
 }
 
 export function ConfidenceBar({ pct }: { pct: number }) {

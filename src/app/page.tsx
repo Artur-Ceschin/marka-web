@@ -1,73 +1,73 @@
-import Image from "next/image";
-import Link from "next/link";
-import { LeafMark } from "@/components/MarkaLogo";
-import { Marquee } from "@/components/Marquee";
-import { Reveal } from "@/components/Reveal";
-import { HeroVideo } from "./_components/HeroVideo";
-import { ScrolledHeader } from "./_components/ScrolledHeader";
-import { StatsCounter } from "./_components/StatsCounter";
-import styles from "./page.module.scss";
+import Image from 'next/image';
+import Link from 'next/link';
+import { LeafMark } from '@/components/MarkaLogo';
+import { Marquee } from '@/components/Marquee';
+import { Reveal } from '@/components/Reveal';
+import { HeroVideo } from './_components/HeroVideo';
+import { ScrolledHeader } from './_components/ScrolledHeader';
+import { StatsCounter } from './_components/StatsCounter';
+import styles from './page.module.scss';
 
 const PLANTS = [
   {
-    name: "Araucaria araucana",
-    latin: "Monkey Puzzle Tree",
-    tag: "Conifer",
+    name: 'Araucaria araucana',
+    latin: 'Monkey Puzzle Tree',
+    tag: 'Conifer',
     match: 97,
-    size: "tall",
-    desc: "Ancient conifer native to the southern Andes. Its interlocking scale-like leaves and towering silhouette make it unmistakable against mountain skies.",
-    img: "/images/plant-araucaria.jpg",
+    size: 'tall',
+    desc: 'Ancient conifer native to the southern Andes. Its interlocking scale-like leaves and towering silhouette make it unmistakable against mountain skies.',
+    img: '/images/plant-araucaria.jpg',
   },
   {
-    name: "Mycena galopus",
-    latin: "Milking Bonnet",
-    tag: "Fungi",
+    name: 'Mycena galopus',
+    latin: 'Milking Bonnet',
+    tag: 'Fungi',
     match: 94,
-    size: "short",
-    desc: "Delicate white fungi found clustered on decaying bark. Exudes a milky sap when broken — a key identification trait.",
-    img: "/images/plant-mycena.jpg",
+    size: 'short',
+    desc: 'Delicate white fungi found clustered on decaying bark. Exudes a milky sap when broken — a key identification trait.',
+    img: '/images/plant-mycena.jpg',
   },
   {
-    name: "Lupinus polyphyllus",
-    latin: "Large-leaved Lupin",
-    tag: "Wildflower",
+    name: 'Lupinus polyphyllus',
+    latin: 'Large-leaved Lupin',
+    tag: 'Wildflower',
     match: 91,
-    size: "medium",
-    desc: "Dense spires of violet-blue flowers, naturalised across temperate meadows. Rich in nitrogen-fixing root nodules.",
-    img: "/images/plant-lupin.jpg",
+    size: 'medium',
+    desc: 'Dense spires of violet-blue flowers, naturalised across temperate meadows. Rich in nitrogen-fixing root nodules.',
+    img: '/images/plant-lupin.jpg',
   },
   {
-    name: "Sequoiadendron giganteum",
-    latin: "Giant Sequoia",
-    tag: "Conifer",
+    name: 'Sequoiadendron giganteum',
+    latin: 'Giant Sequoia',
+    tag: 'Conifer',
     match: 88,
-    size: "short",
-    desc: "The largest tree by volume on Earth. Towering trunks with cinnamon-red bark can reach over 84 metres, living for thousands of years.",
-    img: "/images/plant-sequoia.avif",
+    size: 'short',
+    desc: 'The largest tree by volume on Earth. Towering trunks with cinnamon-red bark can reach over 84 metres, living for thousands of years.',
+    img: '/images/plant-sequoia.avif',
   },
   {
-    name: "Arctic Poppy",
-    latin: "Papaver radicatum",
-    tag: "Alpine",
+    name: 'Arctic Poppy',
+    latin: 'Papaver radicatum',
+    tag: 'Alpine',
     match: 97,
-    size: "short",
-    desc: "Observed in the rocky alpine tundra. Known for its resilient, vibrantly veined petals that track the path of the sun throughout the day.",
-    img: "/images/plant-poppy.png",
+    size: 'short',
+    desc: 'Observed in the rocky alpine tundra. Known for its resilient, vibrantly veined petals that track the path of the sun throughout the day.',
+    img: '/images/plant-poppy.png',
   },
   {
-    name: "Common Juniper",
-    latin: "Juniperus communis",
-    tag: "Shrub",
+    name: 'Common Juniper',
+    latin: 'Juniperus communis',
+    tag: 'Shrub',
     match: 92,
-    size: "tall",
-    desc: "A hardy evergreen shrub found across diverse northern latitudes. Berries exhibit a unique dusty blue-green bloom when ripe.",
-    img: "/images/plant-juniper.png",
+    size: 'tall',
+    desc: 'A hardy evergreen shrub found across diverse northern latitudes. Berries exhibit a unique dusty blue-green bloom when ripe.',
+    img: '/images/plant-juniper.png',
   },
 ];
 
 const VALUE_PROPS = [
   {
-    title: "Honest Free Alternative",
+    title: 'Honest Free Alternative',
     body: "Plant ID journal that's actually free. No subscriptions, no dark patterns.",
     icon: (
       <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
@@ -88,8 +88,8 @@ const VALUE_PROPS = [
     ),
   },
   {
-    title: "Field Journal for Nature Lovers",
-    body: "Document plants you find in the wild. GPS, photos, notes, and species data in one place.",
+    title: 'Field Journal for Nature Lovers',
+    body: 'Document plants you find in the wild. GPS, photos, notes, and species data in one place.',
     icon: (
       <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
         <circle cx="11" cy="9.5" r="3" stroke="currentColor" strokeWidth="1.5" />
@@ -103,8 +103,8 @@ const VALUE_PROPS = [
     ),
   },
   {
-    title: "Personal Botanical Archive",
-    body: "Your lifetime plant collection. Track every species you encounter.",
+    title: 'Personal Botanical Archive',
+    body: 'Your lifetime plant collection. Track every species you encounter.',
     icon: (
       <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
         <rect
@@ -133,8 +133,8 @@ const VALUE_PROPS = [
     ),
   },
   {
-    title: "AI-Powered Identification",
-    body: "Snap a photo and get instant species recognition with confidence scores and detailed info.",
+    title: 'AI-Powered Identification',
+    body: 'Snap a photo and get instant species recognition with confidence scores and detailed info.',
     icon: (
       <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
         <circle cx="11" cy="11" r="3" stroke="currentColor" strokeWidth="1.5" />
@@ -151,8 +151,8 @@ const VALUE_PROPS = [
 
 const GUIDES = [
   {
-    title: "Temperate Deciduous",
-    sub: "Identification of broad-leafed species",
+    title: 'Temperate Deciduous',
+    sub: 'Identification of broad-leafed species',
     icon: (
       <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
         <path
@@ -174,8 +174,8 @@ const GUIDES = [
     ),
   },
   {
-    title: "Coastal Flora",
-    sub: "Survival strategies in saline environments",
+    title: 'Coastal Flora',
+    sub: 'Survival strategies in saline environments',
     icon: (
       <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
         <path
@@ -194,8 +194,8 @@ const GUIDES = [
     ),
   },
   {
-    title: "Mycological Wonders",
-    sub: "Guide to spores and mycelial networks",
+    title: 'Mycological Wonders',
+    sub: 'Guide to spores and mycelial networks',
     icon: (
       <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
         <path
@@ -295,7 +295,7 @@ export default function HomePage() {
             <Reveal key={vp.title} className={styles.valueProp} delay={i * 120}>
               <div className={styles.vpHeader}>
                 <span className={styles.vpIcon}>{vp.icon}</span>
-                <span className={styles.vpNum}>{String(i + 1).padStart(2, "0")}</span>
+                <span className={styles.vpNum}>{String(i + 1).padStart(2, '0')}</span>
               </div>
               <h3 className={styles.vpTitle}>{vp.title}</h3>
               <p className={styles.vpBody}>{vp.body}</p>
@@ -342,12 +342,12 @@ export default function HomePage() {
                               sizes="(max-width: 768px) 50vw, 280px"
                             />
                           </div>
-                          <span className={styles.cardNum}>{String(i + 1).padStart(2, "0")}</span>
+                          <span className={styles.cardNum}>{String(i + 1).padStart(2, '0')}</span>
                           <span className={styles.matchBadge}>
                             <span
                               className={styles.matchDot}
                               data-tier={
-                                plant.match >= 90 ? "high" : plant.match >= 80 ? "mid" : "low"
+                                plant.match >= 90 ? 'high' : plant.match >= 80 ? 'mid' : 'low'
                               }
                             />
                             {plant.match}%
@@ -488,21 +488,6 @@ export default function HomePage() {
   );
 }
 
-// ── Icons ─────────────────────────────────────────────────────────────────────
-function ProfileIcon() {
-  return (
-    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-      <circle cx="10" cy="7" r="3.5" stroke="currentColor" strokeWidth="1.4" />
-      <path
-        d="M3 17c0-3.3 3.1-6 7-6s7 2.7 7 6"
-        stroke="currentColor"
-        strokeWidth="1.4"
-        strokeLinecap="round"
-      />
-    </svg>
-  );
-}
-
 function HeartIcon() {
   return (
     <svg
@@ -510,7 +495,7 @@ function HeartIcon() {
       height="13"
       viewBox="0 0 13 13"
       fill="none"
-      style={{ display: "inline", verticalAlign: "middle", marginRight: 4 }}
+      style={{ display: 'inline', verticalAlign: 'middle', marginRight: 4 }}
     >
       <path
         d="M6.5 11S1 7.5 1 4a2.5 2.5 0 0 1 5.5-.5A2.5 2.5 0 0 1 12 4c0 3.5-5.5 7-5.5 7Z"

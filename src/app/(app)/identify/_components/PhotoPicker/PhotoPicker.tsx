@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import Image from "next/image";
-import { useRef } from "react";
-import { IoCloudUploadOutline, IoCameraOutline, IoImagesOutline } from "react-icons/io5";
-import styles from "./PhotoPicker.module.scss";
+import Image from 'next/image';
+import { useRef } from 'react';
+import { IoCloudUploadOutline, IoCameraOutline, IoImagesOutline } from 'react-icons/io5';
+import styles from './PhotoPicker.module.scss';
 
 export function PhotoPicker({
   preview,
@@ -29,20 +29,39 @@ export function PhotoPicker({
   }
 
   const statusText = isIdentifying
-    ? "PROCESSING_SPECIMEN"
+    ? 'PROCESSING_SPECIMEN'
     : canIdentify
-      ? "SPECIMEN_LOADED"
-      : "AWAITING_SPECIMEN";
+      ? 'SPECIMEN_LOADED'
+      : 'AWAITING_SPECIMEN';
 
   return (
     <div className={styles.viewfinder}>
       {/* Hidden file inputs */}
-      <input ref={galleryRef} type="file" accept="image/*" className={styles.fileInput} onChange={handleInput} />
-      <input ref={cameraRef} type="file" accept="image/*" capture="environment" className={styles.fileInput} onChange={handleInput} />
+      <input
+        ref={galleryRef}
+        type="file"
+        accept="image/*"
+        className={styles.fileInput}
+        onChange={handleInput}
+      />
+      <input
+        ref={cameraRef}
+        type="file"
+        accept="image/*"
+        capture="environment"
+        className={styles.fileInput}
+        onChange={handleInput}
+      />
 
       {/* Preview image */}
       {preview && (
-        <Image src={preview} alt="Selected plant" fill style={{ objectFit: "cover" }} className={styles.previewImg} />
+        <Image
+          src={preview}
+          alt="Selected plant"
+          fill
+          style={{ objectFit: 'cover' }}
+          className={styles.previewImg}
+        />
       )}
 
       {/* Bottom gradient */}
@@ -55,15 +74,15 @@ export function PhotoPicker({
           <div className={styles.metaGroup}>
             <span className={styles.metaLabel}>Status</span>
             <div className={styles.metaValue}>
-              <span className={`${styles.statusDot} ${isIdentifying ? styles.statusDotProcessing : ""}`} />
+              <span
+                className={`${styles.statusDot} ${isIdentifying ? styles.statusDotProcessing : ''}`}
+              />
               {statusText}
             </div>
           </div>
           <div className={styles.metaGroup}>
             <span className={styles.metaLabel}>Archive_Ref</span>
-            <div className={`${styles.metaValue} ${styles.metaValueRight}`}>
-              MK-449.02-FIELD
-            </div>
+            <div className={`${styles.metaValue} ${styles.metaValueRight}`}>MK-449.02-FIELD</div>
           </div>
         </div>
 
@@ -121,13 +140,19 @@ export function PhotoPicker({
               <>
                 <button
                   className={`${styles.scanBtn} ${styles.scanBtnAnalyze}`}
-                  onClick={(e) => { e.stopPropagation(); onIdentify(); }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onIdentify();
+                  }}
                 >
                   Identify Specimen
                 </button>
                 <button
                   className={styles.clearBtn}
-                  onClick={(e) => { e.stopPropagation(); onClear(); }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onClear();
+                  }}
                 >
                   Clear photo
                 </button>
@@ -137,7 +162,10 @@ export function PhotoPicker({
                 <IoCloudUploadOutline size={40} className={styles.uploadIcon} />
                 <button
                   className={styles.scanBtn}
-                  onClick={(e) => { e.stopPropagation(); galleryRef.current?.click(); }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    galleryRef.current?.click();
+                  }}
                 >
                   Initiate Scan
                 </button>

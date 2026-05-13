@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import Image from "next/image";
-import { IoLeafOutline } from "react-icons/io5";
-import type { NearbyPlant } from "@/lib/api";
-import styles from "./NearbyCard.module.scss";
+import Image from 'next/image';
+import { IoLeafOutline } from 'react-icons/io5';
+import type { NearbyPlant } from '@/lib/api';
+import styles from './NearbyCard.module.scss';
 
-const SIZES = ["tall", "short", "medium"] as const;
+const SIZES = ['tall', 'short', 'medium'] as const;
 
 interface Props {
   plant: NearbyPlant;
@@ -21,9 +21,9 @@ export function NearbyCard({ plant, index, onClick }: Props) {
       className={styles.card}
       data-size={size}
       onClick={() => onClick?.(plant)}
-      role={onClick ? "button" : undefined}
+      role={onClick ? 'button' : undefined}
       tabIndex={onClick ? 0 : undefined}
-      onKeyDown={(e) => e.key === "Enter" && onClick?.(plant)}
+      onKeyDown={(e) => e.key === 'Enter' && onClick?.(plant)}
     >
       <div className={styles.imageWrap}>
         {plant.imageUrl ? (

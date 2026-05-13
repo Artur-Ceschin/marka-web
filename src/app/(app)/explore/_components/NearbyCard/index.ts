@@ -1,1 +1,1 @@
-export { NearbyCard } from "./NearbyCard";
+export { NearbyCard } from './NearbyCard';

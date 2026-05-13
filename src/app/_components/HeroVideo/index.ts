@@ -1,1 +1,1 @@
-export { HeroVideo } from "./HeroVideo";
+export { HeroVideo } from './HeroVideo';

@@ -1,46 +1,46 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
-import { Button, Input } from "@/components/ui";
-import { PasswordInput } from "@/components/PasswordInput";
-import { LeafMark } from "@/components/MarkaLogo";
+import Link from 'next/link';
+import { useEffect, useRef, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { Button, Input } from '@/components/ui';
+import { PasswordInput } from '@/components/PasswordInput';
+import { LeafMark } from '@/components/MarkaLogo';
 import {
   signUp,
   confirmSignUp,
   resendConfirmationCode,
   startGoogleSignIn,
   CognitoError,
-} from "@/lib/cognito";
-import { useAuthStore } from "@/store/auth.store";
-import { SignUpSchema, ConfirmSchema } from "./schema";
-import styles from "../auth.module.scss";
+} from '@/lib/cognito';
+import { useAuthStore } from '@/store/auth.store';
+import { SignUpSchema, ConfirmSchema } from './schema';
+import styles from '../auth.module.scss';
 
-type Step = "register" | "confirm";
+type Step = 'register' | 'confirm';
 
 export default function SignUpPage() {
   const router = useRouter();
   const setAuthenticated = useAuthStore((s) => s.setAuthenticated);
 
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [step, setStep] = useState<Step>("register");
-  const [pendingEmail, setPendingEmail] = useState("");
+  const [step, setStep] = useState<Step>('register');
+  const [pendingEmail, setPendingEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [resent, setResent] = useState(false);
 
   useEffect(() => {
-    const channel = new BroadcastChannel("google_auth");
+    const channel = new BroadcastChannel('google_auth');
     channel.onmessage = (e) => {
-      if (e.data?.type === "AUTH_SUCCESS") {
+      if (e.data?.type === 'AUTH_SUCCESS') {
         setGoogleLoading(false);
-        setAuthenticated(e.data.userId);
-        router.replace("/identify");
-      } else if (e.data?.type === "AUTH_ERROR") {
+        setAuthenticated(e.data.userId, null, e.data.picture ?? null);
+        router.replace('/identify');
+      } else if (e.data?.type === 'AUTH_ERROR') {
         setGoogleLoading(false);
-        setErrors({ form: "Google sign in failed. Please try again." });
+        setErrors({ form: 'Google sign in failed. Please try again.' });
       }
     };
     return () => channel.close();
@@ -71,18 +71,18 @@ export default function SignUpPage() {
 
     const form = e.currentTarget;
     const raw = {
-      name: (form.elements.namedItem("name") as HTMLInputElement).value,
-      email: (form.elements.namedItem("email") as HTMLInputElement).value,
-      password: (form.elements.namedItem("password") as HTMLInputElement).value,
+      name: (form.elements.namedItem('name') as HTMLInputElement).value,
+      email: (form.elements.namedItem('email') as HTMLInputElement).value,
+      password: (form.elements.namedItem('password') as HTMLInputElement).value,
     };
 
     const result = SignUpSchema.safeParse(raw);
     if (!result.success) {
       const flat = result.error.flatten().fieldErrors;
       setErrors({
-        name: flat.name?.[0] ?? "",
-        email: flat.email?.[0] ?? "",
-        password: flat.password?.[0] ?? "",
+        name: flat.name?.[0] ?? '',
+        email: flat.email?.[0] ?? '',
+        password: flat.password?.[0] ?? '',
       });
       return;
     }
@@ -91,9 +91,9 @@ export default function SignUpPage() {
     try {
       await signUp(raw.name, raw.email, raw.password);
       setPendingEmail(raw.email);
-      setStep("confirm");
+      setStep('confirm');
     } catch (err) {
-      setErrors({ email: err instanceof CognitoError ? err.message : "Something went wrong." });
+      setErrors({ email: err instanceof CognitoError ? err.message : 'Something went wrong.' });
     } finally {
       setLoading(false);
     }
@@ -104,20 +104,20 @@ export default function SignUpPage() {
     setErrors({});
 
     const form = e.currentTarget;
-    const raw = { code: (form.elements.namedItem("code") as HTMLInputElement).value };
+    const raw = { code: (form.elements.namedItem('code') as HTMLInputElement).value };
 
     const result = ConfirmSchema.safeParse(raw);
     if (!result.success) {
-      setErrors({ code: result.error.flatten().fieldErrors.code?.[0] ?? "" });
+      setErrors({ code: result.error.flatten().fieldErrors.code?.[0] ?? '' });
       return;
     }
 
     setLoading(true);
     try {
       await confirmSignUp(pendingEmail, raw.code);
-      router.push("/signin");
+      router.push('/signin');
     } catch (err) {
-      setErrors({ code: err instanceof CognitoError ? err.message : "Something went wrong." });
+      setErrors({ code: err instanceof CognitoError ? err.message : 'Something went wrong.' });
     } finally {
       setLoading(false);
     }
@@ -175,7 +175,7 @@ export default function SignUpPage() {
           <span className={styles.mobileWordmark}>marka</span>
         </div>
 
-        {step === "register" ? (
+        {step === 'register' ? (
           <div className={styles.formCard}>
             <div className={styles.formEyebrow}>
               <span className={styles.formEyebrowLine} />
@@ -240,14 +240,14 @@ export default function SignUpPage() {
                 setErrors({});
                 setGoogleLoading(true);
                 const onFocus = () => {
-                  window.removeEventListener("focus", onFocus);
+                  window.removeEventListener('focus', onFocus);
                   setTimeout(() => setGoogleLoading((v) => (v ? false : v)), 2000);
                 };
-                window.addEventListener("focus", onFocus);
+                window.addEventListener('focus', onFocus);
               }}
             >
               {googleLoading ? <GoogleSpinner /> : <GoogleIcon />}
-              {googleLoading ? "Signing in…" : "Continue with Google"}
+              {googleLoading ? 'Signing in…' : 'Continue with Google'}
             </button>
 
             <div className={styles.footer}>
@@ -288,7 +288,7 @@ export default function SignUpPage() {
             </form>
 
             <div className={styles.footer}>
-              <span>{resent ? "Code sent!" : "Didn't get it?"}</span>
+              <span>{resent ? 'Code sent!' : "Didn't get it?"}</span>
               <button type="button" onClick={handleResend} className={styles.inlineLink}>
                 Resend code
               </button>
@@ -308,7 +308,7 @@ function GoogleSpinner() {
       viewBox="0 0 18 18"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      style={{ animation: "spin 0.75s linear infinite" }}
+      style={{ animation: 'spin 0.75s linear infinite' }}
     >
       <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
       <circle cx="9" cy="9" r="7" stroke="rgba(255,255,255,0.25)" strokeWidth="2" />

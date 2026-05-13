@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useEffect, useRef, useState } from "react";
-import type { CSSProperties, ReactNode } from "react";
-import styles from "./Reveal.module.scss";
+import { useEffect, useRef, useState } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
+import styles from './Reveal.module.scss';
 
 interface RevealProps {
   children: ReactNode;
@@ -34,7 +34,7 @@ export function Reveal({ children, delay = 0, className, style }: RevealProps) {
   return (
     <div
       ref={ref}
-      className={`${styles.reveal} ${visible ? styles.visible : ""} ${className ?? ""}`.trim()}
+      className={`${styles.reveal} ${visible ? styles.visible : ''} ${className ?? ''}`.trim()}
       style={{ transitionDelay: delay ? `${delay}ms` : undefined, ...style }}
     >
       {children}

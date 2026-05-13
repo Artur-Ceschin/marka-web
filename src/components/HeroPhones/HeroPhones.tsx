@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useRef, useCallback } from "react";
-import styles from "./HeroPhones.module.scss";
+import { useRef, useCallback } from 'react';
+import styles from './HeroPhones.module.scss';
 
 // ── Dark Mode Phone (Feed screen) ────────────────────────────────────────────
 function DarkPhone() {
@@ -60,7 +60,7 @@ function DarkPhone() {
               <div className={styles.feedPlantName}>Bottle gourd</div>
               <div className={styles.feedLatin}>Lagenaria siceraria (Molina) Standl.</div>
               <div className={styles.feedConfBar}>
-                <div className={styles.feedConfFill} style={{ width: "82%" }} />
+                <div className={styles.feedConfFill} style={{ width: '82%' }} />
                 <span>82%</span>
               </div>
               <div className={styles.feedNote}>Achei tomando um mate no soul Ben Baguio</div>
@@ -68,7 +68,7 @@ function DarkPhone() {
               <div className={styles.feedActions}>
                 <span>♡ 0</span>
                 <span>💬</span>
-                <span style={{ marginLeft: "auto" }}>↗ Share</span>
+                <span style={{ marginLeft: 'auto' }}>↗ Share</span>
               </div>
             </div>
           </div>
@@ -76,13 +76,13 @@ function DarkPhone() {
 
         {/* Bottom nav */}
         <div className={styles.darkNav}>
-          {["Feed", "Identify", "Notebook", "Profile"].map((label, i) => (
-            <div key={label} className={`${styles.navItem} ${i === 0 ? styles.navItemActive : ""}`}>
+          {['Feed', 'Identify', 'Notebook', 'Profile'].map((label, i) => (
+            <div key={label} className={`${styles.navItem} ${i === 0 ? styles.navItemActive : ''}`}>
               <div className={styles.navIcon}>
-                {i === 0 && "🌿"}
-                {i === 1 && "🔍"}
-                {i === 2 && "📓"}
-                {i === 3 && "👤"}
+                {i === 0 && '🌿'}
+                {i === 1 && '🔍'}
+                {i === 2 && '📓'}
+                {i === 3 && '👤'}
               </div>
               <span>{label}</span>
             </div>
@@ -160,16 +160,16 @@ function LightPhone() {
 
         {/* Bottom nav */}
         <div className={styles.lightNav}>
-          {["Feed", "Identify", "Notebook", "Profile"].map((label, i) => (
+          {['Feed', 'Identify', 'Notebook', 'Profile'].map((label, i) => (
             <div
               key={label}
-              className={`${styles.lightNavItem} ${i === 2 ? styles.lightNavItemActive : ""}`}
+              className={`${styles.lightNavItem} ${i === 2 ? styles.lightNavItemActive : ''}`}
             >
               <div className={styles.navIcon}>
-                {i === 0 && "🌿"}
-                {i === 1 && "🔍"}
-                {i === 2 && "📓"}
-                {i === 3 && "👤"}
+                {i === 0 && '🌿'}
+                {i === 1 && '🔍'}
+                {i === 2 && '📓'}
+                {i === 3 && '👤'}
               </div>
               <span>{label}</span>
             </div>
@@ -192,15 +192,15 @@ export function HeroPhones() {
     const cy = rect.top + rect.height / 2;
     const dx = (e.clientX - cx) / (rect.width / 2); // -1 to 1
     const dy = (e.clientY - cy) / (rect.height / 2); // -1 to 1
-    wrap.style.setProperty("--tilt-x", `${dy * -10}deg`);
-    wrap.style.setProperty("--tilt-y", `${dx * 10}deg`);
+    wrap.style.setProperty('--tilt-x', `${dy * -10}deg`);
+    wrap.style.setProperty('--tilt-y', `${dx * 10}deg`);
   }, []);
 
   const handleMouseLeave = useCallback(() => {
     const wrap = wrapRef.current;
     if (!wrap) return;
-    wrap.style.setProperty("--tilt-x", "0deg");
-    wrap.style.setProperty("--tilt-y", "0deg");
+    wrap.style.setProperty('--tilt-x', '0deg');
+    wrap.style.setProperty('--tilt-y', '0deg');
   }, []);
 
   return (

@@ -1,5 +1,5 @@
-import { create } from "zustand";
-import { getCurrentSession, signOutCognito } from "@/lib/auth";
+import { create } from 'zustand';
+import { clearAuthCookie, getCurrentSession, setAuthCookie, signOutCognito } from '@/lib/auth';
 
 interface AuthState {
   isAuthenticated: boolean;
@@ -21,6 +21,11 @@ export const useAuthStore = create<AuthState>((set) => ({
 
   hydrate: async () => {
     const session = await getCurrentSession();
+    if (session) {
+      setAuthCookie(session.idToken);
+    } else {
+      clearAuthCookie();
+    }
     set({
       isAuthenticated: !!session,
       userId: session?.userId ?? null,
@@ -31,11 +36,23 @@ export const useAuthStore = create<AuthState>((set) => ({
   },
 
   setAuthenticated: (userId, email, picture) => {
-    set({ isAuthenticated: true, userId, email: email ?? null, picture: picture ?? null, hasHydrated: true });
+    set({
+      isAuthenticated: true,
+      userId,
+      email: email ?? null,
+      picture: picture ?? null,
+      hasHydrated: true,
+    });
+    getCurrentSession().then((session) => {
+      if (session) {
+        setAuthCookie(session.idToken);
+      }
+    });
   },
 
   logout: () => {
     signOutCognito();
+    clearAuthCookie();
     set({ isAuthenticated: false, userId: null, email: null, picture: null });
   },
 }));

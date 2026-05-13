@@ -1,19 +1,19 @@
-"use client";
+'use client';
 
-import { Button } from "@/components/ui";
-import { Modal } from "@/components/Modal";
-import styles from "./LimitModal.module.scss";
+import { Button } from '@/components/ui';
+import { Modal } from '@/components/Modal';
+import styles from './LimitModal.module.scss';
 
 interface Props {
   open: boolean;
-  code: "USER_LIMIT" | "SERVICE_LIMIT" | string;
+  code: 'USER_LIMIT' | 'SERVICE_LIMIT' | string;
   message: string;
   onClose: () => void;
 }
 
 const TITLES: Record<string, string> = {
-  USER_LIMIT: "Daily Limit Reached",
-  SERVICE_LIMIT: "Service Unavailable",
+  USER_LIMIT: 'Daily Limit Reached',
+  SERVICE_LIMIT: 'Service Unavailable',
 };
 
 export function LimitModal({ open, code, message, onClose }: Props) {
@@ -21,11 +21,11 @@ export function LimitModal({ open, code, message, onClose }: Props) {
     <Modal
       open={open}
       onClose={onClose}
-      title={TITLES[code] ?? "Limit Reached"}
+      title={TITLES[code] ?? 'Limit Reached'}
       description={message}
     >
       <div className={styles.actions}>
-        {code === "USER_LIMIT" && (
+        {code === 'USER_LIMIT' && (
           <p className={styles.hint}>
             Limits reset at midnight UTC. Upgrade to premium for unlimited identifications.
           </p>

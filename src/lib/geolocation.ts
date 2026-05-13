@@ -10,14 +10,14 @@ async function reverseGeocode(lat: number, lng: number): Promise<string> {
   try {
     const res = await fetch(
       `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=12`,
-      { headers: { Accept: "application/json" } },
+      { headers: { Accept: 'application/json' } },
     );
-    if (!res.ok) return fallback;
+    if (!res.ok) {return fallback;}
     const data: NominatimResponse = await res.json();
     const a = data.address ?? {};
     const short = [a.city ?? a.town ?? a.village ?? a.suburb, a.state, a.country]
       .filter(Boolean)
-      .join(", ");
+      .join(', ');
     return short || data.display_name || fallback;
   } catch {
     return fallback;
@@ -25,7 +25,7 @@ async function reverseGeocode(lat: number, lng: number): Promise<string> {
 }
 
 export function getCurrentLocation(): Promise<LocationInfo | null> {
-  if (typeof window === "undefined" || !("geolocation" in navigator)) {
+  if (typeof window === 'undefined' || !('geolocation' in navigator)) {
     return Promise.resolve(null);
   }
   return new Promise((resolve) => {

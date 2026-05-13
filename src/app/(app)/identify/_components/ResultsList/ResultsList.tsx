@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import Image from "next/image";
-import type { IdentifyResult } from "@/lib/api";
-import { ChevronRightIcon } from "@/components/icons";
-import { ConfidenceBar } from "../ConfidenceBar";
-import styles from "./ResultsList.module.scss";
+import Image from 'next/image';
+import type { IdentifyResult } from '@/lib/api';
+import { ChevronRightIcon } from '@/components/icons';
+import { ConfidenceBar } from '../ConfidenceBar';
+import styles from './ResultsList.module.scss';
 
 export function ResultsList({
   results,
@@ -40,7 +40,7 @@ export function ResultsList({
                   src={result.imageUrl}
                   alt={result.name}
                   fill
-                  style={{ objectFit: "cover" }}
+                  style={{ objectFit: 'cover' }}
                 />
               </div>
             )}

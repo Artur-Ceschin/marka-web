@@ -7,5 +7,9 @@ export default function Link({
   children: React.ReactNode;
   [key: string]: unknown;
 }) {
-  return <a href={href} {...props}>{children}</a>;
+  return (
+    <a href={href} {...props}>
+      {children}
+    </a>
+  );
 }

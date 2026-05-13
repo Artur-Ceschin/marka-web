@@ -1,4 +1,4 @@
-import { vi } from "vitest";
+import { vi } from 'vitest';
 
 export const useRouter = () => ({
   push: vi.fn(),
@@ -6,4 +6,4 @@ export const useRouter = () => ({
   back: vi.fn(),
 });
 
-export const usePathname = () => "/";
+export const usePathname = () => '/';

@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import Image from "next/image";
-import type { NotebookEntry } from "@/lib/api";
-import styles from "./NotebookCard.module.scss";
+import Image from 'next/image';
+import type { NotebookEntry } from '@/lib/api';
+import styles from './NotebookCard.module.scss';
 
 export function NotebookCard({
   entry,
@@ -12,10 +12,10 @@ export function NotebookCard({
   onClick?: (entry: NotebookEntry) => void;
 }) {
   const date = new Date(entry.identifiedAt);
-  const timeStr = date.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" });
-  const dateStr = date.toLocaleDateString("en-US", { day: "numeric", month: "short" });
+  const timeStr = date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+  const dateStr = date.toLocaleDateString('en-US', { day: 'numeric', month: 'short' });
   const scorePct = Math.round(entry.confidence * 100);
-  const imageUrl = entry.imageUrl || "/images/plant-sequoia.avif";
+  const imageUrl = entry.imageUrl || '/images/plant-sequoia.avif';
 
   const isHighConfidence = scorePct >= 80;
 
@@ -31,11 +31,9 @@ export function NotebookCard({
           alt={entry.plantName}
           fill
           unoptimized
-          style={{ objectFit: "cover" }}
+          style={{ objectFit: 'cover' }}
         />
-        {isHighConfidence && (
-          <span className={styles.rareBadge}>High Match</span>
-        )}
+        {isHighConfidence && <span className={styles.rareBadge}>High Match</span>}
       </div>
 
       <div className={styles.body}>
@@ -56,7 +54,7 @@ export function NotebookCard({
             <span className={styles.metaValue}>{scorePct}%</span>
           </div>
           {entry.location?.place && (
-            <div className={styles.metaItem} style={{ gridColumn: "1 / -1" }}>
+            <div className={styles.metaItem} style={{ gridColumn: '1 / -1' }}>
               <span className={styles.metaLabel}>Location</span>
               <span className={styles.metaValue}>{entry.location.place}</span>
             </div>

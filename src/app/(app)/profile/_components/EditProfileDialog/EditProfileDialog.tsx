@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import { useMutation } from "@tanstack/react-query";
-import { toast } from "sonner";
+import { useEffect, useState } from 'react';
+import { useMutation } from '@tanstack/react-query';
+import { toast } from 'sonner';
 
-import { Button, Input, Textarea } from "@/components/ui";
-import { Modal } from "@/components/Modal";
-import { users, type UpdateProfileBody } from "@/lib/api";
-import styles from "./EditProfileDialog.module.scss";
+import { Button, Input, Textarea } from '@/components/ui';
+import { Modal } from '@/components/Modal';
+import { users, type UpdateProfileBody } from '@/lib/api';
+import styles from './EditProfileDialog.module.scss';
 
 type ProfileData = { name: string; email: string; bio: string | null };
 
@@ -22,20 +22,21 @@ export function EditProfileDialog({
   profile: ProfileData | null;
   onSaved: () => void;
 }) {
-  const [name, setName] = useState("");
-  const [bio, setBio] = useState("");
+  const [name, setName] = useState('');
+  const [bio, setBio] = useState('');
 
   useEffect(() => {
     if (open && profile) {
-      setName(profile.name ?? "");
-      setBio(profile.bio ?? "");
+      setName(profile.name ?? '');
+
+      setBio(profile.bio ?? '');
     }
   }, [open, profile]);
 
   const { mutate, isPending } = useMutation({
     mutationFn: (body: UpdateProfileBody) => users.updateMe(body),
     onSuccess: () => {
-      toast.success("Profile updated.");
+      toast.success('Profile updated.');
       onSaved();
     },
   });
@@ -43,7 +44,7 @@ export function EditProfileDialog({
   function handleSave() {
     const body: UpdateProfileBody = {};
     if (name.trim() && name.trim() !== profile?.name) body.name = name.trim();
-    if (bio.trim() !== (profile?.bio ?? "")) body.bio = bio.trim();
+    if (bio.trim() !== (profile?.bio ?? '')) body.bio = bio.trim();
     if (Object.keys(body).length === 0) {
       onSaved();
       return;
@@ -59,7 +60,7 @@ export function EditProfileDialog({
       description="Update your name and bio."
     >
       <div className={styles.form}>
-        <Input label="Email" value={profile?.email ?? ""} disabled />
+        <Input label="Email" value={profile?.email ?? ''} disabled />
         <Input
           label="Name"
           placeholder="Your name"
@@ -85,13 +86,7 @@ export function EditProfileDialog({
           >
             Cancel
           </Button>
-          <Button
-            variant="primary"
-            size="lg"
-            fullWidth
-            loading={isPending}
-            onClick={handleSave}
-          >
+          <Button variant="primary" size="lg" fullWidth loading={isPending} onClick={handleSave}>
             Save changes
           </Button>
         </div>

@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useEffect, useRef } from "react";
-import styles from "./HeroVideo.module.scss";
+import { useEffect, useRef } from 'react';
+import styles from './HeroVideo.module.scss';
 
 export function HeroVideo({ src }: { src: string }) {
   const ref = useRef<HTMLVideoElement>(null);
