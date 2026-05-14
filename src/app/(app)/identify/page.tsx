@@ -1,16 +1,16 @@
 'use client';
 
 import { useState } from 'react';
-import { useMutation } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { IoSunnyOutline, IoPrismOutline, IoSparklesOutline } from 'react-icons/io5';
 
-import { identify, type IdentifyResult, ApiError } from '@/lib/api';
+import { type IdentifyResult, ApiError } from '@/lib/api';
 import { PhotoPicker } from './_components/PhotoPicker';
 import { ResultsList } from './_components/ResultsList';
 import { DetailView } from './_components/DetailView';
 import { LimitModal } from './_components/LimitModal';
 import styles from './page.module.scss';
+import { useIdentifySubmit } from '@/hooks/useIdentify';
 
 type Step = 'upload' | 'preview' | 'results' | 'detail';
 
@@ -25,8 +25,7 @@ export default function IdentifyPage() {
     mutate: runIdentify,
     data: identifyData,
     isPending,
-  } = useMutation({
-    mutationFn: (f: File) => identify.submit(f),
+  } = useIdentifySubmit({
     onSuccess: (data) => {
       setStep('results');
       const count = data.results?.length ?? 0;

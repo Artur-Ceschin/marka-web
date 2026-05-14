@@ -2,11 +2,10 @@
 
 import { useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
-import { useQuery } from '@tanstack/react-query';
 import { IoSearchOutline } from 'react-icons/io5';
-import { notebook } from '@/lib/api';
 import { NotebookCard } from './_components/NotebookCard';
 import styles from './page.module.scss';
+import { useNotebook } from '@/hooks/useNotebook';
 
 type Filter = 'all' | 'month' | 'notes';
 
@@ -21,10 +20,7 @@ export default function NotebookPage() {
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState<Filter>('all');
 
-  const { data: entries = [], isLoading } = useQuery({
-    queryKey: ['notebook'],
-    queryFn: () => notebook.list().then((r) => r.items),
-  });
+  const { data: entries = [], isLoading } = useNotebook();
 
   const filtered = useMemo(() => {
     let list = entries;

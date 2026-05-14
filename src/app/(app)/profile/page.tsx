@@ -2,7 +2,7 @@
 
 import { useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 
 import {
   BellIcon,
@@ -18,6 +18,7 @@ import { cdnUrl } from '@/lib/cdn';
 
 import { EditProfileDialog } from './_components/EditProfileDialog';
 import styles from './page.module.scss';
+import { useProfile } from '@/hooks/useProfile';
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -52,10 +53,7 @@ export default function ProfilePage() {
     }
   }
 
-  const { data: profile } = useQuery({
-    queryKey: ['users', 'me'],
-    queryFn: users.me,
-  });
+  const { data: profile } = useProfile();
 
   const email = profile?.email || authEmail || null;
 

@@ -1,13 +1,12 @@
 'use client';
 
 import { useEffect, useRef, useState, useCallback } from 'react';
-import { useInfiniteQuery } from '@tanstack/react-query';
 import { IoLocationOutline, IoWarningOutline, IoSearchOutline } from 'react-icons/io5';
 import type { LocationInfo } from '@/lib/geolocation';
-import { explore } from '@/lib/api';
 import { NearbyCard } from './_components/NearbyCard';
 import { PlantDetailPanel } from './_components/PlantDetailPanel';
 import styles from './page.module.scss';
+import { useNearbyPlants } from '@/hooks/useExplore';
 
 type LocationState =
   | { status: 'checking' }
@@ -130,13 +129,12 @@ export default function ExplorePage() {
   const lng = location.status === 'ready' ? location.info.lng : 0;
   const place = location.status === 'ready' ? location.info.place : '';
 
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useInfiniteQuery({
-    queryKey: ['explore', 'nearby', lat, lng, radius],
-    queryFn: ({ pageParam }) => explore.nearby(lat, lng, pageParam, radius),
-    initialPageParam: 0,
-    getNextPageParam: (last) => (last.hasMore ? last.page + 1 : undefined),
-    enabled: location.status === 'ready',
-  });
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useNearbyPlants(
+    lat,
+    lng,
+    radius,
+    location.status === 'ready',
+  );
 
   const plants = data?.pages.flatMap((p) => p.plants) ?? [];
 
