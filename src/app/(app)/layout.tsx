@@ -48,7 +48,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     <div className={styles.shell}>
       {/* ── Desktop sidebar ───────────────────── */}
       <aside className={styles.sidebar}>
-        <Link href="/feed" className={styles.sidebarLogo}>
+        <Link href="/identify" className={styles.sidebarLogo}>
           <LeafMark size={32} />
           <span className={styles.sidebarWordmark}>marka</span>
         </Link>

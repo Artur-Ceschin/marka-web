@@ -56,7 +56,7 @@ export default function SignUpPage() {
         const t = v.currentTime;
         const rem = v.duration - t;
         v.style.opacity = String(
-          t < FADE ? (t / FADE) * MAX : rem < FADE ? (rem / FADE) * MAX : MAX,
+          t < FADE ? 0.1 + (t / FADE) * (MAX - 0.1) : rem < FADE ? (rem / FADE) * MAX : MAX,
         );
       }
       rafId = requestAnimationFrame(tick);
@@ -143,10 +143,19 @@ export default function SignUpPage() {
           ref={videoRef}
           className={styles.brandVideo}
           src={`${process.env.NEXT_PUBLIC_ASSETS_URL}/videos/signup-video.mp4`}
+          poster={`${process.env.NEXT_PUBLIC_ASSETS_URL}/images/signup-video-poster.jpg`}
           autoPlay
           muted
           loop
           playsInline
+          onError={(e) => {
+            const v = e.currentTarget;
+            v.style.display = 'none';
+            const img = document.createElement('img');
+            img.src = `${process.env.NEXT_PUBLIC_ASSETS_URL}/images/signup-video-poster.jpg`;
+            img.className = v.className;
+            v.parentElement?.insertBefore(img, v);
+          }}
         />
 
         <div className={styles.brandBack}>

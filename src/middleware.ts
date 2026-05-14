@@ -21,11 +21,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: [
-    '/identify/:path*',
-    '/explore/:path*',
-    '/notebook/:path*',
-    '/feed/:path*',
-    '/profile/:path*',
-  ],
+  matcher: ['/identify/:path*', '/explore/:path*', '/notebook/:path*', '/profile/:path*'],
 };

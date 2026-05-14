@@ -259,7 +259,10 @@ export default function HomePage() {
 
       {/* ── Hero video ───────────────────────────────────── */}
       <section className={styles.hero}>
-        <HeroVideo src={`${process.env.NEXT_PUBLIC_ASSETS_URL}/videos/hero-forest.mp4`} />
+        <HeroVideo
+          src={`${process.env.NEXT_PUBLIC_ASSETS_URL}/videos/hero-forest.mp4`}
+          poster={`${process.env.NEXT_PUBLIC_ASSETS_URL}/images/hero-forest-poster.jpg`}
+        />
         <div className={styles.heroOverlay} />
         <div className={styles.heroLoopFade} />
         <div className={styles.heroFadeIn} />
