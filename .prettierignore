@@ -1,5 +1,17 @@
+# Prettier is scoped to SCSS, Markdown and YAML only.
+# Biome owns JS/TS/JSX/JSON/CSS formatting: see biome.jsonc.
 pnpm-lock.yaml
 dist
 coverage
 node_modules
 .husky
+.agents
+*.ts
+*.tsx
+*.js
+*.mjs
+*.cjs
+*.json
+*.jsonc
+*.css
+*.html

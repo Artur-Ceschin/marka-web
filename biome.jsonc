@@ -1,0 +1,154 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.5.13/schema.json",
+
+  // Biome reads .gitignore, so anything already ignored by git is skipped.
+  "vcs": { "enabled": true, "clientKind": "git", "useIgnoreFile": true },
+
+  "files": {
+    "includes": ["**", "!dist", "!coverage", "!node_modules", "!public", "!.agents"]
+  },
+
+  // Biome formats JS/TS/JSX/JSON/CSS. It does NOT understand SCSS, so Prettier
+  // is still responsible for .scss/.md/.yaml (see the `format:styles` script).
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineWidth": 100,
+    "lineEnding": "lf",
+    "useEditorconfig": true
+  },
+
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "single",
+      "jsxQuoteStyle": "double",
+      "semicolons": "always",
+      "trailingCommas": "all",
+      "arrowParentheses": "always",
+      "bracketSpacing": true
+    }
+  },
+
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "preset": "recommended",
+
+      // Accessibility is a stated project priority, so the whole group is on.
+      // This is Biome's replacement for eslint-plugin-jsx-a11y.
+      "a11y": { "preset": "recommended" },
+
+      "correctness": {
+        // Biome's replacement for eslint-plugin-react-hooks. Both as error: a
+        // wrong dependency array is a bug, not a style preference.
+        "useExhaustiveDependencies": "error",
+        "useHookAtTopLevel": "error",
+        "noUnusedVariables": { "level": "error", "options": { "ignoreRestSiblings": true } },
+        "noUnusedImports": "error"
+      },
+
+      "suspicious": {
+        // Standing rule: never `any`. Use `unknown` and narrow.
+        "noExplicitAny": "error"
+      },
+
+      "style": {
+        "useConst": "error",
+        "noNonNullAssertion": "error",
+        // verbatimModuleSyntax erases nothing implicitly, so a type-only import
+        // left unmarked becomes a real runtime import.
+        "useImportType": "error"
+      }
+    }
+  },
+
+  // Replaces import-x/order. Biome sorts imports as an assist action rather
+  // than a lint rule, applied by `biome check --write`.
+  "assist": {
+    "enabled": true,
+    "actions": { "source": { "organizeImports": "on" } }
+  },
+
+  "overrides": [
+    // ---------------------------------------------------------------------
+    // ARCHITECTURE BOUNDARY
+    //
+    // ESLint's import-x/no-restricted-paths took a directional `target`/`from`
+    // pair. Biome has no such rule, so the direction is expressed by WHICH
+    // FILES each override applies to: `includes` is the "target", and the
+    // restricted `group` is the "from".
+    //
+    // Caveat worth knowing: this matches on the import SPECIFIER, not the
+    // resolved file path. It catches `@/features/...` and any path containing
+    // `features/`, but a deep relative escape such as `../../plants/api` would
+    // slip through. Always import across layers via the `@/` alias.
+    // ---------------------------------------------------------------------
+
+    // Shared layers must never reach down into a feature.
+    {
+      "includes": ["src/components/**", "src/lib/**"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noRestrictedImports": {
+              "level": "error",
+              "options": {
+                "patterns": [
+                  {
+                    "group": ["@/features/**", "**/features/**"],
+                    "message": "Shared layers (components/, lib/) must not import from features/. Move the shared piece up, or move this file into the feature."
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+
+    // A feature may import its own modules, never a sibling's. The negated
+    // glob is the feature's own directory, so there is one override per
+    // feature. Adding a feature means adding a block here.
+    {
+      "includes": ["src/features/marketing/**"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noRestrictedImports": {
+              "level": "error",
+              "options": {
+                "patterns": [
+                  {
+                    "group": ["@/features/**", "!@/features/marketing/**"],
+                    "message": "Features must not import from sibling features. Promote the shared piece to components/ or lib/."
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "includes": ["src/features/plants/**"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noRestrictedImports": {
+              "level": "error",
+              "options": {
+                "patterns": [
+                  {
+                    "group": ["@/features/**", "!@/features/plants/**"],
+                    "message": "Features must not import from sibling features. Promote the shared piece to components/ or lib/."
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

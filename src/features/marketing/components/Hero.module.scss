@@ -1,0 +1,210 @@
+.hero {
+  position: relative;
+  min-height: 92svh;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+  background-color: var(--color-media-scrim);
+}
+
+.media {
+  position: absolute;
+  inset: 0;
+  /* The image scales past its box while breathing; without this the edges
+     would creep into view at the top of the cycle. */
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* Start slightly scaled so the breath never dips below full bleed. */
+    @include breathe(1.02, 1.07);
+  }
+}
+
+/* Two overlapping gradients rather than one flat tint: the vertical pass buys
+   contrast for the text at the bottom, the horizontal pass keeps the right of
+   the frame readable without flattening the whole photograph. */
+.scrim {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      to top,
+      color-mix(in srgb, var(--color-media-scrim) 92%, transparent) 0%,
+      color-mix(in srgb, var(--color-media-scrim) 55%, transparent) 38%,
+      color-mix(in srgb, var(--color-media-scrim) 12%, transparent) 72%
+    ),
+    linear-gradient(
+      to right,
+      color-mix(in srgb, var(--color-media-scrim) 55%, transparent) 0%,
+      transparent 60%
+    );
+}
+
+.inner {
+  @include container(1280px);
+  position: relative;
+  /* Full-bleed section: on a notched phone in landscape the content would
+     otherwise sit under the rounded corner or the home indicator. */
+  padding-block: var(--space-64) calc(var(--space-48) + env(safe-area-inset-bottom));
+  padding-inline-start: calc(var(--space-24) + env(safe-area-inset-left));
+  padding-inline-end: calc(var(--space-24) + env(safe-area-inset-right));
+  color: var(--color-on-media);
+}
+
+.content {
+  max-width: 660px;
+}
+
+.eyebrow {
+  @include eyebrow;
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  color: var(--color-on-media-muted);
+  margin-block-end: var(--space-16);
+}
+
+.eyebrowDot {
+  width: 6px;
+  height: 6px;
+  border-radius: var(--radius-pill);
+  background-color: var(--c-lime);
+  @include pulse;
+}
+
+.title {
+  @include text-hero;
+  margin-block-end: var(--space-24);
+  text-wrap: balance;
+
+  @media (min-width: 1100px) {
+    font-size: 68px;
+    line-height: 1.03;
+    letter-spacing: -0.8px;
+  }
+}
+
+.lede {
+  @include text-body;
+  color: var(--color-on-media-muted);
+  max-width: 52ch;
+  margin-block-end: var(--space-32);
+
+  @media (min-width: 760px) {
+    font-size: 18px;
+  }
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-12);
+  margin-block-end: var(--space-48);
+}
+
+/* On a photograph the theme's action tokens have no guaranteed contrast, so
+   the hero buttons pin their own. */
+.primaryCta {
+  background-color: var(--color-on-media);
+  color: var(--color-media-scrim);
+}
+
+.secondaryCta {
+  background-color: transparent;
+  color: var(--color-on-media);
+  border-color: color-mix(in srgb, var(--color-on-media) 55%, transparent);
+
+  &:hover:not(:disabled) {
+    border-color: var(--color-on-media);
+    background-color: color-mix(in srgb, var(--color-on-media) 12%, transparent);
+  }
+}
+
+/* The subject strip. These are jump links into the matching card below, so
+   they are pills with a visible edge, a bare icon and label sitting on a
+   photograph gives no affordance that it can be clicked. */
+.subjects {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-12);
+  padding-block-start: var(--space-24);
+  border-block-start: 1px solid color-mix(in srgb, var(--color-on-media) 22%, transparent);
+}
+
+.subject {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-8);
+  padding: var(--space-8) var(--space-16);
+  border: 1px solid color-mix(in srgb, var(--color-on-media) 32%, transparent);
+  border-radius: var(--radius-pill);
+  background-color: color-mix(in srgb, var(--color-media-scrim) 28%, transparent);
+  color: var(--color-on-media);
+  text-decoration: none;
+  backdrop-filter: blur(6px);
+  transition:
+    background-color var(--dur-short) var(--ease-out),
+    border-color var(--dur-short) var(--ease-out);
+
+  &:hover {
+    background-color: color-mix(in srgb, var(--color-on-media) 16%, transparent);
+    border-color: var(--color-on-media);
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+}
+
+.subjectIcon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.subjectLabel {
+  @include text-meta;
+  font-weight: 500;
+}
+
+/* The hero is above the fold, so these animate on mount rather than on scroll.
+   The stagger walks down the block in reading order. */
+@media (prefers-reduced-motion: no-preference) {
+  .eyebrow,
+  .title,
+  .lede,
+  .actions,
+  .subjects {
+    animation: hero-enter var(--dur-medium) var(--ease-out) both;
+  }
+
+  .eyebrow {
+    animation-delay: 60ms;
+  }
+  .title {
+    animation-delay: 140ms;
+  }
+  .lede {
+    animation-delay: 240ms;
+  }
+  .actions {
+    animation-delay: 340ms;
+  }
+  .subjects {
+    animation-delay: 440ms;
+  }
+
+  @keyframes hero-enter {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}

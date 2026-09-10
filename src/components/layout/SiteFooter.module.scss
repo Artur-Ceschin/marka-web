@@ -1,0 +1,52 @@
+.footer {
+  border-block-start: 1px solid var(--color-border);
+  background-color: var(--color-bg);
+}
+
+.inner {
+  @include container(1280px);
+  padding-block: var(--space-48);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-24);
+  align-items: center;
+  justify-content: space-between;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-8);
+  font-weight: 500;
+}
+
+.brandIcon {
+  width: 20px;
+  height: 20px;
+}
+
+.meta {
+  @include text-meta;
+  color: var(--color-text-muted);
+}
+
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-24);
+}
+
+.link {
+  @include text-meta;
+  text-decoration: none;
+  border-block-end: 1px solid transparent;
+  border-radius: 2px;
+
+  &:hover {
+    border-block-end-color: currentColor;
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+}

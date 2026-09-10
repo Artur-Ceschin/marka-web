@@ -1,0 +1,88 @@
+.section {
+  position: relative;
+  overflow: hidden;
+  background-color: var(--color-media-scrim);
+  color: var(--color-on-media);
+}
+
+.media {
+  position: absolute;
+  inset: 0;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 35%;
+    @include breathe(1.02, 1.07);
+  }
+}
+
+.scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--color-media-scrim) 78%, transparent),
+    color-mix(in srgb, var(--color-media-scrim) 88%, transparent)
+  );
+}
+
+.inner {
+  @include container(760px);
+  position: relative;
+  @include reveal;
+  text-align: center;
+  padding-block: var(--space-64);
+
+  @media (min-width: 760px) {
+    padding-block: 128px;
+  }
+}
+
+.title {
+  @include text-display;
+  text-wrap: balance;
+  margin-block-end: var(--space-16);
+
+  @media (min-width: 760px) {
+    font-size: 44px;
+    line-height: 1.12;
+    letter-spacing: -0.4px;
+  }
+}
+
+.text {
+  @include text-body;
+  color: var(--color-on-media-muted);
+  margin-block-end: var(--space-32);
+  margin-inline: auto;
+  max-width: 46ch;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-12);
+  justify-content: center;
+}
+
+.primaryCta {
+  background-color: var(--color-on-media);
+  color: var(--color-media-scrim);
+}
+
+.secondaryCta {
+  background-color: transparent;
+  color: var(--color-on-media);
+  border-color: color-mix(in srgb, var(--color-on-media) 55%, transparent);
+
+  &:hover:not(:disabled) {
+    border-color: var(--color-on-media);
+    background-color: color-mix(in srgb, var(--color-on-media) 12%, transparent);
+  }
+}
+
+.innerVisible {
+  @include reveal-visible;
+}

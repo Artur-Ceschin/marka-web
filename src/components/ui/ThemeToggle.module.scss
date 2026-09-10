@@ -1,0 +1,28 @@
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-pill);
+  background-color: transparent;
+  color: currentColor;
+  cursor: pointer;
+  transition:
+    background-color var(--dur-short) var(--ease-out),
+    border-color var(--dur-short) var(--ease-out);
+
+  &:hover {
+    border-color: currentColor;
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+}
+
+.icon {
+  width: 18px;
+  height: 18px;
+}

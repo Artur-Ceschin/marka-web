@@ -1,0 +1,168 @@
+@font-face {
+  font-family: 'Switzer';
+  src: url('/fonts/switzer-400.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Switzer';
+  src: url('/fonts/switzer-500.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* --- Modern reset --------------------------------------------------------- */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+
+  /* Smooth jump-link scrolling, but only for people who have not asked for
+     less motion, a long smooth scroll is a common migraine trigger. The
+     reduced-motion block further down also forces `scroll-behavior: auto`, so
+     this is belt and braces. */
+  @media (prefers-reduced-motion: no-preference) {
+    scroll-behavior: smooth;
+  }
+
+  /* Reserve the fixed header's height on every scroll-into-view, not just
+     :target. Tabbing to a control just below the fold would otherwise land it
+     underneath the header, where the focus ring is invisible. */
+  scroll-padding-top: 104px;
+}
+
+/* Anything an in-page link targets must clear the fixed header, or it lands
+   underneath it. Set once here so a new anchor cannot forget it. */
+:target {
+  scroll-margin-top: 104px;
+}
+
+body {
+  min-height: 100dvh;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  @include text-body;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+img,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+/* `display: contents` removes the <picture> box so the <img> is laid out as a
+   direct child of the styled wrapper. Without this the picture is a block of
+   auto height, `height: 100%` on the img has no definite basis to resolve
+   against, and `object-fit: cover` silently does nothing: the image renders
+   at its natural aspect ratio and gets clipped instead of cropped. */
+picture {
+  display: contents;
+}
+
+input,
+button,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+/* Removes the 300ms tap delay without disabling zoom (which `user-scalable=no`
+   would, and which breaks the page for low-vision users). The tap highlight is
+   set deliberately rather than left to each platform's default blue flash;
+   every control here already has its own hover and focus states. */
+a,
+button,
+[role='button'],
+label,
+summary {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  overflow-wrap: break-word;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 500;
+}
+
+ul[class],
+ol[class] {
+  list-style: none;
+  padding: 0;
+}
+
+a {
+  color: inherit;
+}
+
+/* --- Focus ---------------------------------------------------------------- */
+
+/* Remove the ring ONLY for non-keyboard focus. A blanket `outline: none` would
+   strip the keyboard affordance from every interactive element in the app. */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+:focus-visible {
+  @include focus-ring;
+}
+
+/* --- Motion --------------------------------------------------------------- */
+
+/* Belt and braces: --dur-short already collapses under reduced motion, but this
+   also catches any animation that hardcodes a duration. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Visually hidden but available to screen readers. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}

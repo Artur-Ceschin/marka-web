@@ -1,0 +1,146 @@
+.section {
+  @include container(1280px);
+  padding-block: var(--space-64);
+
+  @media (min-width: 760px) {
+    padding-block: 120px;
+  }
+}
+
+.panel {
+  @include reveal;
+  display: grid;
+  gap: var(--space-32);
+  align-items: center;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-panel);
+  overflow: hidden;
+  padding: var(--space-32);
+
+  @media (min-width: 900px) {
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: var(--space-64);
+    padding: var(--space-48);
+  }
+}
+
+.panelVisible {
+  @include reveal-visible;
+}
+
+.eyebrow {
+  @include eyebrow;
+  color: var(--color-text-muted);
+  margin-block-end: var(--space-16);
+}
+
+.title {
+  @include text-display;
+  text-wrap: balance;
+  margin-block-end: var(--space-16);
+}
+
+.text {
+  @include text-body;
+  color: var(--color-text-muted);
+  max-width: 52ch;
+  margin-block-end: var(--space-24);
+}
+
+.list {
+  display: grid;
+  gap: var(--space-12);
+}
+
+/* Rows arrive in sequence, so the list reads as filling in rather than
+   appearing all at once. */
+@media (prefers-reduced-motion: no-preference) {
+  .panelVisible {
+    .item:nth-child(1) {
+      transition-delay: 120ms;
+    }
+    .item:nth-child(2) {
+      transition-delay: 200ms;
+    }
+    .item:nth-child(3) {
+      transition-delay: 280ms;
+    }
+    .item:nth-child(4) {
+      transition-delay: 360ms;
+    }
+
+    .item {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  .item {
+    opacity: 0;
+    transform: translateY(10px);
+    transition:
+      opacity var(--dur-medium) var(--ease-out),
+      transform var(--dur-medium) var(--ease-out);
+  }
+}
+
+.item {
+  display: flex;
+  gap: var(--space-12);
+  align-items: flex-start;
+  padding-block: var(--space-12);
+  border-block-start: 1px solid var(--color-border);
+}
+
+.itemIcon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  margin-block-start: 3px;
+  color: var(--color-text-muted);
+}
+
+.itemName {
+  @include text-body;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  flex-wrap: wrap;
+}
+
+.itemText {
+  @include text-meta;
+  color: var(--color-text-muted);
+}
+
+/* Every integration on this list is planned, not shipped. The badge says so on
+   each row rather than in one asterisk at the bottom that nobody reads. */
+.badge {
+  @include text-label;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  padding: 2px var(--space-8);
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--color-border-strong);
+  color: var(--color-text-muted);
+}
+
+.media {
+  border-radius: var(--radius-card);
+  overflow: hidden;
+  aspect-ratio: 4 / 5;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    @include breathe(1.02, 1.06);
+  }
+
+  @media (max-width: 899px) {
+    order: -1;
+    aspect-ratio: 16 / 10;
+  }
+}
