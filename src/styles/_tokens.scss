@@ -20,6 +20,8 @@
   --c-bone: #f3f1ea;
   --c-white: #ffffff;
   --c-muted: #5c6b5f;
+  --c-clay: #b3401f;
+  --c-clay-soft: #f0a58a;
 
   /* tier 2: semantic, this is the component API */
   --color-bg: var(--c-bone);
@@ -31,6 +33,7 @@
   --color-border: #294e3b33;
   --color-border-strong: #294e3b99;
   --color-focus: var(--c-ink);
+  --color-danger: var(--c-clay);
 
   /* Text that sits on top of a photograph, in both themes. Photos do not
      invert, so these stay fixed rather than following the theme. */
@@ -80,6 +83,8 @@
   // The focus ring must stay visible against the dark background; the light
   // theme's ink ring would disappear into it.
   --color-focus: var(--c-lime);
+  /* The light theme's clay is too dark to read on the dark surface. */
+  --color-danger: var(--c-clay-soft);
 }
 
 @media (prefers-reduced-motion: reduce) {

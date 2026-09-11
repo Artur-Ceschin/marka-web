@@ -1,3 +1,4 @@
+import { Link } from '@tanstack/react-router';
 import { Flower, TreeDeciduous } from 'lucide-react';
 
 import { images } from '@/assets/images';
@@ -45,7 +46,7 @@ export function Hero() {
 
           <div className={styles.actions}>
             <Button asChild className={styles.primaryCta}>
-              <a href="#start">Start your catalogue</a>
+              <Link to="/sign-up">Start your catalogue</Link>
             </Button>
             <Button asChild variant="secondary" className={styles.secondaryCta}>
               <a href="#identify">See what it identifies</a>

@@ -1,0 +1,148 @@
+.page {
+  display: grid;
+  min-height: 100svh;
+  grid-template-columns: 1fr;
+
+  @media (min-width: 960px) {
+    /* The form column is fixed-ish and the photo takes the rest, so the form
+       never stretches to an unreadable width on a wide monitor. */
+    grid-template-columns: minmax(480px, 46%) 1fr;
+  }
+}
+
+.formColumn {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-bg);
+  padding-inline: calc(var(--space-24) + env(safe-area-inset-left))
+    calc(var(--space-24) + env(safe-area-inset-right));
+  padding-block: var(--space-24) calc(var(--space-24) + env(safe-area-inset-bottom));
+
+  @media (min-width: 760px) {
+    padding-inline: var(--space-64);
+  }
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-8);
+  font-weight: 500;
+  font-size: 19px;
+  letter-spacing: -0.2px;
+  text-decoration: none;
+  align-self: flex-start;
+  border-radius: var(--radius-input);
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+}
+
+.brandIcon {
+  width: 22px;
+  height: 22px;
+}
+
+.body {
+  /* Optically centred: `auto` above and 1.2fr below sits the form slightly
+     above true centre, which reads as balanced rather than low. */
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-block: var(--space-24);
+}
+
+.inner {
+  width: 100%;
+  max-width: 420px;
+  margin-inline: auto;
+}
+
+.title {
+  @include text-display;
+  text-wrap: balance;
+  margin-block-end: var(--space-8);
+}
+
+.subtitle {
+  @include text-body;
+  color: var(--color-text-muted);
+  margin-block-end: var(--space-24);
+}
+
+.footer {
+  @include text-meta;
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+.footerLink {
+  color: var(--color-text);
+  font-weight: 500;
+  border-radius: 2px;
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+}
+
+/* --- Media column --- */
+
+.media {
+  position: relative;
+  display: none;
+  overflow: hidden;
+  background-color: var(--color-media-scrim);
+
+  @media (min-width: 960px) {
+    display: block;
+  }
+
+  /* Absolutely positioned so the photograph cannot drive the grid row height.
+     In normal flow `height: 100%` has no definite basis to resolve against
+     here, so the image falls back to its natural aspect ratio and stretches the
+     whole page past the viewport, taking the form's footer with it. */
+  img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    @include breathe(1.02, 1.06);
+  }
+}
+
+.mediaScrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    color-mix(in srgb, var(--color-media-scrim) 88%, transparent) 0%,
+    color-mix(in srgb, var(--color-media-scrim) 30%, transparent) 45%,
+    transparent 75%
+  );
+}
+
+.quote {
+  position: absolute;
+  inset-inline: 0;
+  inset-block-end: 0;
+  padding: var(--space-48);
+  color: var(--color-on-media);
+  max-width: 34ch;
+}
+
+.quoteText {
+  @include text-title;
+  font-size: 24px;
+  line-height: 1.3;
+  text-wrap: balance;
+  margin-block-end: var(--space-8);
+}
+
+.quoteMeta {
+  @include text-meta;
+  color: var(--color-on-media-muted);
+}

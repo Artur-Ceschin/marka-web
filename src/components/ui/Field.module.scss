@@ -1,0 +1,140 @@
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+/* Sits tight under the input rather than a full step away. */
+.message {
+  margin-block-start: calc(var(--space-4) * -1);
+}
+
+.labelRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-12);
+}
+
+.label {
+  @include text-meta;
+  font-weight: 500;
+  color: var(--color-text);
+  /* The whole label is a hit target for its control, so make that visible. */
+  cursor: pointer;
+}
+
+.optional {
+  @include text-meta;
+  color: var(--color-text-muted);
+}
+
+.control {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input {
+  width: 100%;
+  min-height: 48px;
+  padding: var(--space-12) var(--space-16);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-input);
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  @include text-body;
+  transition:
+    border-color var(--dur-short) var(--ease-out),
+    box-shadow var(--dur-short) var(--ease-out);
+
+  &::placeholder {
+    color: var(--color-text-muted);
+  }
+
+  &:hover:not(:disabled) {
+    border-color: var(--color-text);
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+    border-color: var(--color-focus);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
+  }
+}
+
+/* Room for the reveal toggle so long values never run under it. */
+.inputWithAffix {
+  padding-inline-end: 48px;
+}
+
+.invalid {
+  border-color: var(--color-danger);
+
+  &:hover:not(:disabled) {
+    border-color: var(--color-danger);
+  }
+}
+
+.affix {
+  position: absolute;
+  inset-inline-end: var(--space-8);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: var(--radius-input);
+  background: transparent;
+  color: var(--color-text-muted);
+  cursor: pointer;
+
+  &:hover {
+    color: var(--color-text);
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+}
+
+.affixIcon {
+  width: 18px;
+  height: 18px;
+}
+
+.message {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-8);
+  @include text-meta;
+
+  /* No reserved height. An empty message collapses to nothing so the fields sit
+     close together; the element itself stays in the DOM because an aria-live
+     region has to exist BEFORE content is inserted for it to be announced.
+     The small shift when an error appears is user-initiated, so it is expected
+     feedback rather than surprise movement, and does not count towards CLS. */
+  &:empty {
+    display: none;
+  }
+}
+
+.error {
+  color: var(--color-danger);
+}
+
+.hint {
+  color: var(--color-text-muted);
+}
+
+.messageIcon {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  margin-block-start: 3px;
+}

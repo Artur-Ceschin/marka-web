@@ -173,10 +173,6 @@
   color: var(--color-text);
 
   .caveatIcon {
-    color: #b3401f;
+    color: var(--color-danger);
   }
-}
-
-[data-theme='dark'] .caveatDanger .caveatIcon {
-  color: #f0a58a;
 }

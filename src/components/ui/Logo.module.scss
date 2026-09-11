@@ -1,0 +1,26 @@
+.lockup {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-8);
+  text-decoration: none;
+  color: inherit;
+  border-radius: var(--radius-input);
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+}
+
+.mark {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.wordmark {
+  font-weight: 500;
+  font-size: 19px;
+  /* The mark is tight and geometric; the wordmark needs the same tension or the
+     lockup reads as two unrelated objects side by side. */
+  letter-spacing: -0.3px;
+}

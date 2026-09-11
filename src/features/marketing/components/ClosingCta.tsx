@@ -1,3 +1,4 @@
+import { Link } from '@tanstack/react-router';
 import { images } from '@/assets/images';
 import { Button } from '@/components/ui/Button';
 import { Picture } from '@/components/ui/Picture';
@@ -25,7 +26,7 @@ export function ClosingCta() {
         </p>
         <div className={styles.actions}>
           <Button asChild className={styles.primaryCta}>
-            <a href="#start">Start your catalogue</a>
+            <Link to="/sign-up">Start your catalogue</Link>
           </Button>
           <Button asChild variant="secondary" className={styles.secondaryCta}>
             <a href="#identify">See how it works</a>

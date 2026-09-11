@@ -1,4 +1,4 @@
-import { Leaf } from 'lucide-react';
+import { Logo } from '@/components/ui/Logo';
 
 import styles from './SiteFooter.module.scss';
 
@@ -8,8 +8,7 @@ export function SiteFooter() {
       <div className={styles.inner}>
         <div>
           <p className={styles.brand}>
-            <Leaf className={styles.brandIcon} aria-hidden="true" />
-            <span translate="no">Marka</span>
+            <Logo />
           </p>
           <p className={styles.meta}>A catalogue of what grows around you.</p>
         </div>

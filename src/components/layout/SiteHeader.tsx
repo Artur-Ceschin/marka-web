@@ -1,7 +1,8 @@
-import { Leaf } from 'lucide-react';
+import { Link } from '@tanstack/react-router';
 import { useEffect, useRef, useState } from 'react';
 
 import { Button } from '@/components/ui/Button';
+import { Logo } from '@/components/ui/Logo';
 import { ThemeToggle } from '@/components/ui/ThemeToggle';
 
 import styles from './SiteHeader.module.scss';
@@ -44,10 +45,9 @@ export function SiteHeader() {
           Skip to content
         </a>
         <div className={styles.inner}>
-          <a href="/" className={styles.brand}>
-            <Leaf className={styles.brandIcon} aria-hidden="true" />
-            <span translate="no">Marka</span>
-          </a>
+          <Link to="/" className={styles.brand}>
+            <Logo />
+          </Link>
 
           <nav className={styles.nav} aria-label="Primary">
             {NAV_LINKS.map((link) => (
@@ -60,7 +60,7 @@ export function SiteHeader() {
           <div className={styles.actions}>
             <ThemeToggle />
             <Button asChild size="sm" className={styles.cta}>
-              <a href="#start">Get started</a>
+              <Link to="/sign-up">Get started</Link>
             </Button>
           </div>
         </div>

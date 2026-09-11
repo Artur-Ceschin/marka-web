@@ -1,0 +1,65 @@
+/* 24px between fields. With the empty message collapsed, 16px sat too tight
+   under a 48px input, and the old 44px (16 plus a 20px reserved message box)
+   made the pair read as two unrelated groups. */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-24);
+}
+
+.submitRow {
+  margin-block-start: var(--space-8);
+}
+
+.submit {
+  width: 100%;
+}
+
+.forgot {
+  @include text-meta;
+  color: var(--color-text-muted);
+  text-decoration: none;
+  border-radius: 2px;
+
+  &:hover {
+    color: var(--color-text);
+    text-decoration: underline;
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+}
+
+/* Form-level failure, as opposed to a per-field message. */
+.formError {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-8);
+  padding: var(--space-12) var(--space-16);
+  border: 1px solid var(--color-danger);
+  border-radius: var(--radius-input);
+  color: var(--color-danger);
+  @include text-meta;
+}
+
+.formErrorIcon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  margin-block-start: 2px;
+}
+
+.terms {
+  @include text-meta;
+  color: var(--color-text-muted);
+  margin-block-start: var(--space-8);
+}
+
+.termsLink {
+  color: var(--color-text);
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+}
