@@ -1,18 +1,24 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="1.6 1.4 20.8 20.8">
   <!--
-    Favicon: the Marka blade, lime on ink.
+    The same mark as the app header: the bare blade, no plate.
 
-    A solid plate rather than a bare mark, because a tab strip may be light or
-    dark and an ink leaf disappears against a dark one. Colours are literal, not
-    tokens: this is a static asset and never sees the stylesheet.
+    A fixed ink leaf would vanish against a dark tab strip, so the fill follows
+    the browser's colour scheme. SVG favicons honour prefers-color-scheme, which
+    is what makes dropping the plate possible at all.
+
+    The viewBox is cropped to the artwork rather than the full 24x24 grid, so the
+    leaf fills the 16px tab icon instead of floating in empty margin.
   -->
-  <rect width="32" height="32" rx="7.5" fill="#23422F"/>
-  <g transform="translate(4 4)">
-    <mask id="midrib">
-      <rect width="24" height="24" fill="white"/>
-      <path d="M12 4 L12 17.2" stroke="black" stroke-width="1.2" stroke-linecap="round"/>
-    </mask>
-    <path d="M12 2.6 Q15.4 5.2 15.6 6.8 Q13.6 7.2 13.4 7.8 Q16.8 9.0 17.1 10.4 Q13.9 10.9 13.7 11.5 Q17.0 12.6 17.0 14.0 Q13.7 14.4 13.5 15.0 Q15.6 16.0 15.4 17.1 Q13.4 17.4 12 17.8 Q6.6 15.9 6.6 11.4 Q6.6 7.0 12 2.6 Z" fill="#DFF5C0" mask="url(#midrib)"/>
-    <rect x="11.3" y="16.8" width="1.4" height="4.6" rx="0.7" fill="#DFF5C0"/>
-  </g>
+  <style>
+    .blade { fill: #23422F; }
+    @media (prefers-color-scheme: dark) {
+      .blade { fill: #DFF5C0; }
+    }
+  </style>
+  <mask id="midrib">
+    <rect x="0" y="0" width="24" height="24" fill="white"/>
+    <path d="M12 4 L12 17.2" stroke="black" stroke-width="1.2" stroke-linecap="round"/>
+  </mask>
+  <path class="blade" d="M12 2.6 Q15.4 5.2 15.6 6.8 Q13.6 7.2 13.4 7.8 Q16.8 9.0 17.1 10.4 Q13.9 10.9 13.7 11.5 Q17.0 12.6 17.0 14.0 Q13.7 14.4 13.5 15.0 Q15.6 16.0 15.4 17.1 Q13.4 17.4 12 17.8 Q6.6 15.9 6.6 11.4 Q6.6 7.0 12 2.6 Z" mask="url(#midrib)"/>
+  <rect class="blade" x="11.3" y="16.8" width="1.4" height="4.6" rx="0.7"/>
 </svg>

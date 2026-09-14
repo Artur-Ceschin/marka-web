@@ -27,3 +27,6 @@ dist-ssr
 coverage
 .claude
 .agents
+
+# Local overrides
+.env.local

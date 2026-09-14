@@ -1,7 +1,22 @@
 import '@testing-library/jest-dom/vitest';
 import { cleanup } from '@testing-library/react';
 import { toHaveNoViolations } from 'jest-axe';
-import { afterEach, beforeEach, expect, vi } from 'vitest';
+import { afterAll, afterEach, beforeAll, beforeEach, expect, vi } from 'vitest';
+
+import { server } from '@/mocks/server';
+
+// `error` rather than `warn`: a request the handlers do not cover means the
+// test is exercising a path nobody modelled, and silently returning a network
+// error would make that look like a UI bug.
+beforeAll(() => {
+  server.listen({ onUnhandledRequest: 'error' });
+});
+afterEach(() => {
+  server.resetHandlers();
+});
+afterAll(() => {
+  server.close();
+});
 
 // Adds `expect(...).toHaveNoViolations()`. Every component test asserts this,
 // so registering it once here keeps it out of the individual files.
@@ -49,4 +64,10 @@ beforeEach(() => {
 afterEach(() => {
   cleanup();
   vi.unstubAllGlobals();
+  // A locale set by one test must not leak into the next.
+  try {
+    localStorage.clear();
+  } catch {
+    // Storage unavailable; nothing to clear.
+  }
 });

@@ -1,19 +1,22 @@
 import { Link } from '@tanstack/react-router';
 import { useEffect, useRef, useState } from 'react';
-
+import { useI18n } from '@/app/providers/i18n';
 import { Button } from '@/components/ui/Button';
+import { LanguageToggle } from '@/components/ui/LanguageToggle';
 import { Logo } from '@/components/ui/Logo';
 import { ThemeToggle } from '@/components/ui/ThemeToggle';
+import { useIsAuthenticated } from '@/lib/auth/use-auth';
 
 import styles from './SiteHeader.module.scss';
 
-const NAV_LINKS = [
-  { href: '#identify', label: 'What it identifies' },
-  { href: '#goal', label: 'Our goal' },
-  { href: '#connect', label: 'Connections' },
-] as const;
-
 export function SiteHeader() {
+  const { m } = useI18n();
+  const authenticated = useIsAuthenticated();
+  const navLinks = [
+    { href: '#identify', label: m.nav.identify },
+    { href: '#goal', label: m.nav.goal },
+    { href: '#connect', label: m.nav.connect },
+  ];
   const [scrolled, setScrolled] = useState(false);
   const sentinelRef = useRef<HTMLDivElement>(null);
 
@@ -42,15 +45,15 @@ export function SiteHeader() {
       <div ref={sentinelRef} aria-hidden="true" />
       <header className={[styles.header, scrolled ? styles.scrolled : ''].join(' ')}>
         <a href="#main" className={styles.skipLink}>
-          Skip to content
+          {m.common.skipToContent}
         </a>
         <div className={styles.inner}>
           <Link to="/" className={styles.brand}>
             <Logo />
           </Link>
 
-          <nav className={styles.nav} aria-label="Primary">
-            {NAV_LINKS.map((link) => (
+          <nav className={styles.nav} aria-label={m.nav.primaryLabel}>
+            {navLinks.map((link) => (
               <a key={link.href} href={link.href} className={styles.navLink}>
                 {link.label}
               </a>
@@ -58,9 +61,14 @@ export function SiteHeader() {
           </nav>
 
           <div className={styles.actions}>
+            <LanguageToggle />
             <ThemeToggle />
             <Button asChild size="sm" className={styles.cta}>
-              <Link to="/sign-up">Get started</Link>
+              {authenticated ? (
+                <Link to="/app">{m.app.openCatalogue}</Link>
+              ) : (
+                <Link to="/sign-up">{m.common.getStarted}</Link>
+              )}
             </Button>
           </div>
         </div>

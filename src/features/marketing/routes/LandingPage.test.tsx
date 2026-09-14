@@ -1,18 +1,13 @@
 import { screen, within } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
-import { ThemeProvider } from '@/app/providers/ThemeProvider';
 import { axe } from '@/test/axe';
 import { renderWithRouter } from '@/test/router';
 
 import { LandingPage } from './LandingPage';
 
 async function renderPage() {
-  return renderWithRouter(
-    <ThemeProvider>
-      <LandingPage />
-    </ThemeProvider>,
-  );
+  return renderWithRouter(<LandingPage />);
 }
 
 describe('LandingPage', () => {

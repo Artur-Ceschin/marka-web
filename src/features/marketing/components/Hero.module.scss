@@ -87,6 +87,55 @@
   }
 }
 
+/* The ghost copy reserves the full box; the visible copy is laid over it. This
+   is what keeps the typing from reflowing the hero on every character. */
+.typeLine {
+  position: relative;
+  display: block;
+}
+
+.typeGhost {
+  visibility: hidden;
+}
+
+.typeVisible {
+  position: absolute;
+  inset: 0;
+}
+
+.caret {
+  display: inline-block;
+  width: 3px;
+  height: 0.82em;
+  margin-inline-start: 0.06em;
+  vertical-align: baseline;
+  transform: translateY(0.08em);
+  background-color: var(--c-lime);
+
+  @media (prefers-reduced-motion: no-preference) {
+    animation: caret-blink 1s steps(1, end) infinite;
+  }
+
+  @keyframes caret-blink {
+    0%,
+    50% {
+      opacity: 1;
+    }
+    50.01%,
+    100% {
+      opacity: 0;
+    }
+  }
+}
+
+/* Once the sentence is complete the caret has nothing left to say, so it stops
+   rather than blinking at the reader for the rest of the session. */
+.caretDone {
+  animation: none;
+  opacity: 0;
+  transition: opacity var(--dur-short) var(--ease-out);
+}
+
 .lede {
   @include text-body;
   color: var(--color-on-media-muted);
@@ -187,6 +236,55 @@
   .title {
     animation-delay: 140ms;
   }
+  /* The ghost copy reserves the full box; the visible copy is laid over it. This
+   is what keeps the typing from reflowing the hero on every character. */
+  .typeLine {
+    position: relative;
+    display: block;
+  }
+
+  .typeGhost {
+    visibility: hidden;
+  }
+
+  .typeVisible {
+    position: absolute;
+    inset: 0;
+  }
+
+  .caret {
+    display: inline-block;
+    width: 3px;
+    height: 0.82em;
+    margin-inline-start: 0.06em;
+    vertical-align: baseline;
+    transform: translateY(0.08em);
+    background-color: var(--c-lime);
+
+    @media (prefers-reduced-motion: no-preference) {
+      animation: caret-blink 1s steps(1, end) infinite;
+    }
+
+    @keyframes caret-blink {
+      0%,
+      50% {
+        opacity: 1;
+      }
+      50.01%,
+      100% {
+        opacity: 0;
+      }
+    }
+  }
+
+  /* Once the sentence is complete the caret has nothing left to say, so it stops
+   rather than blinking at the reader for the rest of the session. */
+  .caretDone {
+    animation: none;
+    opacity: 0;
+    transition: opacity var(--dur-short) var(--ease-out);
+  }
+
   .lede {
     animation-delay: 240ms;
   }

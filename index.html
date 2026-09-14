@@ -54,6 +54,19 @@
           const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
           document.documentElement.dataset.theme =
             stored === 'light' || stored === 'dark' ? stored : prefersDark ? 'dark' : 'light';
+
+          // Same idea for language: <html lang> must be right before first
+          // paint, or a screen reader starts reading with the wrong voice.
+          const savedLocale = localStorage.getItem('marka-locale');
+          const browserLocale = (navigator.languages || []).find((l) =>
+            /^(pt|en)\b/i.test(l),
+          );
+          document.documentElement.lang =
+            savedLocale === 'pt-BR' || savedLocale === 'en'
+              ? savedLocale
+              : /^pt/i.test(browserLocale || '')
+                ? 'pt-BR'
+                : 'en';
         } catch {
           // localStorage or matchMedia unavailable: fall back to the default.
           document.documentElement.dataset.theme = 'light';

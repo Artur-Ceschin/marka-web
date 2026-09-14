@@ -1,8 +1,11 @@
+import { useI18n } from '@/app/providers/i18n';
 import { Logo } from '@/components/ui/Logo';
 
 import styles from './SiteFooter.module.scss';
 
 export function SiteFooter() {
+  const { m } = useI18n();
+
   return (
     <footer className={styles.footer}>
       <div className={styles.inner}>
@@ -10,18 +13,18 @@ export function SiteFooter() {
           <p className={styles.brand}>
             <Logo />
           </p>
-          <p className={styles.meta}>A catalogue of what grows around you.</p>
+          <p className={styles.meta}>{m.footer.tagline}</p>
         </div>
 
-        <nav className={styles.links} aria-label="Footer">
+        <nav className={styles.links} aria-label={m.nav.footerLabel}>
           <a className={styles.link} href="#identify">
-            What it identifies
+            {m.nav.identify}
           </a>
           <a className={styles.link} href="#goal">
-            Our goal
+            {m.nav.goal}
           </a>
           <a className={styles.link} href="#connect">
-            Connections
+            {m.nav.connect}
           </a>
         </nav>
       </div>

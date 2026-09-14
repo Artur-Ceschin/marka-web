@@ -1,41 +1,69 @@
 import { Link, useNavigate } from '@tanstack/react-router';
+import { useEffect, useMemo, useState } from 'react';
 
+import { useI18n } from '@/app/providers/i18n';
+import { ApiError } from '@/lib/api-error';
+
+import { resendCode, signIn } from '../api/auth-api';
 import { AuthForm } from '../components/AuthForm';
 import { AuthLayout } from '../components/AuthLayout';
-import { signInSchema } from '../schemas';
+import { clearPendingEmail, setPendingEmail } from '../pending-verification';
+import { createSignInSchema } from '../schemas';
+import { clearSignInHandoff, peekSignInHandoff } from '../sign-in-handoff';
 
 export function SignInPage() {
   const navigate = useNavigate();
+  const { m } = useI18n();
+  const schema = useMemo(() => createSignInSchema(m), [m]);
+
+  // Peeked in the initializer and cleared in an effect, rather than consumed in
+  // one go: StrictMode runs state initializers twice in development, and a read
+  // that deletes would hand the second run nothing.
+  const [handoff] = useState(peekSignInHandoff);
+  useEffect(() => {
+    clearSignInHandoff();
+  }, []);
+
+  const notices = { verified: m.auth.verifiedNotice, passwordReset: m.auth.resetDone };
+  const notice = handoff ? notices[handoff.notice] : undefined;
 
   return (
     <AuthLayout
-      title="Welcome back"
-      subtitle="Sign in to pick up your catalogue where you left it."
+      title={m.auth.signInTitle}
+      subtitle={m.auth.signInSubtitle}
       footer={
         <>
-          New here?{' '}
-          <Link to="/sign-up" className="">
-            Create an account
-          </Link>
+          {m.auth.newHere} <Link to="/sign-up">{m.auth.createAccount}</Link>
         </>
       }
     >
       <AuthForm
-        schema={signInSchema}
-        submitLabel="Sign in"
+        schema={schema}
+        submitLabel={m.auth.signInSubmit}
         passwordAutoComplete="current-password"
         showForgotLink
+        defaultEmail={handoff?.email}
+        notice={notice}
         onSubmit={async (values) => {
-          // TODO: replace with the Cognito call once the API exists. Nothing
-          // is transmitted today; the delay only exercises the pending state.
-          await new Promise((resolve) => setTimeout(resolve, 600));
-          // eslint-disable-next-line no-console
-          console.info('sign-in submitted for', values.email);
-          await navigate({ to: '/' });
-        }}
-        onGoogle={() => {
-          // TODO: redirect to the Cognito Hosted UI Google identity provider.
-          console.info('google sign-in requested');
+          try {
+            await signIn(values);
+          } catch (error) {
+            // The credentials were right but the account was never verified.
+            // That is a step to resume, not an error to display: send a fresh
+            // code and route to the screen that consumes it.
+            if (error instanceof ApiError && error.isUserNotConfirmed) {
+              setPendingEmail(values.email);
+              // Best effort. If the resend fails, the verification screen
+              // still offers its own resend button.
+              await resendCode({ email: values.email }).catch(() => undefined);
+              await navigate({ to: '/verify-email' });
+              return;
+            }
+            throw error;
+          }
+
+          clearPendingEmail();
+          await navigate({ to: '/app' });
         }}
       />
     </AuthLayout>

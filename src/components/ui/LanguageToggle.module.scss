@@ -1,0 +1,53 @@
+/* A segmented control rather than a single cycling button. Two locales means a
+   toggle can show both, so the choice and the current state are visible at once
+   instead of asking someone to click and find out. */
+.group {
+  display: inline-flex;
+  align-items: center;
+  /* A fieldset brings its own border, padding, margin and a min-inline-size
+     that refuses to shrink. All four have to go before it can be styled. */
+  margin: 0;
+  min-inline-size: 0;
+  padding: 2px;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-pill);
+}
+
+.option {
+  @include text-label;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  min-height: 28px;
+  padding-inline: var(--space-8);
+  border: none;
+  border-radius: var(--radius-pill);
+  background-color: transparent;
+  color: currentColor;
+  opacity: 0.65;
+  cursor: pointer;
+  transition:
+    background-color var(--dur-short) var(--ease-out),
+    opacity var(--dur-short) var(--ease-out);
+
+  &:hover {
+    opacity: 1;
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+}
+
+.selected {
+  background-color: var(--color-action-bg);
+  color: var(--color-action-fg);
+  opacity: 1;
+}
+
+/* On a photograph the theme's action tokens have no guaranteed contrast. */
+.onMedia .selected {
+  background-color: var(--color-on-media);
+  color: var(--color-media-scrim);
+}

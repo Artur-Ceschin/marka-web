@@ -1,9 +1,10 @@
 import { Flower, Gauge, Globe, TreeDeciduous, TriangleAlert } from 'lucide-react';
 import type { ComponentType, SVGProps } from 'react';
+import { useI18n } from '@/app/providers/i18n';
 import { MushroomIcon } from '@/components/ui/icons/MushroomIcon';
 import { Picture } from '@/components/ui/Picture';
 import { useReveal } from '@/lib/use-reveal';
-import { SUBJECTS, type Subject } from '../subjects';
+import { getSubjects, type Subject } from '../subjects';
 import styles from './Capabilities.module.scss';
 
 type IconType = ComponentType<SVGProps<SVGSVGElement>>;
@@ -21,24 +22,23 @@ const CAVEAT_ICONS: Record<Subject['id'], IconType> = {
 };
 
 export function Capabilities() {
+  const { m } = useI18n();
+  const subjects = getSubjects(m);
   const { ref: headRef, isVisible: headVisible } = useReveal<HTMLDivElement>();
   const { ref: gridRef, isVisible: gridVisible } = useReveal<HTMLUListElement>();
 
   return (
     <section className={styles.section} id="identify" aria-labelledby="identify-heading">
       <div ref={headRef} className={[styles.head, headVisible ? styles.headVisible : ''].join(' ')}>
-        <p className={styles.eyebrow}>What it identifies</p>
+        <p className={styles.eyebrow}>{m.identify.eyebrow}</p>
         <h2 id="identify-heading" className={styles.title}>
-          Point it at anything that grows.
+          {m.identify.title}
         </h2>
-        <p className={styles.intro}>
-          Flowers, fungi, trees: the same photograph, the same catalogue. What changes is how much
-          certainty Marka can honestly give you, and it says so every time.
-        </p>
+        <p className={styles.intro}>{m.identify.intro}</p>
       </div>
 
       <ul ref={gridRef} className={styles.grid}>
-        {SUBJECTS.map((subject) => {
+        {subjects.map((subject) => {
           const Icon = SUBJECT_ICONS[subject.id];
           const CaveatIcon = CAVEAT_ICONS[subject.id];
           const isDanger = subject.id === 'fungi';

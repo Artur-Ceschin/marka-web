@@ -2,18 +2,13 @@ import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
 
-import { ThemeProvider } from '@/app/providers/ThemeProvider';
 import { axe } from '@/test/axe';
 import { renderWithRouter } from '@/test/router';
 
 import { SignInPage } from './SignInPage';
 
 function renderPage() {
-  return renderWithRouter(
-    <ThemeProvider>
-      <SignInPage />
-    </ThemeProvider>,
-  );
+  return renderWithRouter(<SignInPage />);
 }
 
 describe('SignInPage', () => {

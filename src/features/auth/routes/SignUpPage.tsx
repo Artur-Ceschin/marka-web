@@ -1,36 +1,53 @@
 import { Link, useNavigate } from '@tanstack/react-router';
+import { useMemo } from 'react';
 
+import { useI18n } from '@/app/providers/i18n';
+import { ApiError } from '@/lib/api-error';
+
+import { signUp } from '../api/auth-api';
 import { AuthForm } from '../components/AuthForm';
 import { AuthLayout } from '../components/AuthLayout';
-import { signUpSchema } from '../schemas';
+import { setPendingEmail } from '../pending-verification';
+import { createSignUpSchema } from '../schemas';
 
 export function SignUpPage() {
   const navigate = useNavigate();
+  const { m } = useI18n();
+  const schema = useMemo(() => createSignUpSchema(m), [m]);
 
   return (
     <AuthLayout
-      title="Start your catalogue"
-      subtitle="One account, every plant you record. Free while Marka is in the making."
+      title={m.auth.signUpTitle}
+      subtitle={m.auth.signUpSubtitle}
       footer={
         <>
-          Already have an account? <Link to="/sign-in">Sign in</Link>
+          {m.auth.haveAccount} <Link to="/sign-in">{m.auth.signInLink}</Link>
         </>
       }
     >
       <AuthForm
-        schema={signUpSchema}
-        submitLabel="Create account"
+        schema={schema}
+        submitLabel={m.auth.signUpSubmit}
         passwordAutoComplete="new-password"
-        passwordHint="At least 12 characters."
+        passwordHint={m.auth.passwordHint}
         onSubmit={async (values) => {
-          // TODO: replace with the Cognito call once the API exists.
-          await new Promise((resolve) => setTimeout(resolve, 600));
-          console.info('sign-up submitted for', values.email);
-          await navigate({ to: '/' });
-        }}
-        onGoogle={() => {
-          // TODO: redirect to the Cognito Hosted UI Google identity provider.
-          console.info('google sign-up requested');
+          try {
+            await signUp(values);
+          } catch (error) {
+            // 409 is not a validation failure, it is a different account
+            // state, so it gets a message that points somewhere useful rather
+            // than a red box under the email field.
+            if (error instanceof ApiError && error.isEmailTaken) {
+              throw new ApiError(error.status, { message: m.auth.emailTaken }, m.auth.emailTaken);
+            }
+            throw error;
+          }
+
+          // Carried to the verification screen through sessionStorage rather
+          // than a query string: an address is personal data and has no place
+          // in history, logs or a pasted link.
+          setPendingEmail(values.email);
+          await navigate({ to: '/verify-email' });
         }}
       />
     </AuthLayout>

@@ -1,46 +1,84 @@
 import { z } from 'zod';
 
+import type { Messages } from '@/lib/i18n';
+
 /**
  * Auth form shapes.
  *
- * These will be shared with the Lambda backend, so the messages are written to
- * be shown to a person rather than logged: each one says what to do next, not
+ * Factories rather than constants: a Zod schema bakes its messages in at
+ * construction, so a module-level schema would be frozen in whichever language
+ * happened to load first. Building them per locale is what makes validation
+ * errors translate.
+ *
+ * Messages are written to be read by a person: each says what to do next, not
  * merely what is wrong.
  */
 
 // `.pipe(z.email())` rather than the deprecated `.string().email()`, and the
 // order matters: trim and the presence check run first so an empty box says
-// "Enter your email address" instead of "that is not an email address".
-const email = z
-  .string()
-  .trim()
-  .min(1, 'Enter your email address.')
-  .pipe(z.email('That does not look like an email address. Check for a typo.'));
-
-export const signInSchema = z.object({
-  email,
-  // Deliberately only a presence check. Telling someone their *existing*
-  // password is too short is useless: they cannot change what they already
-  // have, and the rules may have changed since they signed up.
-  password: z.string().min(1, 'Enter your password.'),
-});
+// "enter your email" instead of "that is not an email address".
+const emailField = (m: Messages) =>
+  z.string().trim().min(1, m.validation.emailRequired).pipe(z.email(m.validation.emailInvalid));
 
 /**
- * Length is the single strongest factor in password strength, so the minimum is
- * 12 rather than the traditional 8, and there are no composition rules. NIST
- * SP 800-63B recommends exactly this: require length, drop the
- * "one uppercase, one symbol" theatre that pushes people towards `Passw0rd!`.
+ * A password being CREATED, on sign-up or reset.
+ *
+ * Mirrors the API exactly: 8 or more characters with an uppercase letter, a
+ * lowercase letter and a digit. The client is not the authority here, the
+ * Cognito pool policy is. A client rule looser than the server lets people
+ * submit passwords that bounce; a stricter one rejects passwords the server
+ * would accept. Matching it means every rejection happens inline, before the
+ * request, with a message naming the one part that is missing.
+ *
+ * Only the first failure is shown, so the message is always a single concrete
+ * next step rather than a checklist.
  */
-export const signUpSchema = z.object({
-  email,
-  password: z
+const newPasswordField = (m: Messages) =>
+  z
     .string()
-    .min(12, 'Use at least 12 characters. Length matters more than symbols.')
-    .max(128, 'That is longer than 128 characters.'),
-});
+    .min(8, m.validation.passwordTooShort)
+    .regex(/[a-z]/, m.validation.passwordNeedsLower)
+    .regex(/[A-Z]/, m.validation.passwordNeedsUpper)
+    .regex(/\d/, m.validation.passwordNeedsDigit);
 
-export type SignInValues = z.infer<typeof signInSchema>;
-export type SignUpValues = z.infer<typeof signUpSchema>;
+/** Cognito confirmation codes are six digits. */
+const codeField = (m: Messages) =>
+  z
+    .string()
+    .trim()
+    .min(1, m.validation.codeRequired)
+    .regex(/^\d{6}$/, m.validation.codeInvalid);
 
-/** Both forms carry the same fields; only the password rule differs. */
-export type AuthValues = SignInValues;
+export const createSignInSchema = (m: Messages) =>
+  z.object({
+    email: emailField(m),
+    // Deliberately only a presence check. Telling someone their EXISTING
+    // password is too short is useless: they cannot change what they already
+    // have, and the rules may have changed since they signed up.
+    password: z.string().min(1, m.validation.passwordRequired),
+  });
+
+export const createSignUpSchema = (m: Messages) =>
+  z.object({
+    email: emailField(m),
+    password: newPasswordField(m),
+  });
+
+export const createVerificationSchema = (m: Messages) =>
+  z.object({
+    code: codeField(m),
+  });
+
+export const createForgotPasswordSchema = (m: Messages) =>
+  z.object({
+    email: emailField(m),
+  });
+
+export const createResetPasswordSchema = (m: Messages) =>
+  z.object({
+    code: codeField(m),
+    password: newPasswordField(m),
+  });
+
+export type AuthValues = { email: string; password: string };
+export type VerificationValues = { code: string };

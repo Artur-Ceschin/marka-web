@@ -1,5 +1,6 @@
 import { Link } from '@tanstack/react-router';
 import type { ReactNode } from 'react';
+import { useI18n } from '@/app/providers/i18n';
 
 import { images } from '@/assets/images';
 import { Logo } from '@/components/ui/Logo';
@@ -9,12 +10,15 @@ import styles from './AuthLayout.module.scss';
 
 interface AuthLayoutProps {
   title: string;
-  subtitle: string;
+  /** Omit where the page supplies its own lead-in. */
+  subtitle?: string;
   children: ReactNode;
   footer: ReactNode;
 }
 
 export function AuthLayout({ title, subtitle, children, footer }: AuthLayoutProps) {
+  const { m } = useI18n();
+
   return (
     <div className={styles.page}>
       <div className={styles.formColumn}>
@@ -25,7 +29,7 @@ export function AuthLayout({ title, subtitle, children, footer }: AuthLayoutProp
         <main className={styles.body}>
           <div className={styles.inner}>
             <h1 className={styles.title}>{title}</h1>
-            <p className={styles.subtitle}>{subtitle}</p>
+            {subtitle ? <p className={styles.subtitle}>{subtitle}</p> : null}
             {children}
           </div>
         </main>
@@ -37,13 +41,11 @@ export function AuthLayout({ title, subtitle, children, footer }: AuthLayoutProp
           from assistive tech and dropped entirely below 960px rather than
           costing a phone an image download for nothing. */}
       <div className={styles.media} aria-hidden="true">
-        <Picture image={images.forest} sizes="54vw" />
+        <Picture image={images.forest} sizes="(min-width: 960px) 54vw, 100vw" priority />
         <div className={styles.mediaScrim} />
         <div className={styles.quote}>
-          <p className={styles.quoteText}>
-            Every plant you record is one more thing known about where you live.
-          </p>
-          <p className={styles.quoteMeta}>Flowers, fungi and trees</p>
+          <p className={styles.quoteText}>{m.auth.quote}</p>
+          <p className={styles.quoteMeta}>{m.auth.quoteMeta}</p>
         </div>
       </div>
     </div>

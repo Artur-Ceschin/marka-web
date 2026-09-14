@@ -17,6 +17,15 @@ export default defineConfig({
     // plugin takes no options and every directive is stated at the import.
     imagetools(),
   ],
+  server: {
+    // Matches the redirect URI registered on the Cognito app client
+    // (http://localhost:3000/auth/callback). Cognito compares that string
+    // exactly, so the dev server has to live on this port. `strictPort` makes a
+    // conflict fail loudly instead of Vite silently moving to 3001, where the
+    // Google flow would break with an unhelpful redirect_mismatch error.
+    port: 3000,
+    strictPort: true,
+  },
   resolve: {
     // Vite 8 reads `compilerOptions.paths` from tsconfig natively, so the
     // `@/*` alias has exactly one source of truth (tsconfig.app.json).

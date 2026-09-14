@@ -1,0 +1,68 @@
+.page {
+  min-height: 100svh;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+}
+
+.bar {
+  @include container(1100px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-16);
+  min-height: 72px;
+  border-block-end: 1px solid var(--color-border);
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-12);
+}
+
+.main {
+  @include container(1100px);
+  padding-block: var(--space-48) var(--space-64);
+}
+
+.title {
+  @include text-display;
+  margin-block-end: var(--space-8);
+}
+
+.subtitle {
+  @include text-body;
+  color: var(--color-text-muted);
+  margin-block-end: var(--space-32);
+}
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-8);
+  padding: var(--space-8) var(--space-16);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-pill);
+  @include text-meta;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  flex-shrink: 0;
+  border-radius: var(--radius-pill);
+  background-color: var(--color-text-muted);
+}
+
+.ok .dot {
+  background-color: var(--color-text);
+}
+
+.failed {
+  border-color: var(--color-danger);
+  color: var(--color-danger);
+
+  .dot {
+    background-color: var(--color-danger);
+  }
+}

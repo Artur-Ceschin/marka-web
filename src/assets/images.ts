@@ -24,7 +24,7 @@
  */
 
 import flowerImg from './flower.jpg?w=560;840;1120&format=avif;webp&as=picture';
-import forestImg from './forest.jpg?w=560;840;1120&format=avif;webp&as=picture';
+import forestImg from './forest.jpg?w=560;840;1120;1440&format=avif;webp&as=picture';
 import forestTropicalImg from './forest-tropical.jpg?w=800;1280;1920;2400&format=avif;webp&as=picture';
 import lupineImg from './lupine-flower.jpg?w=800;1280;1920&format=avif;webp&as=picture';
 import mountainImg from './moutain.jpg?w=800;1280;1920;2400&format=avif;webp&as=picture';

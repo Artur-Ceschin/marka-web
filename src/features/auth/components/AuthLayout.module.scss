@@ -1,19 +1,37 @@
+/*
+ * Two layouts from one markup.
+ *
+ * Below 960px the photograph fills the page and the form sits on it inside a
+ * solid card. Above 960px it splits into form column and photo column.
+ *
+ * The card is the important decision. Putting labels and inputs straight onto a
+ * photograph means contrast depends on whichever leaves happen to be behind
+ * them, which no scrim fixes reliably. A solid surface restores the normal
+ * token pairing (--color-text on --color-surface), so legibility is guaranteed
+ * rather than hoped for, and the photo still frames the page.
+ */
+
 .page {
+  position: relative;
   display: grid;
   min-height: 100svh;
   grid-template-columns: 1fr;
+  background-color: var(--color-media-scrim);
 
   @media (min-width: 960px) {
     /* The form column is fixed-ish and the photo takes the rest, so the form
        never stretches to an unreadable width on a wide monitor. */
     grid-template-columns: minmax(480px, 46%) 1fr;
+    background-color: transparent;
   }
 }
 
 .formColumn {
+  position: relative;
+  /* Above the full-bleed photograph on small screens. */
+  z-index: 1;
   display: flex;
   flex-direction: column;
-  background-color: var(--color-bg);
   padding-inline: calc(var(--space-24) + env(safe-area-inset-left))
     calc(var(--space-24) + env(safe-area-inset-right));
   padding-block: var(--space-24) calc(var(--space-24) + env(safe-area-inset-bottom));
@@ -21,32 +39,31 @@
   @media (min-width: 760px) {
     padding-inline: var(--space-64);
   }
+
+  @media (min-width: 960px) {
+    background-color: var(--color-bg);
+  }
 }
 
+/* Outside the card the brand sits on the photo, so it takes fixed light
+   colours. A photograph does not invert with the theme and neither should
+   text placed on one. */
 .brand {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-8);
-  font-weight: 500;
-  font-size: 19px;
-  letter-spacing: -0.2px;
-  text-decoration: none;
   align-self: flex-start;
+  color: var(--color-on-media);
+  text-decoration: none;
   border-radius: var(--radius-input);
+
+  @media (min-width: 960px) {
+    color: var(--color-text);
+  }
 
   &:focus-visible {
     @include focus-ring;
   }
 }
 
-.brandIcon {
-  width: 22px;
-  height: 22px;
-}
-
 .body {
-  /* Optically centred: `auto` above and 1.2fr below sits the form slightly
-     above true centre, which reads as balanced rather than low. */
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -58,6 +75,15 @@
   width: 100%;
   max-width: 420px;
   margin-inline: auto;
+
+  /* The card. Only below 960px, where it sits on the photograph. */
+  @media (max-width: 959px) {
+    background-color: var(--color-surface);
+    border-radius: var(--radius-panel);
+    padding: var(--space-32) var(--space-24);
+    /* A soft, wide shadow lifts the card off the photo without a hard edge. */
+    box-shadow: 0 18px 50px -12px color-mix(in srgb, var(--color-media-scrim) 60%, transparent);
+  }
 }
 
 .title {
@@ -74,30 +100,46 @@
 
 .footer {
   @include text-meta;
-  color: var(--color-text-muted);
   text-align: center;
+  margin-block-start: var(--space-24);
+  color: var(--color-on-media-muted);
+
+  @media (min-width: 960px) {
+    margin-block-start: 0;
+    color: var(--color-text-muted);
+  }
 }
 
-.footerLink {
-  color: var(--color-text);
+/* Styled by descendant rather than a class the pages have to remember to pass,
+   which is the kind of thing that silently rots. */
+.footer a {
+  color: var(--color-on-media);
   font-weight: 500;
   border-radius: 2px;
+  text-underline-offset: 3px;
+
+  @media (min-width: 960px) {
+    color: var(--color-text);
+  }
 
   &:focus-visible {
     @include focus-ring;
   }
 }
 
-/* --- Media column --- */
+/* --- Media -------------------------------------------------------------- */
 
 .media {
-  position: relative;
-  display: none;
+  position: absolute;
+  inset: 0;
+  z-index: 0;
   overflow: hidden;
   background-color: var(--color-media-scrim);
 
   @media (min-width: 960px) {
-    display: block;
+    /* Back into the grid as the second column. */
+    position: relative;
+    grid-column: 2;
   }
 
   /* Absolutely positioned so the photograph cannot drive the grid row height.
@@ -110,28 +152,54 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    @include breathe(1.02, 1.06);
+  }
+
+  /* The breath only runs on the wide layout. On a phone the photo sits directly
+     behind a form someone is typing into, and movement behind an input is a
+     distraction rather than atmosphere. */
+  @media (min-width: 960px) {
+    img {
+      @include breathe(1.02, 1.06);
+    }
   }
 }
 
 .mediaScrim {
   position: absolute;
   inset: 0;
+  /* Heavier on small screens: the card needs to read as the foreground, and
+     the brand and footer text sit directly on the photo. */
   background: linear-gradient(
-    to top,
-    color-mix(in srgb, var(--color-media-scrim) 88%, transparent) 0%,
-    color-mix(in srgb, var(--color-media-scrim) 30%, transparent) 45%,
-    transparent 75%
+    to bottom,
+    color-mix(in srgb, var(--color-media-scrim) 72%, transparent) 0%,
+    color-mix(in srgb, var(--color-media-scrim) 55%, transparent) 40%,
+    color-mix(in srgb, var(--color-media-scrim) 78%, transparent) 100%
   );
+
+  @media (min-width: 960px) {
+    background: linear-gradient(
+      to top,
+      color-mix(in srgb, var(--color-media-scrim) 88%, transparent) 0%,
+      color-mix(in srgb, var(--color-media-scrim) 30%, transparent) 45%,
+      transparent 75%
+    );
+  }
 }
 
+/* The quote belongs to the wide layout only; on a phone the card occupies that
+   space and the quote would just crowd it. */
 .quote {
-  position: absolute;
-  inset-inline: 0;
-  inset-block-end: 0;
-  padding: var(--space-48);
-  color: var(--color-on-media);
-  max-width: 34ch;
+  display: none;
+
+  @media (min-width: 960px) {
+    display: block;
+    position: absolute;
+    inset-inline: 0;
+    inset-block-end: 0;
+    padding: var(--space-48);
+    color: var(--color-on-media);
+    max-width: 34ch;
+  }
 }
 
 .quoteText {

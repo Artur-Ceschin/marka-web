@@ -1,0 +1,116 @@
+.wrap {
+  position: relative;
+  display: flex;
+  gap: var(--space-8);
+  justify-content: space-between;
+
+  /* The ring goes on the wrapper, because the real input underneath is
+     transparent and would show nothing. */
+  &:focus-within .box {
+    border-color: var(--color-border-strong);
+  }
+}
+
+/*
+ * One real <input>, laid transparently over the boxes.
+ *
+ * Six separate inputs are the usual approach and they break everything that
+ * matters: paste lands in one box, autocomplete="one-time-code" never fires,
+ * and a screen reader announces six unlabelled fields. A single input keeps
+ * paste, iOS and Android code autofill, and password managers working, while
+ * the boxes are pure decoration.
+ */
+.input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: none;
+  background: transparent;
+  /* The value is drawn by the boxes below, so hide the text and the caret
+     rather than double-rendering them. */
+  color: transparent;
+  caret-color: transparent;
+  font-size: 32px;
+  letter-spacing: 1em;
+  text-align: center;
+  z-index: 1;
+  cursor: pointer;
+
+  &:focus {
+    outline: none;
+  }
+
+  /* Chrome draws a strikethrough on some autofilled values. */
+  &::selection {
+    background: transparent;
+  }
+}
+
+.box {
+  flex: 1;
+  min-width: 0;
+  aspect-ratio: 3 / 4;
+  max-height: 68px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-input);
+  background-color: var(--color-surface);
+  font-size: 28px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text);
+  transition:
+    border-color var(--dur-short) var(--ease-out),
+    background-color var(--dur-short) var(--ease-out);
+}
+
+/* The box the next digit will land in. Stands in for the caret, which is
+   hidden on the real input. */
+.boxActive {
+  border-color: var(--color-focus);
+  box-shadow: 0 0 0 1px var(--color-focus);
+}
+
+.boxFilled {
+  border-color: var(--color-text);
+}
+
+.invalid .box {
+  border-color: var(--color-danger);
+}
+
+.caret {
+  display: block;
+  width: 2px;
+  height: 30px;
+  background-color: var(--color-focus);
+
+  @media (prefers-reduced-motion: no-preference) {
+    animation: code-caret 1s steps(1, end) infinite;
+  }
+
+  @keyframes code-caret {
+    0%,
+    50% {
+      opacity: 1;
+    }
+    50.01%,
+    100% {
+      opacity: 0;
+    }
+  }
+}
+
+@media (max-width: 420px) {
+  .wrap {
+    gap: var(--space-4);
+  }
+
+  .box {
+    font-size: 22px;
+  }
+}

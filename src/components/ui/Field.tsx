@@ -1,6 +1,7 @@
 import { Label } from '@radix-ui/react-label';
 import { Eye, EyeOff, TriangleAlert } from 'lucide-react';
 import { type InputHTMLAttributes, type ReactNode, useId, useState } from 'react';
+import { useI18n } from '@/app/providers/i18n';
 
 import styles from './Field.module.scss';
 
@@ -35,6 +36,7 @@ export function Field({
   required,
   ...props
 }: FieldProps) {
+  const { m } = useI18n();
   const id = useId();
   const messageId = `${id}-message`;
   const [revealed, setRevealed] = useState(false);
@@ -82,7 +84,7 @@ export function Field({
             }}
             // The control is icon-only, so it needs its own name, and the name
             // states the action rather than the current state.
-            aria-label={revealed ? 'Hide password' : 'Show password'}
+            aria-label={revealed ? m.a11y.hidePassword : m.a11y.showPassword}
             aria-pressed={revealed}
           >
             {revealed ? (
