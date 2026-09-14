@@ -1,0 +1,31 @@
+.page {
+  display: grid;
+  place-items: center;
+  min-height: 100svh;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+
+  @media (prefers-reduced-motion: no-preference) {
+    /* Fades in rather than popping, so a loader that only just crosses the
+       pending delay does not arrive as a hard cut. */
+    animation: loader-in var(--dur-medium) var(--ease-out) both;
+
+    @keyframes loader-in {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+  }
+}
+
+.mark {
+  width: 40px;
+  height: 40px;
+  /* A slow breath, not a spinner: the wait is expected to be short, and a
+     spinning element signals "this is taking a while" before it has. Under
+     reduced motion the mixin declares nothing and the mark sits still. */
+  @include pulse;
+}

@@ -7,6 +7,7 @@ import { ApiError } from '@/lib/api-error';
 import { resendCode, signIn } from '../api/auth-api';
 import { AuthForm } from '../components/AuthForm';
 import { AuthLayout } from '../components/AuthLayout';
+import { setPendingCredentials } from '../pending-credentials';
 import { clearPendingEmail, setPendingEmail } from '../pending-verification';
 import { createSignInSchema } from '../schemas';
 import { clearSignInHandoff, peekSignInHandoff } from '../sign-in-handoff';
@@ -53,6 +54,9 @@ export function SignInPage() {
             // code and route to the screen that consumes it.
             if (error instanceof ApiError && error.isUserNotConfirmed) {
               setPendingEmail(values.email);
+              // They just typed a correct password, so verifying can finish
+              // the sign-in instead of asking for it again.
+              setPendingCredentials(values);
               // Best effort. If the resend fails, the verification screen
               // still offers its own resend button.
               await resendCode({ email: values.email }).catch(() => undefined);

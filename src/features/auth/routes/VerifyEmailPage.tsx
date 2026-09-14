@@ -5,9 +5,10 @@ import { useCallback, useEffect, useId, useMemo, useState } from 'react';
 import { useI18n } from '@/app/providers/i18n';
 import { Button } from '@/components/ui/Button';
 import { ApiError, NetworkError } from '@/lib/api-error';
-import { confirmSignUp, resendCode } from '../api/auth-api';
+import { confirmSignUp, resendCode, signIn } from '../api/auth-api';
 import { AuthLayout } from '../components/AuthLayout';
 import { CODE_LENGTH, CodeInput } from '../components/CodeInput';
+import { takePendingCredentials } from '../pending-credentials';
 import { clearPendingEmail, getPendingEmail } from '../pending-verification';
 import { createVerificationSchema } from '../schemas';
 import { setSignInHandoff } from '../sign-in-handoff';
@@ -54,8 +55,24 @@ export function VerifyEmailPage() {
       try {
         await confirmSignUp({ email: email ?? '', code: value });
         clearPendingEmail();
-        // Confirmation does not sign anyone in, so the next step is sign-in,
-        // with the address prefilled and a note saying why they are there.
+
+        // Confirming does not sign anyone in. When the password from sign-up is
+        // still in memory, sign in now and go straight to the app.
+        const credentials = takePendingCredentials(email ?? '');
+        if (credentials) {
+          try {
+            await signIn(credentials);
+            await navigate({ to: '/app' });
+            return;
+          } catch {
+            // The account IS verified; only the automatic sign-in failed.
+            // Fall through and let them sign in themselves.
+          }
+        }
+
+        // No password in memory (the page was reloaded after sign-up, which is
+        // common on mobile) or the automatic sign-in failed: sign-in with the
+        // address prefilled and a note saying why they are there.
         setSignInHandoff({ email: email ?? '', notice: 'verified' });
         await navigate({ to: '/sign-in' });
       } catch (caught) {

@@ -7,6 +7,7 @@ import { ApiError } from '@/lib/api-error';
 import { signUp } from '../api/auth-api';
 import { AuthForm } from '../components/AuthForm';
 import { AuthLayout } from '../components/AuthLayout';
+import { setPendingCredentials } from '../pending-credentials';
 import { setPendingEmail } from '../pending-verification';
 import { createSignUpSchema } from '../schemas';
 
@@ -47,6 +48,8 @@ export function SignUpPage() {
           // than a query string: an address is personal data and has no place
           // in history, logs or a pasted link.
           setPendingEmail(values.email);
+          // In memory only, so verification can sign straight in afterwards.
+          setPendingCredentials(values);
           await navigate({ to: '/verify-email' });
         }}
       />

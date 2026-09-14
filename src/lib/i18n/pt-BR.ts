@@ -6,6 +6,7 @@ export const ptBR: Messages = {
     or: 'ou',
     planned: 'Planejado',
     getStarted: 'Começar',
+    loading: 'Carregando\u2026',
   },
 
   nav: {

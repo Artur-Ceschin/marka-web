@@ -16,6 +16,7 @@ export const en = {
     or: 'or',
     planned: 'Planned',
     getStarted: 'Get started',
+    loading: 'Loading\u2026',
   },
 
   nav: {
