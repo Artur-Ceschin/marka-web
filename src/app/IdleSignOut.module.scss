@@ -1,0 +1,11 @@
+/* Stacked with the main action on top on a phone, side by side from 560px. */
+.actions {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: var(--space-12);
+
+  @media (min-width: 560px) {
+    flex-direction: row;
+    justify-content: flex-end;
+  }
+}

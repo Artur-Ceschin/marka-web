@@ -56,6 +56,24 @@ class IntersectionObserverStub implements IntersectionObserver {
   takeRecords = vi.fn(() => []);
 }
 
+// jsdom knows <dialog> but not its methods. Enough of them to open and close
+// it; focus trapping and inertness are the browser's job and not tested here.
+if (typeof HTMLDialogElement !== 'undefined') {
+  const proto = HTMLDialogElement.prototype;
+  if (typeof proto.showModal !== 'function') {
+    proto.showModal = function showModal(this: HTMLDialogElement) {
+      this.setAttribute('open', '');
+    };
+  }
+  if (typeof proto.close !== 'function') {
+    proto.close = function close(this: HTMLDialogElement) {
+      this.removeAttribute('open');
+      // Queued, as browsers do. Firing it synchronously hid a real bug: see Dialog.
+      setTimeout(() => this.dispatchEvent(new Event('close')), 0);
+    };
+  }
+}
+
 beforeEach(() => {
   stubMatchMedia();
   vi.stubGlobal('IntersectionObserver', IntersectionObserverStub);

@@ -54,6 +54,16 @@
   }
 }
 
+/* For actions that cannot be undone. */
+.danger {
+  background-color: var(--color-danger);
+  color: var(--c-white);
+
+  &:hover:not(:disabled) {
+    opacity: 0.88;
+  }
+}
+
 /* --- sizes --- */
 
 .sm {

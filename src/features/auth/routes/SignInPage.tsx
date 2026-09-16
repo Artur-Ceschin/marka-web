@@ -25,8 +25,12 @@ export function SignInPage() {
     clearSignInHandoff();
   }, []);
 
-  const notices = { verified: m.auth.verifiedNotice, passwordReset: m.auth.resetDone };
-  const notice = handoff ? notices[handoff.notice] : undefined;
+  const notices = {
+    verified: m.auth.verifiedNotice,
+    passwordReset: m.auth.resetDone,
+    idle: m.auth.idleNotice,
+  };
+  const notice = handoff?.notice ? notices[handoff.notice] : undefined;
 
   return (
     <AuthLayout

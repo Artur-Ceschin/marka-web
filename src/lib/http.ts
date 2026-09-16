@@ -17,16 +17,11 @@ export interface RequestOptions<TResponse> {
   signal?: AbortSignal | undefined;
 }
 
-/**
- * Typed fetch wrapper.
- *
- * Three jobs: build the URL and headers, turn any non-2xx into a typed
- * `ApiError`, and parse the success body through Zod.
- *
- * It deliberately knows nothing about tokens or refreshing. That lives in
- * `session.ts`, because refresh needs to call this and a cycle between the two
- * would be the kind of thing that only shows up under concurrency.
- */
+function retryAfterSeconds(response: Response): number | undefined {
+  const seconds = Number(response.headers.get('Retry-After'));
+  return Number.isFinite(seconds) && seconds > 0 ? seconds : undefined;
+}
+
 export async function request<TResponse = unknown>(
   path: string,
   { method = 'GET', body, schema, token, signal }: RequestOptions<TResponse> = {},
@@ -34,6 +29,11 @@ export async function request<TResponse = unknown>(
   const headers: Record<string, string> = {};
   if (body !== undefined) headers['Content-Type'] = 'application/json';
   if (token) headers.Authorization = `Bearer ${token}`;
+  // The API writes common names and care text in this language. I18nProvider
+  // keeps <html lang> in step with the chosen locale, so reading it here needs
+  // no React and cannot drift from the language the page is showing.
+  const lang = typeof document === 'undefined' ? '' : document.documentElement.lang;
+  if (lang) headers['Accept-Language'] = lang;
 
   let response: Response;
   try {
@@ -58,6 +58,7 @@ export async function request<TResponse = unknown>(
       response.status,
       parsed.success ? parsed.data : {},
       response.statusText || `Request failed with status ${response.status}`,
+      retryAfterSeconds(response),
     );
   }
 

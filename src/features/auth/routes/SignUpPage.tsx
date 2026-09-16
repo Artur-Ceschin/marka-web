@@ -2,7 +2,6 @@ import { Link, useNavigate } from '@tanstack/react-router';
 import { useMemo } from 'react';
 
 import { useI18n } from '@/app/providers/i18n';
-import { ApiError } from '@/lib/api-error';
 
 import { signUp } from '../api/auth-api';
 import { AuthForm } from '../components/AuthForm';
@@ -32,17 +31,7 @@ export function SignUpPage() {
         passwordAutoComplete="new-password"
         passwordHint={m.auth.passwordHint}
         onSubmit={async (values) => {
-          try {
-            await signUp(values);
-          } catch (error) {
-            // 409 is not a validation failure, it is a different account
-            // state, so it gets a message that points somewhere useful rather
-            // than a red box under the email field.
-            if (error instanceof ApiError && error.isEmailTaken) {
-              throw new ApiError(error.status, { message: m.auth.emailTaken }, m.auth.emailTaken);
-            }
-            throw error;
-          }
+          await signUp(values);
 
           // Carried to the verification screen through sessionStorage rather
           // than a query string: an address is personal data and has no place

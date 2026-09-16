@@ -1,10 +1,11 @@
 const STORAGE_KEY = 'marka-sign-in-handoff';
 
-export type SignInNotice = 'verified' | 'passwordReset';
+export type SignInNotice = 'verified' | 'passwordReset' | 'idle';
 
 export interface SignInHandoff {
   email: string;
-  notice: SignInNotice;
+  /** Why they are here. Absent for a plain prefill, e.g. "that address is taken". */
+  notice?: SignInNotice;
 }
 
 /**
@@ -30,15 +31,12 @@ export function peekSignInHandoff(): SignInHandoff | null {
     const value: unknown = JSON.parse(raw);
     // Validated rather than cast: storage is writable by anything on the
     // origin, and a malformed value must not break the sign-in screen.
-    if (
-      typeof value === 'object' &&
-      value !== null &&
-      'email' in value &&
-      'notice' in value &&
-      typeof value.email === 'string' &&
-      (value.notice === 'verified' || value.notice === 'passwordReset')
-    ) {
-      return { email: value.email, notice: value.notice };
+    if (typeof value !== 'object' || value === null) return null;
+    if (!('email' in value) || typeof value.email !== 'string') return null;
+    const notice = 'notice' in value ? value.notice : undefined;
+    if (notice === undefined) return { email: value.email };
+    if (notice === 'verified' || notice === 'passwordReset' || notice === 'idle') {
+      return { email: value.email, notice };
     }
     return null;
   } catch {

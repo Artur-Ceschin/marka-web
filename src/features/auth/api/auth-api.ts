@@ -1,5 +1,6 @@
 import { z } from 'zod';
 
+import { authorizedRequest } from '@/lib/auth/session';
 import { setTokens } from '@/lib/auth/token-store';
 import { request } from '@/lib/http';
 
@@ -18,6 +19,27 @@ export const signInResponseSchema = z.object({
 });
 
 export type SignInResponse = z.infer<typeof signInResponseSchema>;
+
+export const profileSchema = z.object({
+  userId: z.string(),
+  email: z.string(),
+  /** Only present for Google accounts; email sign-up never asks for a name. */
+  name: z.string().optional(),
+  emailVerified: z.boolean(),
+  createdAt: z.string(),
+});
+
+export type Profile = z.infer<typeof profileSchema>;
+
+/**
+ * The signed-in user's profile.
+ *
+ * `userId` is the same whether they signed in with email or Google, which is
+ * also the quickest way to confirm a linked Google account is one user.
+ */
+export function getMe(): Promise<Profile> {
+  return authorizedRequest('/me', { schema: profileSchema });
+}
 
 /** 201 on success. 409 means the address already has an account. */
 export async function signUp(input: { email: string; password: string }): Promise<void> {

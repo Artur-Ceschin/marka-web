@@ -88,7 +88,9 @@ describe('after a successful verification', () => {
   });
 
   it('falls back to sign-in when the automatic sign-in fails', async () => {
-    trackSignIn(() => HttpResponse.json({ code: 'NOT_AUTHORIZED' }, { status: 401 }));
+    trackSignIn(() =>
+      HttpResponse.json({ success: false, code: 'INVALID_CREDENTIALS' }, { status: 401 }),
+    );
     setPendingCredentials({ email: EMAIL, password: 'Passphrase123' });
 
     await verify();

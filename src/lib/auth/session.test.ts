@@ -117,7 +117,7 @@ describe('authorizedRequest', () => {
       }),
     );
 
-    await authorizedRequest('/identify');
+    await authorizedRequest('/identifications');
     expect(refreshes).toBe(1);
   });
 
@@ -132,7 +132,7 @@ describe('authorizedRequest', () => {
       }),
     );
 
-    await authorizedRequest('/identify');
+    await authorizedRequest('/identifications');
     expect(refreshes).toBe(0);
   });
 
@@ -141,7 +141,7 @@ describe('authorizedRequest', () => {
 
     let attempts = 0;
     server.use(
-      http.get(api('/identify'), () => {
+      http.get(api('/identifications'), () => {
         attempts += 1;
         // Always 401, so a retry loop would show up as runaway attempts.
         return HttpResponse.json({ code: 'UNAUTHORIZED' }, { status: 401 });
@@ -151,7 +151,7 @@ describe('authorizedRequest', () => {
       ),
     );
 
-    await expect(authorizedRequest('/identify')).rejects.toBeInstanceOf(ApiError);
+    await expect(authorizedRequest('/identifications')).rejects.toBeInstanceOf(ApiError);
     expect(attempts).toBe(2);
   });
 
@@ -160,7 +160,7 @@ describe('authorizedRequest', () => {
 
     let attempts = 0;
     server.use(
-      http.get(api('/identify'), () => {
+      http.get(api('/identifications'), () => {
         attempts += 1;
         if (attempts === 1) return HttpResponse.json({ code: 'UNAUTHORIZED' }, { status: 401 });
         return HttpResponse.json({ ok: true });
@@ -170,7 +170,7 @@ describe('authorizedRequest', () => {
       ),
     );
 
-    await expect(authorizedRequest('/identify')).resolves.toBeUndefined();
+    await expect(authorizedRequest('/identifications')).resolves.toBeUndefined();
     expect(attempts).toBe(2);
   });
 
@@ -180,13 +180,13 @@ describe('authorizedRequest', () => {
 
     let seen: string | null = null;
     server.use(
-      http.get(api('/identify'), ({ request }) => {
+      http.get(api('/identifications'), ({ request }) => {
         seen = request.headers.get('Authorization');
         return HttpResponse.json({ ok: true });
       }),
     );
 
-    await authorizedRequest('/identify');
+    await authorizedRequest('/identifications');
     expect(seen).toBe(`Bearer ${idToken}`);
   });
 });

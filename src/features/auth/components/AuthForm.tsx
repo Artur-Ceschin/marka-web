@@ -6,11 +6,12 @@ import type { z } from 'zod';
 import { useI18n } from '@/app/providers/i18n';
 import { Button } from '@/components/ui/Button';
 import { Field } from '@/components/ui/Field';
-import { ApiError, NetworkError } from '@/lib/api-error';
 import { startGoogleSignIn } from '@/lib/auth/google';
 import { isGoogleSignInConfigured } from '@/lib/config';
 
+import { type AuthErrorAction, describeAuthError } from '../error-messages';
 import type { AuthValues } from '../schemas';
+import { setSignInHandoff } from '../sign-in-handoff';
 import styles from './AuthForm.module.scss';
 import { GoogleButton, OAuthDivider } from './OAuthButtons';
 
@@ -48,6 +49,9 @@ export function AuthForm({
 }: AuthFormProps) {
   const { m } = useI18n();
   const [formError, setFormError] = useState<string | null>(null);
+  // A next step offered inside the error banner, and the address it applies to.
+  const [formAction, setFormAction] = useState<AuthErrorAction | null>(null);
+  const [actionEmail, setActionEmail] = useState('');
   // Field errors the SERVER produced, keyed by field name. Kept separate from
   // the Zod errors so a rule the client does not know about still lands next
   // to the input that caused it, and clears as soon as that input changes.
@@ -80,25 +84,25 @@ export function AuthForm({
     validators: { onSubmit: schema, onBlur: schema },
     onSubmit: async ({ value }) => {
       setFormError(null);
+      setFormAction(null);
       setServerFieldErrors({});
       try {
         await onSubmit(value);
       } catch (error) {
-        if (error instanceof NetworkError) {
-          setFormError(m.auth.networkError);
+        const view = describeAuthError(error, m);
+        const email = view.fields.email;
+        const password = view.fields.password;
+        if (email || password) {
+          // A field problem is shown under that field, not as a banner.
+          setServerFieldErrors({
+            ...(email ? { email } : {}),
+            ...(password ? { password } : {}),
+          });
           return;
         }
-        if (error instanceof ApiError) {
-          const fields = error.fieldErrors();
-          if (Object.keys(fields).length > 0) {
-            // A 400 with details: show them per field, not as one banner.
-            setServerFieldErrors(fields);
-            return;
-          }
-          setFormError(error.message || m.auth.genericError);
-          return;
-        }
-        setFormError(error instanceof Error ? error.message : m.auth.genericError);
+        setFormError(view.message);
+        setFormAction(view.action);
+        setActionEmail(value.email);
       }
     },
   });
@@ -136,10 +140,27 @@ export function AuthForm({
         ) : null}
 
         {formError ? (
-          <p id={formErrorId} className={styles.formError} role="alert">
+          <div id={formErrorId} className={styles.formError} role="alert">
             <TriangleAlert className={styles.formErrorIcon} aria-hidden="true" />
-            <span>{formError}</span>
-          </p>
+            <div className={styles.formErrorBody}>
+              <span>{formError}</span>
+              {/* An account-state error is a fork in the road, not a dead end,
+                  so it carries the two ways forward. */}
+              {formAction === 'signInOrReset' ? (
+                <span className={styles.formErrorActions}>
+                  <Link
+                    to="/sign-in"
+                    onClick={() => {
+                      setSignInHandoff({ email: actionEmail });
+                    }}
+                  >
+                    {m.auth.signInLink}
+                  </Link>
+                  <Link to="/reset-password">{m.auth.forgotPassword}</Link>
+                </span>
+              ) : null}
+            </div>
+          </div>
         ) : null}
 
         <form.Field name="email">
@@ -221,6 +242,7 @@ export function AuthForm({
               // Navigates away to the hosted UI, so there is no success path
               // to handle here: only a failure to even start.
               void startGoogleSignIn().catch(() => {
+                setFormAction(null);
                 setFormError(m.auth.googleFailed);
               });
             }}

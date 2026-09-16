@@ -1,0 +1,202 @@
+.section {
+  margin-block-start: var(--space-48);
+}
+
+.heading {
+  @include text-title;
+  margin-block-end: var(--space-16);
+}
+
+.status {
+  @include text-meta;
+  color: var(--color-text-muted);
+}
+
+/* Two columns on a phone; from 760px as many 200px+ columns as fit. */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-16) var(--space-12);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  @media (min-width: 760px) {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: var(--space-24);
+  }
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  transition: opacity var(--dur-short) var(--ease-out);
+}
+
+/* Edit and delete sit on the photo's corner. Always visible where there is
+   no hover (a phone has no way to reveal them); on a mouse they appear with
+   the card, and whenever one of them has keyboard focus. */
+.tools {
+  position: absolute;
+  inset-block-start: var(--space-8);
+  inset-inline-end: var(--space-8);
+  z-index: 1;
+  display: flex;
+  gap: var(--space-8);
+  transition: opacity var(--dur-short) var(--ease-out);
+
+  @media (hover: hover) {
+    opacity: 0;
+
+    .card:hover &,
+    &:focus-within {
+      opacity: 1;
+    }
+  }
+}
+
+.tool {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: var(--radius-pill);
+  background-color: color-mix(in srgb, var(--color-bg) 78%, transparent);
+  backdrop-filter: blur(8px);
+  color: var(--color-text);
+  cursor: pointer;
+  transition:
+    background-color var(--dur-short) var(--ease-out),
+    color var(--dur-short) var(--ease-out);
+
+  &:hover {
+    background-color: var(--color-bg);
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+
+  svg {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+.toolDanger:hover {
+  color: var(--color-danger);
+}
+
+.notes {
+  @include text-label;
+  color: var(--color-text-muted);
+  margin-block-start: var(--space-4);
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow-wrap: anywhere;
+}
+
+.media {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border-radius: var(--radius-input);
+  background-color: var(--color-border);
+  transition:
+    transform var(--dur-medium) var(--ease-out),
+    box-shadow var(--dur-medium) var(--ease-out);
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--dur-medium) var(--ease-out);
+  }
+}
+
+/* Pop out on hover: the card lifts off the page and the others step back.
+   Only where a real hover exists, so a tap on a phone never leaves a card
+   stuck in its raised state. */
+@media (hover: hover) {
+  .card:hover .media {
+    box-shadow: 0 18px 36px -14px color-mix(in srgb, var(--c-ink) 55%, transparent);
+  }
+
+  .grid:has(.card:hover) .card:not(:hover) {
+    opacity: 0.6;
+  }
+
+  /* Movement only with motion allowed; the shadow and dimming still say
+     which card is picked out. */
+  @media (prefers-reduced-motion: no-preference) {
+    .card:hover .media {
+      transform: translateY(-6px) scale(1.03);
+    }
+
+    .card:hover .media img {
+      transform: scale(1.06);
+    }
+  }
+}
+
+.name {
+  @include text-meta;
+  margin-block-start: var(--space-8);
+  overflow: hidden;
+  font-weight: 500;
+  font-style: italic;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
+  @media (min-width: 760px) {
+    @include text-body;
+    font-weight: 500;
+    font-style: italic;
+  }
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-4) var(--space-8);
+  @include text-label;
+  color: var(--color-text-muted);
+}
+
+.badge {
+  padding-inline: 6px;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-pill);
+}
+
+.more {
+  display: flex;
+  justify-content: center;
+  margin-block-start: var(--space-24);
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-8);
+  padding: var(--space-32) var(--space-16);
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-card);
+  text-align: center;
+}
+
+.emptyTitle {
+  @include text-title;
+}
+
+.emptyHint {
+  @include text-body;
+  color: var(--color-text-muted);
+}

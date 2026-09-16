@@ -1,15 +1,14 @@
-import { screen } from '@testing-library/react';
+import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { HttpResponse, http } from 'msw';
 import { beforeEach, describe, expect, it } from 'vitest';
-
 import { config } from '@/lib/config';
 import { server } from '@/mocks/server';
 import { renderWithRouter } from '@/test/router';
-
 import { getPendingEmail } from './pending-verification';
 import { SignInPage } from './routes/SignInPage';
 import { SignUpPage } from './routes/SignUpPage';
+import { peekSignInHandoff } from './sign-in-handoff';
 
 const api = (path: string) => `${config.apiUrl}${path}`;
 
@@ -91,6 +90,51 @@ describe('sign-up against the API', () => {
   });
 });
 
+describe('account-state errors on sign-up', () => {
+  it('offers sign-in and password reset when the address is taken', async () => {
+    const user = userEvent.setup();
+    await renderWithRouter(<SignUpPage />);
+
+    await user.type(screen.getByLabelText('Email'), 'taken@example.com');
+    await user.type(screen.getByLabelText('Password'), 'Passphrase123');
+    await user.click(screen.getByRole('button', { name: 'Create account' }));
+
+    const alert = await screen.findByRole('alert');
+    expect(within(alert).getByRole('link', { name: 'Forgot your password?' })).toHaveAttribute(
+      'href',
+      '/reset-password',
+    );
+
+    // Choosing sign-in carries the address over, so they do not retype it.
+    await user.click(within(alert).getByRole('link', { name: 'Sign in' }));
+    expect(peekSignInHandoff()).toEqual({ email: 'taken@example.com' });
+  });
+
+  it('shows the password rules when the API rejects the password', async () => {
+    const user = userEvent.setup();
+    server.use(
+      http.post(api('/auth/signup'), () =>
+        HttpResponse.json(
+          {
+            success: false,
+            code: 'INVALID_PASSWORD',
+            error: 'Password does not conform to policy',
+          },
+          { status: 400 },
+        ),
+      ),
+    );
+    await renderWithRouter(<SignUpPage />);
+
+    await user.type(screen.getByLabelText('Email'), 'someone@example.com');
+    await user.type(screen.getByLabelText('Password'), 'Passphrase123');
+    await user.click(screen.getByRole('button', { name: 'Create account' }));
+
+    expect(await screen.findByText(/does not meet the rules/i)).toBeInTheDocument();
+    expect(screen.getByLabelText('Password')).toHaveAttribute('aria-invalid', 'true');
+  });
+});
+
 describe('sign-in against the API', () => {
   it('stores the address and routes to verification on USER_NOT_CONFIRMED', async () => {
     const user = userEvent.setup();
@@ -120,7 +164,9 @@ describe('sign-in against the API', () => {
     await user.type(screen.getByLabelText('Password'), 'wrongpassword');
     await user.click(screen.getByRole('button', { name: 'Sign in' }));
 
-    expect(await screen.findByRole('alert')).toHaveTextContent(/incorrect email or password/i);
+    // Translated by code: the mock's English "Incorrect email or password."
+    // must not reach the screen.
+    expect(await screen.findByRole('alert')).toHaveTextContent('Wrong email or password.');
   });
 
   it('reports a failed connection differently from a rejection', async () => {

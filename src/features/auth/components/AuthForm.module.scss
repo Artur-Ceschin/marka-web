@@ -82,3 +82,26 @@
   flex-shrink: 0;
   margin-block-start: 2px;
 }
+
+.formErrorBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.formErrorActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4) var(--space-16);
+
+  a {
+    color: inherit;
+    font-weight: 500;
+    text-underline-offset: 3px;
+    border-radius: 2px;
+
+    &:focus-visible {
+      @include focus-ring;
+    }
+  }
+}

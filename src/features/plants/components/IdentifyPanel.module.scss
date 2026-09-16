@@ -1,0 +1,328 @@
+/* Mobile first: everything stacks, and rows open up from 560px. */
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-24);
+  padding: var(--space-24) var(--space-16);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  background-color: var(--color-surface);
+
+  @media (min-width: 560px) {
+    padding: var(--space-32);
+  }
+}
+
+/* --- working ------------------------------------------------------------- */
+
+.photo {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+  max-height: 340px;
+  border-radius: var(--radius-input);
+  background-color: var(--color-border);
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+/* A band of light passing over the photo while it is being looked at. Under
+   reduced motion it simply sits still as a soft tint. */
+.scan {
+  position: absolute;
+  inset-inline: 0;
+  inset-block-start: 0;
+  height: 40%;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    color-mix(in srgb, var(--c-lime) 45%, transparent),
+    transparent
+  );
+
+  @media (prefers-reduced-motion: no-preference) {
+    animation: scan 1.8s var(--ease-breath) infinite alternate;
+
+    @keyframes scan {
+      from {
+        transform: translateY(-60%);
+      }
+      to {
+        transform: translateY(210%);
+      }
+    }
+  }
+}
+
+.stage {
+  @include text-body;
+  text-align: center;
+}
+
+.steps {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-8);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.step {
+  width: 32px;
+  height: 4px;
+  border-radius: var(--radius-pill);
+  background-color: var(--color-border-strong);
+  transition: background-color var(--dur-short) var(--ease-out);
+}
+
+.stepDone {
+  background-color: var(--color-text);
+}
+
+/* --- shared -------------------------------------------------------------- */
+
+.head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-16);
+  min-width: 0;
+}
+
+.thumb {
+  width: 64px;
+  height: 64px;
+  flex-shrink: 0;
+  border-radius: var(--radius-input);
+  object-fit: cover;
+
+  @media (min-width: 560px) {
+    width: 88px;
+    height: 88px;
+  }
+}
+
+.heading {
+  @include text-title;
+  overflow-wrap: anywhere;
+}
+
+.hint {
+  @include text-body;
+  color: var(--color-text-muted);
+  margin-block-start: var(--space-4);
+}
+
+/* Full-width buttons on a phone are easier to hit; side by side from 560px. */
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+
+  @media (min-width: 560px) {
+    flex-direction: row;
+  }
+}
+
+/* --- error --------------------------------------------------------------- */
+
+.errorText {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-12);
+  min-width: 0;
+}
+
+.errorIcon {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  color: var(--color-danger);
+}
+
+/* --- results ------------------------------------------------------------- */
+
+.quota {
+  @include text-meta;
+  color: var(--color-text-muted);
+  margin-block-start: var(--space-4);
+}
+
+.certainty {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-8);
+  padding: var(--space-12) var(--space-16);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-input);
+  @include text-meta;
+
+  svg {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    margin-block-start: 2px;
+  }
+}
+
+.certaintyLow svg {
+  color: var(--color-danger);
+}
+
+.inlineError {
+  @include text-meta;
+  color: var(--color-danger);
+}
+
+.candidates {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.candidate {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-16);
+  padding: var(--space-16);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-input);
+
+  @media (min-width: 560px) {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+/* Thumbnail beside the text at every width: comparing a photo with a name is
+   the point, so they must stay together even on a phone. */
+.candidateMain {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-12);
+  flex: 1;
+  min-width: 0;
+
+  @media (min-width: 560px) {
+    gap: var(--space-16);
+  }
+}
+
+.candidateThumb {
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  flex-shrink: 0;
+  overflow: hidden;
+  border-radius: var(--radius-input);
+  background-color: var(--color-border);
+  color: var(--color-text-muted);
+
+  @media (min-width: 560px) {
+    width: 72px;
+    height: 72px;
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.credit {
+  @include text-label;
+  color: var(--color-text-muted);
+  margin-block-start: var(--space-4);
+}
+
+.candidateText {
+  flex: 1;
+  min-width: 0;
+}
+
+.scientific {
+  @include text-body;
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+
+.common,
+.meta {
+  @include text-meta;
+  color: var(--color-text-muted);
+}
+
+.bar {
+  height: 4px;
+  margin-block-start: var(--space-8);
+  overflow: hidden;
+  border-radius: var(--radius-pill);
+  background-color: var(--color-border);
+
+  span {
+    display: block;
+    height: 100%;
+    background-color: var(--color-text);
+  }
+}
+
+.choose {
+  width: 100%;
+
+  @media (min-width: 560px) {
+    width: auto;
+    flex-shrink: 0;
+  }
+}
+
+/* --- confirmed ----------------------------------------------------------- */
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-4);
+  @include text-meta;
+  color: var(--color-text-muted);
+
+  svg {
+    width: 14px;
+    height: 14px;
+  }
+}
+
+.enrichment {
+  display: grid;
+  gap: var(--space-16);
+  margin: 0;
+
+  @media (min-width: 760px) {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-24);
+  }
+
+  dt {
+    @include eyebrow;
+    color: var(--color-text-muted);
+    margin-block-end: var(--space-4);
+  }
+
+  dd {
+    @include text-body;
+    margin: 0;
+  }
+}

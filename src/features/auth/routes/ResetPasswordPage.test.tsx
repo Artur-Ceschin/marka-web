@@ -2,11 +2,11 @@ import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { HttpResponse, http } from 'msw';
 import { beforeEach, describe, expect, it } from 'vitest';
-
 import { config } from '@/lib/config';
 import { server } from '@/mocks/server';
 import { axe } from '@/test/axe';
 import { renderWithRouter } from '@/test/router';
+import { getPendingEmail } from '../pending-verification';
 
 import { peekSignInHandoff } from '../sign-in-handoff';
 import { ResetPasswordPage } from './ResetPasswordPage';
@@ -100,7 +100,10 @@ describe('ResetPasswordPage', () => {
     await user.type(screen.getByLabelText('New password'), 'Newpassword1');
     await user.click(screen.getByRole('button', { name: 'Set new password' }));
 
-    expect(await screen.findByText('That code is not valid.')).toBeInTheDocument();
+    // Translated by code, and placed under the code boxes.
+    expect(
+      await screen.findByText('That code is not right. Check it and try again.'),
+    ).toBeInTheDocument();
   });
 
   it('lets someone go back and use a different address', async () => {
@@ -109,6 +112,28 @@ describe('ResetPasswordPage', () => {
     await user.click(screen.getByRole('button', { name: 'Use a different address' }));
 
     expect(screen.getByRole('button', { name: 'Send code' })).toBeInTheDocument();
+  });
+
+  it('offers to verify the email when the account cannot be reset', async () => {
+    server.use(
+      http.post(api('/auth/reset-password'), () =>
+        HttpResponse.json(
+          { success: false, code: 'CANNOT_RESET_PASSWORD', error: 'Cannot reset password' },
+          { status: 400 },
+        ),
+      ),
+    );
+    const user = await goToResetStep('unverified@example.com');
+
+    await user.type(screen.getByLabelText(/verification code/i), '123456');
+    await user.type(screen.getByLabelText('New password'), 'Newpassword1');
+    await user.click(screen.getByRole('button', { name: 'Set new password' }));
+
+    expect(await screen.findByRole('alert')).toHaveTextContent(/has not been verified yet/i);
+
+    await user.click(screen.getByRole('button', { name: 'Verify your email' }));
+    // The verification screen picks the address up from here.
+    expect(getPendingEmail()).toBe('unverified@example.com');
   });
 
   it('has no accessibility violations on the first step', async () => {

@@ -14,6 +14,7 @@ const button = cva(styles.base, {
       primary: styles.primary,
       secondary: styles.secondary,
       ghost: styles.ghost,
+      danger: styles.danger,
     },
     size: {
       sm: styles.sm,

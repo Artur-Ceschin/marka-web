@@ -5,11 +5,12 @@ import { useId, useMemo, useState } from 'react';
 import { useI18n } from '@/app/providers/i18n';
 import { Button } from '@/components/ui/Button';
 import { Field } from '@/components/ui/Field';
-import { ApiError, NetworkError } from '@/lib/api-error';
 
-import { forgotPassword, resetPassword } from '../api/auth-api';
+import { forgotPassword, resendCode, resetPassword } from '../api/auth-api';
 import { AuthLayout } from '../components/AuthLayout';
 import { CodeInput } from '../components/CodeInput';
+import { type AuthErrorAction, describeAuthError } from '../error-messages';
+import { setPendingEmail } from '../pending-verification';
 import { createForgotPasswordSchema, createResetPasswordSchema } from '../schemas';
 import { setSignInHandoff } from '../sign-in-handoff';
 
@@ -53,27 +54,27 @@ export function ResetPasswordPage() {
   const [password, setPassword] = useState('');
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [formError, setFormError] = useState<string | null>(null);
+  const [formAction, setFormAction] = useState<AuthErrorAction | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
   function handleFailure(caught: unknown) {
-    if (caught instanceof NetworkError) {
-      setFormError(m.auth.networkError);
+    const view = describeAuthError(caught, m);
+    if (view.code) {
+      // A wrong or expired code belongs under the code boxes.
+      setFieldErrors({ code: view.message });
       return;
     }
-    if (caught instanceof ApiError) {
-      const fields = caught.fieldErrors();
-      if (Object.keys(fields).length > 0) {
-        setFieldErrors(fields);
-        return;
-      }
-      setFormError(caught.message || m.auth.genericError);
+    if (Object.keys(view.fields).length > 0) {
+      setFieldErrors(view.fields);
       return;
     }
-    setFormError(m.auth.genericError);
+    setFormError(view.message);
+    setFormAction(view.action);
   }
 
   async function requestCode() {
     setFormError(null);
+    setFormAction(null);
     const parsed = forgotSchema.safeParse({ email });
     if (!parsed.success) {
       setFieldErrors(issuesToFields(parsed.error.issues));
@@ -95,6 +96,7 @@ export function ResetPasswordPage() {
 
   async function submitReset() {
     setFormError(null);
+    setFormAction(null);
     const parsed = resetSchema.safeParse({ code, password });
     if (!parsed.success) {
       setFieldErrors(issuesToFields(parsed.error.issues));
@@ -121,10 +123,28 @@ export function ResetPasswordPage() {
   );
 
   const errorBanner = formError ? (
-    <p id={errorId} className={styles.error} role="alert">
+    <div id={errorId} className={styles.error} role="alert">
       <TriangleAlert className={styles.errorIcon} aria-hidden="true" />
-      <span>{formError}</span>
-    </p>
+      <div className={styles.errorBody}>
+        <span>{formError}</span>
+        {formAction === 'verifyEmail' ? (
+          <button
+            type="button"
+            className={styles.errorAction}
+            onClick={() => {
+              // A reset is refused for an unverified account, so the way
+              // forward is to finish verifying it: send a fresh code and go
+              // to the screen that takes it.
+              setPendingEmail(email);
+              void resendCode({ email }).catch(() => undefined);
+              void navigate({ to: '/verify-email' });
+            }}
+          >
+            {m.auth.verifyEmailFirst}
+          </button>
+        ) : null}
+      </div>
+    </div>
   ) : null;
 
   if (step === 'request') {
@@ -236,6 +256,7 @@ export function ResetPasswordPage() {
             setPassword('');
             setFieldErrors({});
             setFormError(null);
+            setFormAction(null);
           }}
         >
           {m.auth.useDifferentEmail}

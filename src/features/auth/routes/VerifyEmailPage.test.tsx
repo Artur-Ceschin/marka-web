@@ -1,3 +1,9 @@
+import { HttpResponse, http } from 'msw';
+import { config } from '@/lib/config';
+import { server } from '@/mocks/server';
+
+const api = (path: string) => `${config.apiUrl}${path}`;
+
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it } from 'vitest';
@@ -99,18 +105,39 @@ describe('VerifyEmailPage', () => {
     // succeeds navigates away too quickly to observe.
     await user.type(screen.getByLabelText(/verification code/i), '999999');
 
-    expect(await screen.findByRole('alert')).toHaveTextContent(/invalid verification code/i);
+    expect(await screen.findByRole('alert')).toHaveTextContent(/that code is not right/i);
   });
 
-  it('surfaces the server message rather than a generic one', async () => {
+  it('shows its own translated message, not the API text', async () => {
     const user = userEvent.setup();
     await renderPage();
 
+    // The mock answers INVALID_CODE with the English "Invalid verification
+    // code." The screen must translate by code instead of echoing that.
     await user.type(screen.getByLabelText(/verification code/i), '111111');
 
-    // The server knows whether a code was wrong or merely stale, so its
-    // wording beats anything we could guess at.
-    expect(await screen.findByRole('alert')).toHaveTextContent('Invalid verification code.');
+    const alert = await screen.findByRole('alert');
+    expect(alert).toHaveTextContent('That code is not right. Check it and try again.');
+    expect(alert).not.toHaveTextContent('Invalid verification code.');
+  });
+
+  it('unlocks resend straight away when the code has expired', async () => {
+    const user = userEvent.setup();
+    server.use(
+      http.post(api('/auth/confirm'), () =>
+        HttpResponse.json(
+          { success: false, code: 'EXPIRED_CODE', error: 'Code expired' },
+          { status: 400 },
+        ),
+      ),
+    );
+    await renderPage();
+
+    await user.type(screen.getByLabelText(/verification code/i), '123456');
+
+    expect(await screen.findByRole('alert')).toHaveTextContent('That code has expired.');
+    // No point making them wait out the cooldown for a code that cannot work.
+    expect(screen.getByRole('button', { name: 'Send a new code' })).toBeEnabled();
   });
 
   it('starts the resend link on a cooldown so it cannot be hammered', async () => {

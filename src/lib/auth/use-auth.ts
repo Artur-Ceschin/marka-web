@@ -1,5 +1,7 @@
 import { useSyncExternalStore } from 'react';
 
+import { request } from '../http';
+
 import { clearTokens, getIdToken, getRefreshToken, subscribeTokens } from './token-store';
 
 /**
@@ -20,12 +22,18 @@ export function useIsAuthenticated(): boolean {
 }
 
 /**
- * Ends the session in this browser.
+ * Ends the session: locally at once, and at Cognito in the background.
  *
- * Local only: the API has no sign-out endpoint, so the refresh token is dropped
- * here but stays valid at Cognito until it expires. Revoking it everywhere
- * would need a server call.
+ * The tokens are cleared before the request so the UI never waits on the
+ * network to sign someone out. Revoking the refresh token is what stops a
+ * copied token from working for its remaining 30 days. If that call fails the
+ * browser is still signed out; only the leaked-token protection is lost.
  */
 export function signOut(): void {
+  const refreshToken = getRefreshToken();
   clearTokens();
+
+  if (refreshToken) {
+    void request('/auth/signout', { method: 'POST', body: { refreshToken } }).catch(() => {});
+  }
 }

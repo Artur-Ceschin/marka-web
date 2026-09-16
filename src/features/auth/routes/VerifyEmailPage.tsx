@@ -4,10 +4,10 @@ import { useCallback, useEffect, useId, useMemo, useState } from 'react';
 
 import { useI18n } from '@/app/providers/i18n';
 import { Button } from '@/components/ui/Button';
-import { ApiError, NetworkError } from '@/lib/api-error';
 import { confirmSignUp, resendCode, signIn } from '../api/auth-api';
 import { AuthLayout } from '../components/AuthLayout';
 import { CODE_LENGTH, CodeInput } from '../components/CodeInput';
+import { describeAuthError } from '../error-messages';
 import { takePendingCredentials } from '../pending-credentials';
 import { clearPendingEmail, getPendingEmail } from '../pending-verification';
 import { createVerificationSchema } from '../schemas';
@@ -76,16 +76,9 @@ export function VerifyEmailPage() {
         setSignInHandoff({ email: email ?? '', notice: 'verified' });
         await navigate({ to: '/sign-in' });
       } catch (caught) {
-        if (caught instanceof NetworkError) {
-          setError(m.auth.networkError);
-        } else if (caught instanceof ApiError) {
-          // The server's own message wins where it has one: it knows whether
-          // the code was wrong or simply stale.
-          const detail = caught.details[0]?.message;
-          setError(detail ?? caught.message ?? m.verify.codeIncorrect);
-        } else {
-          setError(m.verify.codeIncorrect);
-        }
+        const view = describeAuthError(caught, m);
+        setError(view.message);
+        if (view.code === 'expired') setCooldown(0);
       } finally {
         setSubmitting(false);
       }

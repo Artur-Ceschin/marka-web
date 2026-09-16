@@ -1,3 +1,5 @@
+import { clearActivity, recordActivity } from './idle';
+
 const REFRESH_TOKEN_KEY = 'marka-refresh-token';
 
 /**
@@ -80,6 +82,9 @@ export function setTokens(tokens: {
   // A refresh response returns a new id token but usually no new refresh
   // token, so only overwrite when one actually arrives.
   if (tokens.refreshToken) {
+    // A sign-in is activity; without this a timestamp left over from days ago
+    // would sign the person straight back out.
+    recordActivity(Date.now(), { force: true });
     try {
       localStorage.setItem(REFRESH_TOKEN_KEY, tokens.refreshToken);
     } catch {
@@ -90,6 +95,7 @@ export function setTokens(tokens: {
 }
 
 export function clearTokens(): void {
+  clearActivity();
   idToken = null;
   accessToken = null;
   try {

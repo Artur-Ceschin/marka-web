@@ -117,11 +117,7 @@ export async function authorizedRequest<TResponse>(
   path: string,
   options: Omit<RequestOptions<TResponse>, 'token'> = {},
 ): Promise<TResponse> {
-  const token = await getValidIdToken();
-  if (!token) {
-    endSession();
-    throw new ApiError(401, { code: 'SESSION_EXPIRED' }, 'Not signed in');
-  }
+  const token = await currentOrRefreshedIdToken();
 
   try {
     return await request<TResponse>(path, { ...options, token });
@@ -137,4 +133,22 @@ export async function authorizedRequest<TResponse>(
 export function resetSessionStateForTests(): void {
   inFlightRefresh = null;
   onSessionEnded = null;
+}
+
+/**
+ * The id token, refreshed first when it is missing or about to expire.
+ *
+ * Unlike `getValidIdToken` this lets a failed refresh THROW. That difference
+ * is the whole point: a refresh that fails because the laptop just woke up
+ * with no network, or the API had a 5xx, says nothing about the session, and
+ * must not sign anyone out. `refreshSession` ends the session itself, and only
+ * when there is no refresh token or the API rejects it with a 401.
+ */
+async function currentOrRefreshedIdToken(): Promise<string> {
+  const current = getIdToken();
+  if (current) {
+    const remaining = secondsUntilExpiry(current);
+    if (remaining === null || remaining > REFRESH_SKEW_SECONDS) return current;
+  }
+  return refreshSession();
 }

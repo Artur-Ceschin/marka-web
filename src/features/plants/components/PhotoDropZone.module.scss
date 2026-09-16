@@ -1,0 +1,97 @@
+.zone {
+  position: relative;
+  border: 1.5px dashed var(--color-border-strong);
+  border-radius: var(--radius-card);
+  background-color: var(--color-surface);
+  transition:
+    border-color var(--dur-short) var(--ease-out),
+    background-color var(--dur-short) var(--ease-out);
+}
+
+.dragging {
+  border-style: solid;
+  border-color: var(--color-text);
+  background-color: color-mix(in srgb, var(--color-surface) 82%, var(--c-lime));
+}
+
+.disabled {
+  opacity: 0.6;
+}
+
+/* Mobile first: a generous tap target that fills the width. */
+.target {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-12);
+  width: 100%;
+  min-height: 188px;
+  padding: var(--space-32) var(--space-24);
+  border: none;
+  border-radius: inherit;
+  background: none;
+  color: inherit;
+  text-align: center;
+  cursor: pointer;
+
+  @media (min-width: 760px) {
+    min-height: 240px;
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+
+  &:disabled {
+    cursor: progress;
+  }
+}
+
+.icon {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-pill);
+  background-color: var(--color-action-bg);
+  color: var(--color-action-fg);
+  transition: transform var(--dur-short) var(--ease-out);
+
+  svg {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .dragging .icon {
+    transform: scale(1.08);
+  }
+}
+
+.title {
+  @include text-title;
+}
+
+.hint {
+  @include text-meta;
+  color: var(--color-text-muted);
+  max-width: 34ch;
+}
+
+/* Wording by input type, not screen width: a small laptop window can still
+   drag a file, a large tablet cannot. */
+.coarse {
+  display: none;
+}
+
+@media (pointer: coarse) {
+  .fine {
+    display: none;
+  }
+
+  .coarse {
+    display: inline;
+  }
+}

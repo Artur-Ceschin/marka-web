@@ -4,25 +4,37 @@
   color: var(--color-text);
 }
 
+/* On a narrow phone the three controls cannot sit beside the logo, so they
+   wrap onto their own row instead of overflowing the screen. */
 .bar {
   @include container(1100px);
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: var(--space-16);
-  min-height: 72px;
+  gap: var(--space-8) var(--space-16);
+  min-height: 64px;
+  padding-block: var(--space-12);
   border-block-end: 1px solid var(--color-border);
 }
 
 .actions {
   display: flex;
   align-items: center;
-  gap: var(--space-12);
+  gap: var(--space-8);
+
+  @media (min-width: 560px) {
+    gap: var(--space-12);
+  }
 }
 
 .main {
   @include container(1100px);
-  padding-block: var(--space-48) var(--space-64);
+  padding-block: var(--space-32) var(--space-64);
+
+  @media (min-width: 760px) {
+    padding-block: var(--space-48) var(--space-64);
+  }
 }
 
 .title {
@@ -33,36 +45,11 @@
 .subtitle {
   @include text-body;
   color: var(--color-text-muted);
-  margin-block-end: var(--space-32);
+  margin-block-end: var(--space-24);
 }
 
-.status {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-8);
-  padding: var(--space-8) var(--space-16);
-  border: 1px solid var(--color-border-strong);
-  border-radius: var(--radius-pill);
+.rejection {
   @include text-meta;
-}
-
-.dot {
-  width: 8px;
-  height: 8px;
-  flex-shrink: 0;
-  border-radius: var(--radius-pill);
-  background-color: var(--color-text-muted);
-}
-
-.ok .dot {
-  background-color: var(--color-text);
-}
-
-.failed {
-  border-color: var(--color-danger);
   color: var(--color-danger);
-
-  .dot {
-    background-color: var(--color-danger);
-  }
+  margin-block-start: var(--space-12);
 }

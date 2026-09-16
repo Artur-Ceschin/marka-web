@@ -1,5 +1,6 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
+import { useState } from 'react';
 
 import { useI18n } from '@/app/providers/i18n';
 import { Button } from '@/components/ui/Button';
@@ -8,33 +9,27 @@ import { Logo } from '@/components/ui/Logo';
 import { ThemeToggle } from '@/components/ui/ThemeToggle';
 import { signOut } from '@/lib/auth/use-auth';
 
-import { useIdentifyCheck } from '../api/queries';
+import { CatalogueGrid } from '../components/CatalogueGrid';
+import { IdentifyPanel } from '../components/IdentifyPanel';
+import { PhotoDropZone } from '../components/PhotoDropZone';
+import { useIdentifyFlow } from '../hooks/use-identify-flow';
 
 import styles from './PlantsHomePage.module.scss';
 
 /**
- * The first screen after sign-in.
+ * The catalogue: add a plant by putting in a photo, see what you have found
+ * below.
  *
- * Deliberately thin: the catalogue itself does not exist yet. What it does do
- * is make one authenticated call and report the result, so a broken token,
- * refresh or API configuration shows up here instead of on the first real
- * feature built on top of it.
+ * Mobile first. On a phone the drop zone is a large tap target that opens the
+ * camera or photo library, and every panel stacks to one column. Drag and drop
+ * is a desktop layer on top of that same control, not a separate path.
  */
 export function PlantsHomePage() {
   const { m } = useI18n();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const check = useIdentifyCheck();
-
-  let statusText = m.app.checking;
-  let statusClass: string | undefined;
-  if (check.isError) {
-    statusText = m.app.connectionFailed;
-    statusClass = styles.failed;
-  } else if (check.isSuccess) {
-    statusText = m.app.connectionOk;
-    statusClass = styles.ok;
-  }
+  const flow = useIdentifyFlow();
+  const [rejection, setRejection] = useState<string | null>(null);
 
   return (
     <div className={styles.page}>
@@ -60,16 +55,29 @@ export function PlantsHomePage() {
       </header>
 
       <main id="main" className={styles.main}>
-        <h1 className={styles.title}>{m.app.title}</h1>
-        <p className={styles.subtitle}>{m.app.subtitle}</p>
-        <p
-          className={[styles.status, statusClass].filter(Boolean).join(' ')}
-          role="status"
-          aria-live="polite"
-        >
-          <span className={styles.dot} aria-hidden="true" />
-          {statusText}
-        </p>
+        <h1 className={styles.title}>{m.plants.title}</h1>
+        <p className={styles.subtitle}>{m.plants.subtitle}</p>
+
+        {flow.state.phase === 'idle' ? (
+          <div>
+            <PhotoDropZone
+              onPhoto={(photo) => {
+                setRejection(null);
+                void flow.start(photo);
+              }}
+              onReject={setRejection}
+            />
+            {rejection ? (
+              <p className={styles.rejection} role="alert">
+                {rejection}
+              </p>
+            ) : null}
+          </div>
+        ) : (
+          <IdentifyPanel flow={flow} />
+        )}
+
+        <CatalogueGrid />
       </main>
     </div>
   );

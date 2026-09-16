@@ -1,12 +1,21 @@
 import { redirect } from '@tanstack/react-router';
 
+import { setSignInHandoff } from '@/features/auth/sign-in-handoff';
+import { isIdleExpired } from '@/lib/auth/idle';
 import { getValidIdToken } from '@/lib/auth/session';
-import { hasSession } from '@/lib/auth/use-auth';
+import { hasSession, signOut } from '@/lib/auth/use-auth';
 
 type SessionState = 'valid' | 'none' | 'unreachable';
 
 async function resolveSession(): Promise<SessionState> {
   if (!hasSession()) return 'none';
+  // Reopening the app after a long gap: no timer ran while it was closed, so
+  // the idle limit is checked here, before any page shows.
+  if (isIdleExpired()) {
+    signOut();
+    setSignInHandoff({ email: '', notice: 'idle' });
+    return 'none';
+  }
   const token = await getValidIdToken();
   if (token) return 'valid';
   return hasSession() ? 'unreachable' : 'none';

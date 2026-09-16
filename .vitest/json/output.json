@@ -1,0 +1,1572 @@
+{
+  "numTotalTestSuites": 45,
+  "numPassedTestSuites": 43,
+  "numFailedTestSuites": 2,
+  "numPendingTestSuites": 0,
+  "numTotalTests": 124,
+  "numPassedTests": 121,
+  "numFailedTests": 3,
+  "numPendingTests": 0,
+  "numTodoTests": 0,
+  "snapshot": {
+    "added": 0,
+    "failure": false,
+    "filesAdded": 0,
+    "filesRemoved": 0,
+    "filesRemovedList": [],
+    "filesUnmatched": 0,
+    "filesUpdated": 0,
+    "matched": 0,
+    "total": 0,
+    "unchecked": 0,
+    "uncheckedKeysByFile": [],
+    "unmatched": 0,
+    "updated": 0,
+    "didUpdate": false
+  },
+  "startTime": 1789440358591,
+  "success": false,
+  "testResults": [
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["route guards"],
+          "fullName": "route guards sends a visitor with no session to sign-in",
+          "status": "passed",
+          "title": "sends a visitor with no session to sign-in",
+          "duration": 5.824458999999933,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["route guards"],
+          "fullName": "route guards lets a valid session straight through without a network call",
+          "status": "passed",
+          "title": "lets a valid session straight through without a network call",
+          "duration": 0.8849170000000868,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["route guards"],
+          "fullName": "route guards refreshes an expired session before deciding, rather than after rendering",
+          "status": "passed",
+          "title": "refreshes an expired session before deciding, rather than after rendering",
+          "duration": 12.351290999999947,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["route guards"],
+          "fullName": "route guards redirects a dead session to sign-in without ever rendering the app",
+          "status": "passed",
+          "title": "redirects a dead session to sign-in without ever rendering the app",
+          "duration": 6.253750000000082,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["route guards"],
+          "fullName": "route guards does not bounce a dead session from sign-in through the app",
+          "status": "passed",
+          "title": "does not bounce a dead session from sign-in through the app",
+          "duration": 1.5351670000000013,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["route guards"],
+          "fullName": "route guards keeps an offline visitor signed in rather than logging them out",
+          "status": "passed",
+          "title": "keeps an offline visitor signed in rather than logging them out",
+          "duration": 1.399791999999934,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        }
+      ],
+      "startTime": 1789440360410,
+      "endTime": 1789440360437.4,
+      "status": "passed",
+      "message": "",
+      "name": "/Users/arturceschin/Desktop/www/markav2/marka-web/src/app/route-guards.test.ts"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["Button"],
+          "fullName": "Button renders a real button defaulting to type=\"button\"",
+          "status": "passed",
+          "title": "renders a real button defaulting to type=\"button\"",
+          "duration": 54.346500000000106,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["Button"],
+          "fullName": "Button honours an explicit type",
+          "status": "passed",
+          "title": "honours an explicit type",
+          "duration": 6.3485420000001795,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["Button"],
+          "fullName": "Button calls onClick when activated",
+          "status": "passed",
+          "title": "calls onClick when activated",
+          "duration": 15.844333000000006,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["Button"],
+          "fullName": "Button is reachable and activatable by keyboard",
+          "status": "passed",
+          "title": "is reachable and activatable by keyboard",
+          "duration": 13.78449999999998,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["Button"],
+          "fullName": "Button marks itself busy and disabled while loading",
+          "status": "passed",
+          "title": "marks itself busy and disabled while loading",
+          "duration": 9.844457999999804,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["Button"],
+          "fullName": "Button does not set aria-busy when idle",
+          "status": "passed",
+          "title": "does not set aria-busy when idle",
+          "duration": 6.799290999999812,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["Button"],
+          "fullName": "Button does not fire onClick when disabled",
+          "status": "passed",
+          "title": "does not fire onClick when disabled",
+          "duration": 21.449541999999838,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["Button"],
+          "fullName": "Button renders the child element with asChild, keeping it a link",
+          "status": "passed",
+          "title": "renders the child element with asChild, keeping it a link",
+          "duration": 10.599875000000111,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["Button"],
+          "fullName": "Button applies variant and size classes",
+          "status": "passed",
+          "title": "applies variant and size classes",
+          "duration": 5.827708999999913,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["Button"],
+          "fullName": "Button has no accessibility violations",
+          "status": "passed",
+          "title": "has no accessibility violations",
+          "duration": 22.272667000000183,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["Button"],
+          "fullName": "Button has no accessibility violations while loading",
+          "status": "passed",
+          "title": "has no accessibility violations while loading",
+          "duration": 13.809541999999965,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        }
+      ],
+      "startTime": 1789440360511,
+      "endTime": 1789440360691.8096,
+      "status": "passed",
+      "message": "",
+      "name": "/Users/arturceschin/Desktop/www/markav2/marka-web/src/components/ui/Button.test.tsx"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["PageLoader"],
+          "fullName": "PageLoader announces loading to assistive tech",
+          "status": "passed",
+          "title": "announces loading to assistive tech",
+          "duration": 53.61991699999999,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["PageLoader"],
+          "fullName": "PageLoader announces it in the active language",
+          "status": "passed",
+          "title": "announces it in the active language",
+          "duration": 6.1003749999999854,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["PageLoader"],
+          "fullName": "PageLoader has no accessibility violations",
+          "status": "passed",
+          "title": "has no accessibility violations",
+          "duration": 30.73550000000023,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        }
+      ],
+      "startTime": 1789440360643,
+      "endTime": 1789440360733.7356,
+      "status": "passed",
+      "message": "",
+      "name": "/Users/arturceschin/Desktop/www/markav2/marka-web/src/components/ui/PageLoader.test.tsx"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["token expiry"],
+          "fullName": "token expiry reads seconds remaining from the exp claim",
+          "status": "passed",
+          "title": "reads seconds remaining from the exp claim",
+          "duration": 1.7987919999998212,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["token expiry"],
+          "fullName": "token expiry returns null for a token it cannot decode, rather than throwing",
+          "status": "passed",
+          "title": "returns null for a token it cannot decode, rather than throwing",
+          "duration": 0.2782920000001923,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["refreshSession"],
+          "fullName": "refreshSession shares one in-flight request across concurrent callers",
+          "status": "passed",
+          "title": "shares one in-flight request across concurrent callers",
+          "duration": 42.738583999999946,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["refreshSession"],
+          "fullName": "refreshSession allows a new refresh after the first settles",
+          "status": "passed",
+          "title": "allows a new refresh after the first settles",
+          "duration": 8.931833000000097,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["refreshSession"],
+          "fullName": "refreshSession ends the session when the refresh token is dead",
+          "status": "passed",
+          "title": "ends the session when the refresh token is dead",
+          "duration": 5.265625,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["authorizedRequest"],
+          "fullName": "authorizedRequest refreshes before sending when the token is near expiry",
+          "status": "passed",
+          "title": "refreshes before sending when the token is near expiry",
+          "duration": 3.1071249999999964,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["authorizedRequest"],
+          "fullName": "authorizedRequest does not refresh a token with plenty of life left",
+          "status": "passed",
+          "title": "does not refresh a token with plenty of life left",
+          "duration": 1.1179999999999382,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["authorizedRequest"],
+          "fullName": "authorizedRequest retries once after a 401, and only once",
+          "status": "passed",
+          "title": "retries once after a 401, and only once",
+          "duration": 1.7609160000001793,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["authorizedRequest"],
+          "fullName": "authorizedRequest succeeds on the retry when the second attempt is accepted",
+          "status": "passed",
+          "title": "succeeds on the retry when the second attempt is accepted",
+          "duration": 3.6750409999999647,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["authorizedRequest"],
+          "fullName": "authorizedRequest sends the bearer token",
+          "status": "passed",
+          "title": "sends the bearer token",
+          "duration": 0.7127089999999043,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        }
+      ],
+      "startTime": 1789440360381,
+      "endTime": 1789440360451.7126,
+      "status": "passed",
+      "message": "",
+      "name": "/Users/arturceschin/Desktop/www/markav2/marka-web/src/lib/auth/session.test.ts"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["token store subscriptions"],
+          "fullName": "token store subscriptions notifies subscribers when tokens are set and cleared",
+          "status": "passed",
+          "title": "notifies subscribers when tokens are set and cleared",
+          "duration": 1.9572499999999309,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["token store subscriptions"],
+          "fullName": "token store subscriptions stops notifying after unsubscribe",
+          "status": "passed",
+          "title": "stops notifying after unsubscribe",
+          "duration": 0.45566699999994853,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["token store subscriptions"],
+          "fullName": "token store subscriptions signs this tab out when another tab removes the refresh token",
+          "status": "passed",
+          "title": "signs this tab out when another tab removes the refresh token",
+          "duration": 0.5935409999999592,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        }
+      ],
+      "startTime": 1789440362265,
+      "endTime": 1789440362268.5935,
+      "status": "passed",
+      "message": "",
+      "name": "/Users/arturceschin/Desktop/www/markav2/marka-web/src/lib/auth/token-store.test.ts"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["sign-up against the API"],
+          "fullName": "sign-up against the API sends email and password, then remembers the address for verification",
+          "status": "passed",
+          "title": "sends email and password, then remembers the address for verification",
+          "duration": 512.4346660000001,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["sign-up against the API"],
+          "fullName": "sign-up against the API renders a 400 details entry against the field it names",
+          "status": "passed",
+          "title": "renders a 400 details entry against the field it names",
+          "duration": 246.6357079999998,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["sign-up against the API"],
+          "fullName": "sign-up against the API clears a server field error once that field is edited",
+          "status": "passed",
+          "title": "clears a server field error once that field is edited",
+          "duration": 281.63237500000014,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["sign-up against the API"],
+          "fullName": "sign-up against the API tells someone the address is taken instead of showing a field error",
+          "status": "passed",
+          "title": "tells someone the address is taken instead of showing a field error",
+          "duration": 155.13929099999996,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["account-state errors on sign-up"],
+          "fullName": "account-state errors on sign-up offers sign-in and password reset when the address is taken",
+          "status": "passed",
+          "title": "offers sign-in and password reset when the address is taken",
+          "duration": 147.45508299999983,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["account-state errors on sign-up"],
+          "fullName": "account-state errors on sign-up shows the password rules when the API rejects the password",
+          "status": "passed",
+          "title": "shows the password rules when the API rejects the password",
+          "duration": 123.63249999999971,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["sign-in against the API"],
+          "fullName": "sign-in against the API stores the address and routes to verification on USER_NOT_CONFIRMED",
+          "status": "passed",
+          "title": "stores the address and routes to verification on USER_NOT_CONFIRMED",
+          "duration": 110.89966699999968,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["sign-in against the API"],
+          "fullName": "sign-in against the API shows the server message for bad credentials",
+          "status": "passed",
+          "title": "shows the server message for bad credentials",
+          "duration": 101.91829099999995,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["sign-in against the API"],
+          "fullName": "sign-in against the API reports a failed connection differently from a rejection",
+          "status": "passed",
+          "title": "reports a failed connection differently from a rejection",
+          "duration": 100.59745800000019,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        }
+      ],
+      "startTime": 1789440360837,
+      "endTime": 1789440362617.5974,
+      "status": "passed",
+      "message": "",
+      "name": "/Users/arturceschin/Desktop/www/markav2/marka-web/src/features/auth/auth-flow.test.tsx"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["describeAuthError"],
+          "fullName": "describeAuthError translates a known code instead of echoing the English API text",
+          "status": "passed",
+          "title": "translates a known code instead of echoing the English API text",
+          "duration": 2.2377909999997883,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["describeAuthError"],
+          "fullName": "describeAuthError marks code errors so a screen can attach them to its code field",
+          "status": "passed",
+          "title": "marks code errors so a screen can attach them to its code field",
+          "duration": 0.4559999999999036,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["describeAuthError"],
+          "fullName": "describeAuthError pairs account-state errors with a way forward",
+          "status": "passed",
+          "title": "pairs account-state errors with a way forward",
+          "duration": 0.32170799999994415,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["describeAuthError"],
+          "fullName": "describeAuthError puts a rejected password under the password field",
+          "status": "passed",
+          "title": "puts a rejected password under the password field",
+          "duration": 0.24450000000001637,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["describeAuthError"],
+          "fullName": "describeAuthError passes validation details through per field",
+          "status": "passed",
+          "title": "passes validation details through per field",
+          "duration": 0.9839999999999236,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["describeAuthError"],
+          "fullName": "describeAuthError hides server internals behind a generic message on a 5xx",
+          "status": "passed",
+          "title": "hides server internals behind a generic message on a 5xx",
+          "duration": 0.38475000000016735,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["describeAuthError"],
+          "fullName": "describeAuthError falls back to the API text for a code it does not know",
+          "status": "passed",
+          "title": "falls back to the API text for a code it does not know",
+          "duration": 0.2559999999998581,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["describeAuthError"],
+          "fullName": "describeAuthError says the server could not be reached for a network failure",
+          "status": "passed",
+          "title": "says the server could not be reached for a network failure",
+          "duration": 0.257959000000028,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        }
+      ],
+      "startTime": 1789440361973,
+      "endTime": 1789440361978.258,
+      "status": "passed",
+      "message": "",
+      "name": "/Users/arturceschin/Desktop/www/markav2/marka-web/src/features/auth/error-messages.test.ts"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["message catalogues"],
+          "fullName": "message catalogues has the same key set in every locale",
+          "status": "passed",
+          "title": "has the same key set in every locale",
+          "duration": 3.357041999999865,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["message catalogues"],
+          "fullName": "message catalogues leaves no message empty, and keeps interpolation signatures aligned",
+          "status": "passed",
+          "title": "leaves no message empty, and keeps interpolation signatures aligned",
+          "duration": 4.011166999999887,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["message catalogues"],
+          "fullName": "message catalogues actually translates the copy rather than copying English",
+          "status": "passed",
+          "title": "actually translates the copy rather than copying English",
+          "duration": 0.6458749999999327,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["message catalogues"],
+          "fullName": "message catalogues uses BCP 47 tags, which Intl and <html lang> both require",
+          "status": "passed",
+          "title": "uses BCP 47 tags, which Intl and <html lang> both require",
+          "duration": 19.97420800000009,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        }
+      ],
+      "startTime": 1789440361640,
+      "endTime": 1789440361667.974,
+      "status": "passed",
+      "message": "",
+      "name": "/Users/arturceschin/Desktop/www/markav2/marka-web/src/lib/i18n/i18n.test.ts"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["LandingPage"],
+          "fullName": "LandingPage has exactly one h1",
+          "status": "passed",
+          "title": "has exactly one h1",
+          "duration": 153.85658399999966,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["LandingPage"],
+          "fullName": "LandingPage gives every image alt text",
+          "status": "passed",
+          "title": "gives every image alt text",
+          "duration": 69.17174999999997,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["LandingPage"],
+          "fullName": "LandingPage states the foraging safety caveat on the fungi card",
+          "status": "passed",
+          "title": "states the foraging safety caveat on the fungi card",
+          "duration": 47.85483299999987,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["LandingPage"],
+          "fullName": "LandingPage marks every integration as planned rather than shipped",
+          "status": "passed",
+          "title": "marks every integration as planned rather than shipped",
+          "duration": 34.824249999999665,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["LandingPage"],
+          "fullName": "LandingPage exposes a skip link as the first focusable element",
+          "status": "passed",
+          "title": "exposes a skip link as the first focusable element",
+          "duration": 95.9357500000001,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["LandingPage"],
+          "fullName": "LandingPage points every hero subject link at a card that actually exists",
+          "status": "passed",
+          "title": "points every hero subject link at a card that actually exists",
+          "duration": 39.159000000000106,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["LandingPage"],
+          "fullName": "LandingPage has no accessibility violations",
+          "status": "passed",
+          "title": "has no accessibility violations",
+          "duration": 285.0351660000001,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        }
+      ],
+      "startTime": 1789440361180,
+      "endTime": 1789440361906.0352,
+      "status": "passed",
+      "message": "",
+      "name": "/Users/arturceschin/Desktop/www/markav2/marka-web/src/features/marketing/routes/LandingPage.test.tsx"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["identify response tolerance"],
+          "fullName": "identify response tolerance accepts a match with no family, genus or common names",
+          "status": "passed",
+          "title": "accepts a match with no family, genus or common names",
+          "duration": 23.276415999999926,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["upload size"],
+          "fullName": "upload size refuses an oversized photo before sending anything to S3",
+          "status": "passed",
+          "title": "refuses an oversized photo before sending anything to S3",
+          "duration": 7.26666699999987,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        }
+      ],
+      "startTime": 1789440361675,
+      "endTime": 1789440361705.2666,
+      "status": "passed",
+      "message": "",
+      "name": "/Users/arturceschin/Desktop/www/markav2/marka-web/src/features/plants/api/identify-api.contract.test.ts"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["uploadPhoto"],
+          "fullName": "uploadPhoto sends every presigned field before the file, and no bearer token",
+          "status": "passed",
+          "title": "sends every presigned field before the file, and no bearer token",
+          "duration": 18.52712499999984,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["uploadPhoto"],
+          "fullName": "uploadPhoto fails loudly when S3 refuses the upload",
+          "status": "passed",
+          "title": "fails loudly when S3 refuses the upload",
+          "duration": 6.276583000000073,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["identify"],
+          "fullName": "identify surfaces the daily limit with the server message and how long to wait",
+          "status": "passed",
+          "title": "surfaces the daily limit with the server message and how long to wait",
+          "duration": 4.636291999999912,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["confirmDetection"],
+          "fullName": "confirmDetection encodes the detection id so its \"#\" is not read as a URL fragment",
+          "status": "passed",
+          "title": "encodes the detection id so its \"#\" is not read as a URL fragment",
+          "duration": 2.7940000000000964,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        }
+      ],
+      "startTime": 1789440361910,
+      "endTime": 1789440361942.794,
+      "status": "passed",
+      "message": "",
+      "name": "/Users/arturceschin/Desktop/www/markav2/marka-web/src/features/plants/api/identify-api.test.ts"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["PlantsHomePage"],
+          "fullName": "PlantsHomePage confirms an authenticated round trip to the API",
+          "status": "failed",
+          "title": "confirms an authenticated round trip to the API",
+          "duration": 1036.686417,
+          "failureMessages": [
+            "Error: Unable to find an element with the text: Connected to the Marka API.. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.\n\nIgnored nodes: comments, script, style\n\u001b[36m<body>\u001b[39m\n  \u001b[36m<div>\u001b[39m\n    \u001b[36m<div\u001b[39m\n      \u001b[33mclass\u001b[39m=\u001b[32m\"_page_b2176c\"\u001b[39m\n    \u001b[36m>\u001b[39m\n      \u001b[36m<header\u001b[39m\n        \u001b[33mclass\u001b[39m=\u001b[32m\"_bar_b2176c\"\u001b[39m\n      \u001b[36m>\u001b[39m\n        \u001b[36m<span\u001b[39m\n          \u001b[33mclass\u001b[39m=\u001b[32m\"_lockup_b755ea\"\u001b[39m\n        \u001b[36m>\u001b[39m\n          \u001b[36m<svg\u001b[39m\n            \u001b[33maria-hidden\u001b[39m=\u001b[32m\"true\"\u001b[39m\n            \u001b[33mclass\u001b[39m=\u001b[32m\"_mark_b755ea\"\u001b[39m\n            \u001b[33mfill\u001b[39m=\u001b[32m\"currentColor\"\u001b[39m\n            \u001b[33mfocusable\u001b[39m=\u001b[32m\"false\"\u001b[39m\n            \u001b[33mviewBox\u001b[39m=\u001b[32m\"0 0 24 24\"\u001b[39m\n          \u001b[36m>\u001b[39m\n            \u001b[36m<mask\u001b[39m\n              \u001b[33mid\u001b[39m=\u001b[32m\"_r_0_\"\u001b[39m\n            \u001b[36m>\u001b[39m\n              \u001b[36m<rect\u001b[39m\n                \u001b[33mfill\u001b[39m=\u001b[32m\"white\"\u001b[39m\n                \u001b[33mheight\u001b[39m=\u001b[32m\"24\"\u001b[39m\n                \u001b[33mwidth\u001b[39m=\u001b[32m\"24\"\u001b[39m\n                \u001b[33mx\u001b[39m=\u001b[32m\"0\"\u001b[39m\n                \u001b[33my\u001b[39m=\u001b[32m\"0\"\u001b[39m\n              \u001b[36m/>\u001b[39m\n              \u001b[36m<path\u001b[39m\n                \u001b[33md\u001b[39m=\u001b[32m\"M12 4 L12 17.2\"\u001b[39m\n                \u001b[33mstroke\u001b[39m=\u001b[32m\"black\"\u001b[39m\n                \u001b[33mstroke-linecap\u001b[39m=\u001b[32m\"round\"\u001b[39m\n                \u001b[33mstroke-width\u001b[39m=\u001b[32m\"1.2\"\u001b[39m\n              \u001b[36m/>\u001b[39m\n            \u001b[36m</mask>\u001b[39m\n            \u001b[36m<path\u001b[39m\n              \u001b[33md\u001b[39m=\u001b[32m\"M12 2.6 Q15.4 5.2 15.6 6.8 Q13.6 7.2 13.4 7.8 Q16.8 9.0 17.1 10.4 Q13.9 10.9 13.7 11.5 Q17.0 12.6 17.0 14.0 Q13.7 14.4 13.5 15.0 Q15.6 16.0 15.4 17.1 Q13.4 17.4 12 17.8 Q6.6 15.9 6.6 11.4 Q6.6 7.0 12 2.6 Z\"\u001b[39m\n              \u001b[33mmask\u001b[39m=\u001b[32m\"url(#_r_0_)\"\u001b[39m\n            \u001b[36m/>\u001b[39m\n            \u001b[36m<rect\u001b[39m\n              \u001b[33mheight\u001b[39m=\u001b[32m\"4.6\"\u001b[39m\n              \u001b[33mrx\u001b[39m=\u001b[32m\"0.7\"\u001b[39m\n              \u001b[33mwidth\u001b[39m=\u001b[32m\"1.4\"\u001b[39m\n              \u001b[33mx\u001b[39m=\u001b[32m\"11.3\"\u001b[39m\n              \u001b[33my\u001b[39m=\u001b[32m\"16.8\"\u001b[39m\n            \u001b[36m/>\u001b[39m\n          \u001b[36m</svg>\u001b[39m\n          \u001b[36m<span\u001b[39m\n            \u001b[33mclass\u001b[39m=\u001b[32m\"_wordmark_b755ea\"\u001b[39m\n            \u001b[33mtranslate\u001b[39m=\u001b[32m\"no\"\u001b[39m\n          \u001b[36m>\u001b[39m\n            \u001b[0mMarka\u001b[0m\n          \u001b[36m</span>\u001b[39m\n        \u001b[36m</span>\u001b[39m\n        \u001b[36m<div\u001b[39m\n          \u001b[33mclass\u001b[39m=\u001b[32m\"_actions_b2176c\"\u001b[39m\n        \u001b[36m>\u001b[39m\n          \u001b[36m<fieldset\u001b[39m\n            \u001b[33mclass\u001b[39m=\u001b[32m\"_group_ae9856\"\u001b[39m\n          \u001b[36m>\u001b[39m\n            \u001b[36m<legend\u001b[39m\n              \u001b[33mclass\u001b[39m=\u001b[32m\"sr-only\"\u001b[39m\n            \u001b[36m>\u001b[39m\n              \u001b[0mLanguage\u001b[0m\n            \u001b[36m</legend>\u001b[39m\n            \u001b[36m<button\u001b[39m\n              \u001b[33maria-label\u001b[39m=\u001b[32m\"English\"\u001b[39m\n              \u001b[33maria-pressed\u001b[39m=\u001b[32m\"true\"\u001b[39m\n              \u001b[33mclass\u001b[39m=\u001b[32m\"_option_ae9856 _selected_ae9856\"\u001b[39m\n              \u001b[33mlang\u001b[39m=\u001b[32m\"en\"\u001b[39m\n              \u001b[33mtype\u001b[39m=\u001b[32m\"button\"\u001b[39m\n            \u001b[36m>\u001b[39m\n              \u001b[0mEN\u001b[0m\n            \u001b[36m</button>\u001b[39m\n            \u001b[36m<button\u001b[39m\n              \u001b[33maria-label\u001b[39m=\u001b[32m\"Português\"\u001b[39m\n              \u001b[33maria-pressed\u001b[39m=\u001b[32m\"false\"\u001b[39m\n              \u001b[33mclass\u001b[39m=\u001b[32m\"_option_ae9856\"\u001b[39m\n              \u001b[33mlang\u001b[39m=\u001b[32m\"pt-BR\"\u001b[39m\n              \u001b[33mtype\u001b[39m=\u001b[32m\"button\"\u001b[39m\n            \u001b[36m>\u001b[39m\n              \u001b[0mPT\u001b[0m\n            \u001b[36m</button>\u001b[39m\n          \u001b[36m</fieldset>\u001b[39m\n          \u001b[36m<button\u001b[39m\n            \u001b[33maria-label\u001b[39m=\u001b[32m\"Switch to dark theme\"\u001b[39m\n            \u001b[33mclass\u001b[39m=\u001b[32m\"_toggle_567b8c\"\u001b[39m\n            \u001b[33mtype\u001b[39m=\u001b[32m\"button\"\u001b[39m\n          \u001b[36m>\u001b[39m\n            \u001b[36m<svg\u001b[39m\n              \u001b[33maria-hidden\u001b[39m=\u001b[32m\"true\"\u001b[39m\n              \u001b[33mclass\u001b[39m=\u001b[32m\"lucide lucide-moon _icon_567b8c\"\u001b[39m\n              \u001b[33mfill\u001b[39m=\u001b[32m\"none\"\u001b[39m\n              \u001b[33mheight\u001b[39m=\u001b[32m\"24\"\u001b[39m\n              \u001b[33mstroke\u001b[39m=\u001b[32m\"currentColor\"\u001b[39m\n              \u001b[33mstroke-linecap\u001b[39m=\u001b[32m\"round\"\u001b[39m\n              \u001b[33mstroke-linejoin\u001b[39m=\u001b[32m\"round\"\u001b[39m\n              \u001b[33mstroke-width\u001b[39m=\u001b[32m\"2\"\u001b[39m\n              \u001b[33mviewBox\u001b[39m=\u001b[32m\"0 0 24 24\"\u001b[39m\n              \u001b[33mwidth\u001b[39m=\u001b[32m\"24\"\u001b[39m\n              \u001b[33mxmlns\u001b[39m=\u001b[32m\"http://www.w3.org/2000/svg\"\u001b[39m\n            \u001b[36m>\u001b[39m\n              \u001b[36m<path\u001b[39m\n                \u001b[33md\u001b[39m=\u001b[32m\"M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401\"\u001b[39m\n              \u001b[36m/>\u001b[39m\n            \u001b[36m</svg>\u001b[39m\n          \u001b[36m</button>\u001b[39m\n          \u001b[36m<button\u001b[39m\n            \u001b[33mclass\u001b[39m=\u001b[32m\"_base_288a79 _secondary_288a79 _sm_288a79\"\u001b[39m\n            \u001b[33mtype\u001b[39m=\u001b[32m\"button\"\u001b[39m\n          \u001b[36m>\u001b[39m\n            \u001b[0mSign out\u001b[0m\n          \u001b[36m</button>\u001b[39m\n        \u001b[36m</div>\u001b[39m\n      \u001b[36m</header>\u001b[39m\n      \u001b[36m<main\u001b[39m\n        \u001b[33mclass\u001b[39m=\u001b[32m\"_main_b2176c\"\u001b[39m\n        \u001b[33mid\u001b[39m=\u001b[32m\"main\"\u001b[39m\n      \u001b[36m>\u001b[39m\n        \u001b[36m<h1\u001b[39m\n          \u001b[33mclass\u001b[39m=\u001b[32m\"_title_b2176c\"\u001b[39m\n        \u001b[36m/>\u001b[39m\n        \u001b[36m<p\u001b[39m\n          \u001b[33mclass\u001b[39m=\u001b[32m\"_subtitle_b2176c\"\u001b[39m\n        \u001b[36m/>\u001b[39m\n        \u001b[36m<p\u001b[39m\n          \u001b[33maria-live\u001b[39m=\u001b[32m\"polite\"\u001b[39m\n          \u001b[33mclass\u001b[39m=\u001b[32m\"_status_b2176c _ok_b2176c\"\u001b[39m\n          \u001b[33mrole\u001b[39m=\u001b[32m\"status\"\u001b[39m\n        \u001b[36m>\u001b[39m\n          \u001b[36m<span\u001b[39m\n            \u001b[33maria-hidden\u001b[39m=\u001b[32m\"true\"\u001b[39m\n            \u001b[33mclass\u001b[39m=\u001b[32m\"_dot_b2176c\"\u001b[39m\n          \u001b[36m/>\u001b[39m\n        \u001b[36m</p>\u001b[39m\n      \u001b[36m</main>\u001b[39m\n    \u001b[36m</div>\u001b[39m\n  \u001b[36m</div>\u001b[39m\n\u001b[36m</body>\u001b[39m\n    at waitForWrapper (/Users/arturceschin/Desktop/www/markav2/marka-web/node_modules/.pnpm/@testing-library+dom@10.4.1/node_modules/@testing-library/dom/dist/wait-for.js:163:27)\n    at /Users/arturceschin/Desktop/www/markav2/marka-web/node_modules/.pnpm/@testing-library+dom@10.4.1/node_modules/@testing-library/dom/dist/query-helpers.js:86:33\n    at /Users/arturceschin/Desktop/www/markav2/marka-web/src/features/plants/routes/PlantsHomePage.test.tsx:41:25\n    at processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at file:///Users/arturceschin/Desktop/www/markav2/marka-web/node_modules/.pnpm/vitest@5.0.0_@types+node@24.13.4_@vitest+coverage-v8@5.0.0_jsdom@30.0.1_msw@2.15.0_@types+nod_rtj5uavoab777yey36t2byd54a/node_modules/vitest/dist/chunks/run.CQOUYP-x.js:2783:20"
+          ],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["PlantsHomePage"],
+          "fullName": "PlantsHomePage says so when the API call fails",
+          "status": "failed",
+          "title": "says so when the API call fails",
+          "duration": 1013.6518750000005,
+          "failureMessages": [
+            "Error: Unable to find an element with the text: Could not reach the Marka API.. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.\n\nIgnored nodes: comments, script, style\n\u001b[36m<body>\u001b[39m\n  \u001b[36m<div>\u001b[39m\n    \u001b[36m<div\u001b[39m\n      \u001b[33mclass\u001b[39m=\u001b[32m\"_page_b2176c\"\u001b[39m\n    \u001b[36m>\u001b[39m\n      \u001b[36m<header\u001b[39m\n        \u001b[33mclass\u001b[39m=\u001b[32m\"_bar_b2176c\"\u001b[39m\n      \u001b[36m>\u001b[39m\n        \u001b[36m<span\u001b[39m\n          \u001b[33mclass\u001b[39m=\u001b[32m\"_lockup_b755ea\"\u001b[39m\n        \u001b[36m>\u001b[39m\n          \u001b[36m<svg\u001b[39m\n            \u001b[33maria-hidden\u001b[39m=\u001b[32m\"true\"\u001b[39m\n            \u001b[33mclass\u001b[39m=\u001b[32m\"_mark_b755ea\"\u001b[39m\n            \u001b[33mfill\u001b[39m=\u001b[32m\"currentColor\"\u001b[39m\n            \u001b[33mfocusable\u001b[39m=\u001b[32m\"false\"\u001b[39m\n            \u001b[33mviewBox\u001b[39m=\u001b[32m\"0 0 24 24\"\u001b[39m\n          \u001b[36m>\u001b[39m\n            \u001b[36m<mask\u001b[39m\n              \u001b[33mid\u001b[39m=\u001b[32m\"_r_1_\"\u001b[39m\n            \u001b[36m>\u001b[39m\n              \u001b[36m<rect\u001b[39m\n                \u001b[33mfill\u001b[39m=\u001b[32m\"white\"\u001b[39m\n                \u001b[33mheight\u001b[39m=\u001b[32m\"24\"\u001b[39m\n                \u001b[33mwidth\u001b[39m=\u001b[32m\"24\"\u001b[39m\n                \u001b[33mx\u001b[39m=\u001b[32m\"0\"\u001b[39m\n                \u001b[33my\u001b[39m=\u001b[32m\"0\"\u001b[39m\n              \u001b[36m/>\u001b[39m\n              \u001b[36m<path\u001b[39m\n                \u001b[33md\u001b[39m=\u001b[32m\"M12 4 L12 17.2\"\u001b[39m\n                \u001b[33mstroke\u001b[39m=\u001b[32m\"black\"\u001b[39m\n                \u001b[33mstroke-linecap\u001b[39m=\u001b[32m\"round\"\u001b[39m\n                \u001b[33mstroke-width\u001b[39m=\u001b[32m\"1.2\"\u001b[39m\n              \u001b[36m/>\u001b[39m\n            \u001b[36m</mask>\u001b[39m\n            \u001b[36m<path\u001b[39m\n              \u001b[33md\u001b[39m=\u001b[32m\"M12 2.6 Q15.4 5.2 15.6 6.8 Q13.6 7.2 13.4 7.8 Q16.8 9.0 17.1 10.4 Q13.9 10.9 13.7 11.5 Q17.0 12.6 17.0 14.0 Q13.7 14.4 13.5 15.0 Q15.6 16.0 15.4 17.1 Q13.4 17.4 12 17.8 Q6.6 15.9 6.6 11.4 Q6.6 7.0 12 2.6 Z\"\u001b[39m\n              \u001b[33mmask\u001b[39m=\u001b[32m\"url(#_r_1_)\"\u001b[39m\n            \u001b[36m/>\u001b[39m\n            \u001b[36m<rect\u001b[39m\n              \u001b[33mheight\u001b[39m=\u001b[32m\"4.6\"\u001b[39m\n              \u001b[33mrx\u001b[39m=\u001b[32m\"0.7\"\u001b[39m\n              \u001b[33mwidth\u001b[39m=\u001b[32m\"1.4\"\u001b[39m\n              \u001b[33mx\u001b[39m=\u001b[32m\"11.3\"\u001b[39m\n              \u001b[33my\u001b[39m=\u001b[32m\"16.8\"\u001b[39m\n            \u001b[36m/>\u001b[39m\n          \u001b[36m</svg>\u001b[39m\n          \u001b[36m<span\u001b[39m\n            \u001b[33mclass\u001b[39m=\u001b[32m\"_wordmark_b755ea\"\u001b[39m\n            \u001b[33mtranslate\u001b[39m=\u001b[32m\"no\"\u001b[39m\n          \u001b[36m>\u001b[39m\n            \u001b[0mMarka\u001b[0m\n          \u001b[36m</span>\u001b[39m\n        \u001b[36m</span>\u001b[39m\n        \u001b[36m<div\u001b[39m\n          \u001b[33mclass\u001b[39m=\u001b[32m\"_actions_b2176c\"\u001b[39m\n        \u001b[36m>\u001b[39m\n          \u001b[36m<fieldset\u001b[39m\n            \u001b[33mclass\u001b[39m=\u001b[32m\"_group_ae9856\"\u001b[39m\n          \u001b[36m>\u001b[39m\n            \u001b[36m<legend\u001b[39m\n              \u001b[33mclass\u001b[39m=\u001b[32m\"sr-only\"\u001b[39m\n            \u001b[36m>\u001b[39m\n              \u001b[0mLanguage\u001b[0m\n            \u001b[36m</legend>\u001b[39m\n            \u001b[36m<button\u001b[39m\n              \u001b[33maria-label\u001b[39m=\u001b[32m\"English\"\u001b[39m\n              \u001b[33maria-pressed\u001b[39m=\u001b[32m\"true\"\u001b[39m\n              \u001b[33mclass\u001b[39m=\u001b[32m\"_option_ae9856 _selected_ae9856\"\u001b[39m\n              \u001b[33mlang\u001b[39m=\u001b[32m\"en\"\u001b[39m\n              \u001b[33mtype\u001b[39m=\u001b[32m\"button\"\u001b[39m\n            \u001b[36m>\u001b[39m\n              \u001b[0mEN\u001b[0m\n            \u001b[36m</button>\u001b[39m\n            \u001b[36m<button\u001b[39m\n              \u001b[33maria-label\u001b[39m=\u001b[32m\"Português\"\u001b[39m\n              \u001b[33maria-pressed\u001b[39m=\u001b[32m\"false\"\u001b[39m\n              \u001b[33mclass\u001b[39m=\u001b[32m\"_option_ae9856\"\u001b[39m\n              \u001b[33mlang\u001b[39m=\u001b[32m\"pt-BR\"\u001b[39m\n              \u001b[33mtype\u001b[39m=\u001b[32m\"button\"\u001b[39m\n            \u001b[36m>\u001b[39m\n              \u001b[0mPT\u001b[0m\n            \u001b[36m</button>\u001b[39m\n          \u001b[36m</fieldset>\u001b[39m\n          \u001b[36m<button\u001b[39m\n            \u001b[33maria-label\u001b[39m=\u001b[32m\"Switch to dark theme\"\u001b[39m\n            \u001b[33mclass\u001b[39m=\u001b[32m\"_toggle_567b8c\"\u001b[39m\n            \u001b[33mtype\u001b[39m=\u001b[32m\"button\"\u001b[39m\n          \u001b[36m>\u001b[39m\n            \u001b[36m<svg\u001b[39m\n              \u001b[33maria-hidden\u001b[39m=\u001b[32m\"true\"\u001b[39m\n              \u001b[33mclass\u001b[39m=\u001b[32m\"lucide lucide-moon _icon_567b8c\"\u001b[39m\n              \u001b[33mfill\u001b[39m=\u001b[32m\"none\"\u001b[39m\n              \u001b[33mheight\u001b[39m=\u001b[32m\"24\"\u001b[39m\n              \u001b[33mstroke\u001b[39m=\u001b[32m\"currentColor\"\u001b[39m\n              \u001b[33mstroke-linecap\u001b[39m=\u001b[32m\"round\"\u001b[39m\n              \u001b[33mstroke-linejoin\u001b[39m=\u001b[32m\"round\"\u001b[39m\n              \u001b[33mstroke-width\u001b[39m=\u001b[32m\"2\"\u001b[39m\n              \u001b[33mviewBox\u001b[39m=\u001b[32m\"0 0 24 24\"\u001b[39m\n              \u001b[33mwidth\u001b[39m=\u001b[32m\"24\"\u001b[39m\n              \u001b[33mxmlns\u001b[39m=\u001b[32m\"http://www.w3.org/2000/svg\"\u001b[39m\n            \u001b[36m>\u001b[39m\n              \u001b[36m<path\u001b[39m\n                \u001b[33md\u001b[39m=\u001b[32m\"M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401\"\u001b[39m\n              \u001b[36m/>\u001b[39m\n            \u001b[36m</svg>\u001b[39m\n          \u001b[36m</button>\u001b[39m\n          \u001b[36m<button\u001b[39m\n            \u001b[33mclass\u001b[39m=\u001b[32m\"_base_288a79 _secondary_288a79 _sm_288a79\"\u001b[39m\n            \u001b[33mtype\u001b[39m=\u001b[32m\"button\"\u001b[39m\n          \u001b[36m>\u001b[39m\n            \u001b[0mSign out\u001b[0m\n          \u001b[36m</button>\u001b[39m\n        \u001b[36m</div>\u001b[39m\n      \u001b[36m</header>\u001b[39m\n      \u001b[36m<main\u001b[39m\n        \u001b[33mclass\u001b[39m=\u001b[32m\"_main_b2176c\"\u001b[39m\n        \u001b[33mid\u001b[39m=\u001b[32m\"main\"\u001b[39m\n      \u001b[36m>\u001b[39m\n        \u001b[36m<h1\u001b[39m\n          \u001b[33mclass\u001b[39m=\u001b[32m\"_title_b2176c\"\u001b[39m\n        \u001b[36m/>\u001b[39m\n        \u001b[36m<p\u001b[39m\n          \u001b[33mclass\u001b[39m=\u001b[32m\"_subtitle_b2176c\"\u001b[39m\n        \u001b[36m/>\u001b[39m\n        \u001b[36m<p\u001b[39m\n          \u001b[33maria-live\u001b[39m=\u001b[32m\"polite\"\u001b[39m\n          \u001b[33mclass\u001b[39m=\u001b[32m\"_status_b2176c _failed_b2176c\"\u001b[39m\n          \u001b[33mrole\u001b[39m=\u001b[32m\"status\"\u001b[39m\n        \u001b[36m>\u001b[39m\n          \u001b[36m<span\u001b[39m\n            \u001b[33maria-hidden\u001b[39m=\u001b[32m\"true\"\u001b[39m\n            \u001b[33mclass\u001b[39m=\u001b[32m\"_dot_b2176c\"\u001b[39m\n          \u001b[36m/>\u001b[39m\n        \u001b[36m</p>\u001b[39m\n      \u001b[36m</main>\u001b[39m\n    \u001b[36m</div>\u001b[39m\n  \u001b[36m</div>\u001b[39m\n\u001b[36m</body>\u001b[39m\n    at waitForWrapper (/Users/arturceschin/Desktop/www/markav2/marka-web/node_modules/.pnpm/@testing-library+dom@10.4.1/node_modules/@testing-library/dom/dist/wait-for.js:163:27)\n    at /Users/arturceschin/Desktop/www/markav2/marka-web/node_modules/.pnpm/@testing-library+dom@10.4.1/node_modules/@testing-library/dom/dist/query-helpers.js:86:33\n    at /Users/arturceschin/Desktop/www/markav2/marka-web/src/features/plants/routes/PlantsHomePage.test.tsx:50:25\n    at file:///Users/arturceschin/Desktop/www/markav2/marka-web/node_modules/.pnpm/vitest@5.0.0_@types+node@24.13.4_@vitest+coverage-v8@5.0.0_jsdom@30.0.1_msw@2.15.0_@types+nod_rtj5uavoab777yey36t2byd54a/node_modules/vitest/dist/chunks/run.CQOUYP-x.js:2783:20"
+          ],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["PlantsHomePage"],
+          "fullName": "PlantsHomePage signs out by dropping every token in this browser",
+          "status": "passed",
+          "title": "signs out by dropping every token in this browser",
+          "duration": 68.42395800000031,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["PlantsHomePage"],
+          "fullName": "PlantsHomePage revokes the refresh token at the API, not only in this browser",
+          "status": "passed",
+          "title": "revokes the refresh token at the API, not only in this browser",
+          "duration": 18.959375000000364,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["PlantsHomePage"],
+          "fullName": "PlantsHomePage has no accessibility violations",
+          "status": "failed",
+          "title": "has no accessibility violations",
+          "duration": 1006.3046249999998,
+          "failureMessages": [
+            "Error: Unable to find an element with the text: Connected to the Marka API.. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.\n\nIgnored nodes: comments, script, style\n\u001b[36m<body>\u001b[39m\n  \u001b[36m<div>\u001b[39m\n    \u001b[36m<div\u001b[39m\n      \u001b[33mclass\u001b[39m=\u001b[32m\"_page_b2176c\"\u001b[39m\n    \u001b[36m>\u001b[39m\n      \u001b[36m<header\u001b[39m\n        \u001b[33mclass\u001b[39m=\u001b[32m\"_bar_b2176c\"\u001b[39m\n      \u001b[36m>\u001b[39m\n        \u001b[36m<span\u001b[39m\n          \u001b[33mclass\u001b[39m=\u001b[32m\"_lockup_b755ea\"\u001b[39m\n        \u001b[36m>\u001b[39m\n          \u001b[36m<svg\u001b[39m\n            \u001b[33maria-hidden\u001b[39m=\u001b[32m\"true\"\u001b[39m\n            \u001b[33mclass\u001b[39m=\u001b[32m\"_mark_b755ea\"\u001b[39m\n            \u001b[33mfill\u001b[39m=\u001b[32m\"currentColor\"\u001b[39m\n            \u001b[33mfocusable\u001b[39m=\u001b[32m\"false\"\u001b[39m\n            \u001b[33mviewBox\u001b[39m=\u001b[32m\"0 0 24 24\"\u001b[39m\n          \u001b[36m>\u001b[39m\n            \u001b[36m<mask\u001b[39m\n              \u001b[33mid\u001b[39m=\u001b[32m\"_r_4_\"\u001b[39m\n            \u001b[36m>\u001b[39m\n              \u001b[36m<rect\u001b[39m\n                \u001b[33mfill\u001b[39m=\u001b[32m\"white\"\u001b[39m\n                \u001b[33mheight\u001b[39m=\u001b[32m\"24\"\u001b[39m\n                \u001b[33mwidth\u001b[39m=\u001b[32m\"24\"\u001b[39m\n                \u001b[33mx\u001b[39m=\u001b[32m\"0\"\u001b[39m\n                \u001b[33my\u001b[39m=\u001b[32m\"0\"\u001b[39m\n              \u001b[36m/>\u001b[39m\n              \u001b[36m<path\u001b[39m\n                \u001b[33md\u001b[39m=\u001b[32m\"M12 4 L12 17.2\"\u001b[39m\n                \u001b[33mstroke\u001b[39m=\u001b[32m\"black\"\u001b[39m\n                \u001b[33mstroke-linecap\u001b[39m=\u001b[32m\"round\"\u001b[39m\n                \u001b[33mstroke-width\u001b[39m=\u001b[32m\"1.2\"\u001b[39m\n              \u001b[36m/>\u001b[39m\n            \u001b[36m</mask>\u001b[39m\n            \u001b[36m<path\u001b[39m\n              \u001b[33md\u001b[39m=\u001b[32m\"M12 2.6 Q15.4 5.2 15.6 6.8 Q13.6 7.2 13.4 7.8 Q16.8 9.0 17.1 10.4 Q13.9 10.9 13.7 11.5 Q17.0 12.6 17.0 14.0 Q13.7 14.4 13.5 15.0 Q15.6 16.0 15.4 17.1 Q13.4 17.4 12 17.8 Q6.6 15.9 6.6 11.4 Q6.6 7.0 12 2.6 Z\"\u001b[39m\n              \u001b[33mmask\u001b[39m=\u001b[32m\"url(#_r_4_)\"\u001b[39m\n            \u001b[36m/>\u001b[39m\n            \u001b[36m<rect\u001b[39m\n              \u001b[33mheight\u001b[39m=\u001b[32m\"4.6\"\u001b[39m\n              \u001b[33mrx\u001b[39m=\u001b[32m\"0.7\"\u001b[39m\n              \u001b[33mwidth\u001b[39m=\u001b[32m\"1.4\"\u001b[39m\n              \u001b[33mx\u001b[39m=\u001b[32m\"11.3\"\u001b[39m\n              \u001b[33my\u001b[39m=\u001b[32m\"16.8\"\u001b[39m\n            \u001b[36m/>\u001b[39m\n          \u001b[36m</svg>\u001b[39m\n          \u001b[36m<span\u001b[39m\n            \u001b[33mclass\u001b[39m=\u001b[32m\"_wordmark_b755ea\"\u001b[39m\n            \u001b[33mtranslate\u001b[39m=\u001b[32m\"no\"\u001b[39m\n          \u001b[36m>\u001b[39m\n            \u001b[0mMarka\u001b[0m\n          \u001b[36m</span>\u001b[39m\n        \u001b[36m</span>\u001b[39m\n        \u001b[36m<div\u001b[39m\n          \u001b[33mclass\u001b[39m=\u001b[32m\"_actions_b2176c\"\u001b[39m\n        \u001b[36m>\u001b[39m\n          \u001b[36m<fieldset\u001b[39m\n            \u001b[33mclass\u001b[39m=\u001b[32m\"_group_ae9856\"\u001b[39m\n          \u001b[36m>\u001b[39m\n            \u001b[36m<legend\u001b[39m\n              \u001b[33mclass\u001b[39m=\u001b[32m\"sr-only\"\u001b[39m\n            \u001b[36m>\u001b[39m\n              \u001b[0mLanguage\u001b[0m\n            \u001b[36m</legend>\u001b[39m\n            \u001b[36m<button\u001b[39m\n              \u001b[33maria-label\u001b[39m=\u001b[32m\"English\"\u001b[39m\n              \u001b[33maria-pressed\u001b[39m=\u001b[32m\"true\"\u001b[39m\n              \u001b[33mclass\u001b[39m=\u001b[32m\"_option_ae9856 _selected_ae9856\"\u001b[39m\n              \u001b[33mlang\u001b[39m=\u001b[32m\"en\"\u001b[39m\n              \u001b[33mtype\u001b[39m=\u001b[32m\"button\"\u001b[39m\n            \u001b[36m>\u001b[39m\n              \u001b[0mEN\u001b[0m\n            \u001b[36m</button>\u001b[39m\n            \u001b[36m<button\u001b[39m\n              \u001b[33maria-label\u001b[39m=\u001b[32m\"Português\"\u001b[39m\n              \u001b[33maria-pressed\u001b[39m=\u001b[32m\"false\"\u001b[39m\n              \u001b[33mclass\u001b[39m=\u001b[32m\"_option_ae9856\"\u001b[39m\n              \u001b[33mlang\u001b[39m=\u001b[32m\"pt-BR\"\u001b[39m\n              \u001b[33mtype\u001b[39m=\u001b[32m\"button\"\u001b[39m\n            \u001b[36m>\u001b[39m\n              \u001b[0mPT\u001b[0m\n            \u001b[36m</button>\u001b[39m\n          \u001b[36m</fieldset>\u001b[39m\n          \u001b[36m<button\u001b[39m\n            \u001b[33maria-label\u001b[39m=\u001b[32m\"Switch to dark theme\"\u001b[39m\n            \u001b[33mclass\u001b[39m=\u001b[32m\"_toggle_567b8c\"\u001b[39m\n            \u001b[33mtype\u001b[39m=\u001b[32m\"button\"\u001b[39m\n          \u001b[36m>\u001b[39m\n            \u001b[36m<svg\u001b[39m\n              \u001b[33maria-hidden\u001b[39m=\u001b[32m\"true\"\u001b[39m\n              \u001b[33mclass\u001b[39m=\u001b[32m\"lucide lucide-moon _icon_567b8c\"\u001b[39m\n              \u001b[33mfill\u001b[39m=\u001b[32m\"none\"\u001b[39m\n              \u001b[33mheight\u001b[39m=\u001b[32m\"24\"\u001b[39m\n              \u001b[33mstroke\u001b[39m=\u001b[32m\"currentColor\"\u001b[39m\n              \u001b[33mstroke-linecap\u001b[39m=\u001b[32m\"round\"\u001b[39m\n              \u001b[33mstroke-linejoin\u001b[39m=\u001b[32m\"round\"\u001b[39m\n              \u001b[33mstroke-width\u001b[39m=\u001b[32m\"2\"\u001b[39m\n              \u001b[33mviewBox\u001b[39m=\u001b[32m\"0 0 24 24\"\u001b[39m\n              \u001b[33mwidth\u001b[39m=\u001b[32m\"24\"\u001b[39m\n              \u001b[33mxmlns\u001b[39m=\u001b[32m\"http://www.w3.org/2000/svg\"\u001b[39m\n            \u001b[36m>\u001b[39m\n              \u001b[36m<path\u001b[39m\n                \u001b[33md\u001b[39m=\u001b[32m\"M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401\"\u001b[39m\n              \u001b[36m/>\u001b[39m\n            \u001b[36m</svg>\u001b[39m\n          \u001b[36m</button>\u001b[39m\n          \u001b[36m<button\u001b[39m\n            \u001b[33mclass\u001b[39m=\u001b[32m\"_base_288a79 _secondary_288a79 _sm_288a79\"\u001b[39m\n            \u001b[33mtype\u001b[39m=\u001b[32m\"button\"\u001b[39m\n          \u001b[36m>\u001b[39m\n            \u001b[0mSign out\u001b[0m\n          \u001b[36m</button>\u001b[39m\n        \u001b[36m</div>\u001b[39m\n      \u001b[36m</header>\u001b[39m\n      \u001b[36m<main\u001b[39m\n        \u001b[33mclass\u001b[39m=\u001b[32m\"_main_b2176c\"\u001b[39m\n        \u001b[33mid\u001b[39m=\u001b[32m\"main\"\u001b[39m\n      \u001b[36m>\u001b[39m\n        \u001b[36m<h1\u001b[39m\n          \u001b[33mclass\u001b[39m=\u001b[32m\"_title_b2176c\"\u001b[39m\n        \u001b[36m/>\u001b[39m\n        \u001b[36m<p\u001b[39m\n          \u001b[33mclass\u001b[39m=\u001b[32m\"_subtitle_b2176c\"\u001b[39m\n        \u001b[36m/>\u001b[39m\n        \u001b[36m<p\u001b[39m\n          \u001b[33maria-live\u001b[39m=\u001b[32m\"polite\"\u001b[39m\n          \u001b[33mclass\u001b[39m=\u001b[32m\"_status_b2176c _ok_b2176c\"\u001b[39m\n          \u001b[33mrole\u001b[39m=\u001b[32m\"status\"\u001b[39m\n        \u001b[36m>\u001b[39m\n          \u001b[36m<span\u001b[39m\n            \u001b[33maria-hidden\u001b[39m=\u001b[32m\"true\"\u001b[39m\n            \u001b[33mclass\u001b[39m=\u001b[32m\"_dot_b2176c\"\u001b[39m\n          \u001b[36m/>\u001b[39m\n        \u001b[36m</p>\u001b[39m\n      \u001b[36m</main>\u001b[39m\n    \u001b[36m</div>\u001b[39m\n  \u001b[36m</div>\u001b[39m\n\u001b[36m</body>\u001b[39m\n    at waitForWrapper (/Users/arturceschin/Desktop/www/markav2/marka-web/node_modules/.pnpm/@testing-library+dom@10.4.1/node_modules/@testing-library/dom/dist/wait-for.js:163:27)\n    at /Users/arturceschin/Desktop/www/markav2/marka-web/node_modules/.pnpm/@testing-library+dom@10.4.1/node_modules/@testing-library/dom/dist/query-helpers.js:86:33\n    at /Users/arturceschin/Desktop/www/markav2/marka-web/src/features/plants/routes/PlantsHomePage.test.tsx:81:18\n    at file:///Users/arturceschin/Desktop/www/markav2/marka-web/node_modules/.pnpm/vitest@5.0.0_@types+node@24.13.4_@vitest+coverage-v8@5.0.0_jsdom@30.0.1_msw@2.15.0_@types+nod_rtj5uavoab777yey36t2byd54a/node_modules/vitest/dist/chunks/run.CQOUYP-x.js:2783:20"
+          ],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        }
+      ],
+      "startTime": 1789440360807,
+      "endTime": 1789440363950.3047,
+      "status": "failed",
+      "message": "",
+      "name": "/Users/arturceschin/Desktop/www/markav2/marka-web/src/features/plants/routes/PlantsHomePage.test.tsx"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["scaledSize"],
+          "fullName": "scaledSize shrinks the long edge to the limit and keeps the aspect ratio",
+          "status": "passed",
+          "title": "shrinks the long edge to the limit and keeps the aspect ratio",
+          "duration": 1.5532500000000482,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["scaledSize"],
+          "fullName": "scaledSize measures portrait photos by their long edge too",
+          "status": "passed",
+          "title": "measures portrait photos by their long edge too",
+          "duration": 0.2514579999999569,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["scaledSize"],
+          "fullName": "scaledSize never enlarges an image that is already small",
+          "status": "passed",
+          "title": "never enlarges an image that is already small",
+          "duration": 0.18541700000002947,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        }
+      ],
+      "startTime": 1789440362412,
+      "endTime": 1789440362414.2515,
+      "status": "passed",
+      "message": "",
+      "name": "/Users/arturceschin/Desktop/www/markav2/marka-web/src/features/plants/lib/prepare-image.test.ts"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["ResetPasswordPage"],
+          "fullName": "ResetPasswordPage validates the address before calling the API",
+          "status": "passed",
+          "title": "validates the address before calling the API",
+          "duration": 177.63470800000005,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["ResetPasswordPage"],
+          "fullName": "ResetPasswordPage requests a code and moves to the reset step",
+          "status": "passed",
+          "title": "requests a code and moves to the reset step",
+          "duration": 235.8561249999998,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["ResetPasswordPage"],
+          "fullName": "ResetPasswordPage holds the new password to the same rules as sign-up",
+          "status": "passed",
+          "title": "holds the new password to the same rules as sign-up",
+          "duration": 386.4674580000001,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["ResetPasswordPage"],
+          "fullName": "ResetPasswordPage resets the password and hands the address to sign-in",
+          "status": "passed",
+          "title": "resets the password and hands the address to sign-in",
+          "duration": 306.30499999999984,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["ResetPasswordPage"],
+          "fullName": "ResetPasswordPage shows a rejected code against the code field",
+          "status": "passed",
+          "title": "shows a rejected code against the code field",
+          "duration": 206.1322500000001,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["ResetPasswordPage"],
+          "fullName": "ResetPasswordPage lets someone go back and use a different address",
+          "status": "passed",
+          "title": "lets someone go back and use a different address",
+          "duration": 103.67758400000002,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["ResetPasswordPage"],
+          "fullName": "ResetPasswordPage offers to verify the email when the account cannot be reset",
+          "status": "passed",
+          "title": "offers to verify the email when the account cannot be reset",
+          "duration": 176.23220899999978,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["ResetPasswordPage"],
+          "fullName": "ResetPasswordPage has no accessibility violations on the first step",
+          "status": "passed",
+          "title": "has no accessibility violations on the first step",
+          "duration": 42.11366700000008,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        }
+      ],
+      "startTime": 1789440360914,
+      "endTime": 1789440362548.1138,
+      "status": "passed",
+      "message": "",
+      "name": "/Users/arturceschin/Desktop/www/markav2/marka-web/src/features/auth/routes/ResetPasswordPage.test.tsx"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["SignInPage in Portuguese"],
+          "fullName": "SignInPage in Portuguese renders the page copy in pt-BR",
+          "status": "passed",
+          "title": "renders the page copy in pt-BR",
+          "duration": 148.49391700000024,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["SignInPage in Portuguese"],
+          "fullName": "SignInPage in Portuguese translates validation messages, not just static copy",
+          "status": "passed",
+          "title": "translates validation messages, not just static copy",
+          "duration": 156.7125000000001,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["SignInPage in Portuguese"],
+          "fullName": "SignInPage in Portuguese sets <html lang> so screen readers use the right voice",
+          "status": "passed",
+          "title": "sets <html lang> so screen readers use the right voice",
+          "duration": 16.102416000000176,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["SignInPage in Portuguese"],
+          "fullName": "SignInPage in Portuguese labels each language option in its own language",
+          "status": "passed",
+          "title": "labels each language option in its own language",
+          "duration": 14.336291999999958,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        }
+      ],
+      "startTime": 1789440360836,
+      "endTime": 1789440361172.3362,
+      "status": "passed",
+      "message": "",
+      "name": "/Users/arturceschin/Desktop/www/markav2/marka-web/src/features/auth/routes/SignInPage.i18n.test.tsx"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["SignInPage"],
+          "fullName": "SignInPage labels both fields so they are reachable by name",
+          "status": "passed",
+          "title": "labels both fields so they are reachable by name",
+          "duration": 55.76608299999998,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["SignInPage"],
+          "fullName": "SignInPage gives password managers the autocomplete hints they need",
+          "status": "passed",
+          "title": "gives password managers the autocomplete hints they need",
+          "duration": 18.92516700000033,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["SignInPage"],
+          "fullName": "SignInPage uses a real email input so mobile shows the right keyboard",
+          "status": "passed",
+          "title": "uses a real email input so mobile shows the right keyboard",
+          "duration": 9.008832999999868,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["SignInPage"],
+          "fullName": "SignInPage offers a Google button below the credentials",
+          "status": "passed",
+          "title": "offers a Google button below the credentials",
+          "duration": 118.31158400000004,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["SignInPage"],
+          "fullName": "SignInPage keeps the submit button enabled before a request starts",
+          "status": "passed",
+          "title": "keeps the submit button enabled before a request starts",
+          "duration": 51.8090830000001,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["SignInPage"],
+          "fullName": "SignInPage shows an inline error and marks the field invalid on empty submit",
+          "status": "passed",
+          "title": "shows an inline error and marks the field invalid on empty submit",
+          "duration": 103.72362499999963,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["SignInPage"],
+          "fullName": "SignInPage rejects a malformed address with a different message",
+          "status": "passed",
+          "title": "rejects a malformed address with a different message",
+          "duration": 269.8011670000001,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["SignInPage"],
+          "fullName": "SignInPage toggles password visibility without losing the value",
+          "status": "passed",
+          "title": "toggles password visibility without losing the value",
+          "duration": 206.74408400000038,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["SignInPage"],
+          "fullName": "SignInPage has no accessibility violations",
+          "status": "passed",
+          "title": "has no accessibility violations",
+          "duration": 110.6357909999997,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        }
+      ],
+      "startTime": 1789440360837,
+      "endTime": 1789440361781.6357,
+      "status": "passed",
+      "message": "",
+      "name": "/Users/arturceschin/Desktop/www/markav2/marka-web/src/features/auth/routes/SignInPage.test.tsx"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["SignUpPage"],
+          "fullName": "SignUpPage asks the password manager to generate a new password, not recall one",
+          "status": "passed",
+          "title": "asks the password manager to generate a new password, not recall one",
+          "duration": 50.13225000000011,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["SignUpPage"],
+          "fullName": "SignUpPage states the password rules up front rather than after failure",
+          "status": "passed",
+          "title": "states the password rules up front rather than after failure",
+          "duration": 11.434917000000041,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["SignUpPage"],
+          "fullName": "SignUpPage rejects a password shorter than 8 characters",
+          "status": "passed",
+          "title": "rejects a password shorter than 8 characters",
+          "duration": 344.7493330000002,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["SignUpPage"],
+          "fullName": "SignUpPage rejects a password with no number",
+          "status": "passed",
+          "title": "rejects a password with no number",
+          "duration": 270.41929200000004,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["SignUpPage"],
+          "fullName": "SignUpPage rejects a password with no uppercase letter",
+          "status": "passed",
+          "title": "rejects a password with no uppercase letter",
+          "duration": 241.69433299999992,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["SignUpPage"],
+          "fullName": "SignUpPage rejects a password with no lowercase letter",
+          "status": "passed",
+          "title": "rejects a password with no lowercase letter",
+          "duration": 188.90045800000007,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["SignUpPage"],
+          "fullName": "SignUpPage sends a password that meets the API rules",
+          "status": "passed",
+          "title": "sends a password that meets the API rules",
+          "duration": 148.407917,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["SignUpPage"],
+          "fullName": "SignUpPage offers Google below the credential fields",
+          "status": "passed",
+          "title": "offers Google below the credential fields",
+          "duration": 15.94662500000004,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["SignUpPage"],
+          "fullName": "SignUpPage has no accessibility violations",
+          "status": "passed",
+          "title": "has no accessibility violations",
+          "duration": 70.62704200000007,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        }
+      ],
+      "startTime": 1789440360836,
+      "endTime": 1789440362178.627,
+      "status": "passed",
+      "message": "",
+      "name": "/Users/arturceschin/Desktop/www/markav2/marka-web/src/features/auth/routes/SignUpPage.test.tsx"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["after a successful verification"],
+          "fullName": "after a successful verification signs in with the password from sign-up and holds a session",
+          "status": "passed",
+          "title": "signs in with the password from sign-up and holds a session",
+          "duration": 232.82450000000017,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["after a successful verification"],
+          "fullName": "after a successful verification forgets the password once it has been used",
+          "status": "passed",
+          "title": "forgets the password once it has been used",
+          "duration": 151.7068750000003,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["after a successful verification"],
+          "fullName": "after a successful verification falls back to sign-in with the address prefilled when the password is gone",
+          "status": "passed",
+          "title": "falls back to sign-in with the address prefilled when the password is gone",
+          "duration": 78.97270900000012,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["after a successful verification"],
+          "fullName": "after a successful verification falls back to sign-in when the automatic sign-in fails",
+          "status": "passed",
+          "title": "falls back to sign-in when the automatic sign-in fails",
+          "duration": 70.5760409999998,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["after a successful verification"],
+          "fullName": "after a successful verification never tries a password that belongs to a different address",
+          "status": "passed",
+          "title": "never tries a password that belongs to a different address",
+          "duration": 69.07954199999995,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        }
+      ],
+      "startTime": 1789440360906,
+      "endTime": 1789440361509.0796,
+      "status": "passed",
+      "message": "",
+      "name": "/Users/arturceschin/Desktop/www/markav2/marka-web/src/features/auth/routes/VerifyEmailPage.redirect.test.tsx"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["VerifyEmailPage"],
+          "fullName": "VerifyEmailPage shows which address the code went to",
+          "status": "passed",
+          "title": "shows which address the code went to",
+          "duration": 52.98999999999978,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["VerifyEmailPage"],
+          "fullName": "VerifyEmailPage exposes ONE labelled input, not six unlabelled ones",
+          "status": "passed",
+          "title": "exposes ONE labelled input, not six unlabelled ones",
+          "duration": 80.4557920000002,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["VerifyEmailPage"],
+          "fullName": "VerifyEmailPage asks the OS for the emailed code via autocomplete",
+          "status": "passed",
+          "title": "asks the OS for the emailed code via autocomplete",
+          "duration": 12.600875000000087,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["VerifyEmailPage"],
+          "fullName": "VerifyEmailPage caps the code at six digits even when more are typed",
+          "status": "passed",
+          "title": "caps the code at six digits even when more are typed",
+          "duration": 159.36199999999963,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["VerifyEmailPage"],
+          "fullName": "VerifyEmailPage accepts a pasted code, including one with stray characters",
+          "status": "passed",
+          "title": "accepts a pasted code, including one with stray characters",
+          "duration": 63.96962500000018,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["VerifyEmailPage"],
+          "fullName": "VerifyEmailPage ignores letters typed into the field",
+          "status": "passed",
+          "title": "ignores letters typed into the field",
+          "duration": 49.046875,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["VerifyEmailPage"],
+          "fullName": "VerifyEmailPage keeps submit disabled while the code is incomplete",
+          "status": "passed",
+          "title": "keeps submit disabled while the code is incomplete",
+          "duration": 121.12374999999975,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["VerifyEmailPage"],
+          "fullName": "VerifyEmailPage submits on its own once the sixth digit arrives",
+          "status": "passed",
+          "title": "submits on its own once the sixth digit arrives",
+          "duration": 70.16829199999984,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["VerifyEmailPage"],
+          "fullName": "VerifyEmailPage shows its own translated message, not the API text",
+          "status": "passed",
+          "title": "shows its own translated message, not the API text",
+          "duration": 86.88579200000004,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["VerifyEmailPage"],
+          "fullName": "VerifyEmailPage unlocks resend straight away when the code has expired",
+          "status": "passed",
+          "title": "unlocks resend straight away when the code has expired",
+          "duration": 88.65295800000013,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["VerifyEmailPage"],
+          "fullName": "VerifyEmailPage starts the resend link on a cooldown so it cannot be hammered",
+          "status": "passed",
+          "title": "starts the resend link on a cooldown so it cannot be hammered",
+          "duration": 29.27074999999968,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["VerifyEmailPage"],
+          "fullName": "VerifyEmailPage announces code progress for people who cannot see the boxes",
+          "status": "passed",
+          "title": "announces code progress for people who cannot see the boxes",
+          "duration": 40.66012499999988,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["VerifyEmailPage"],
+          "fullName": "VerifyEmailPage offers a way out when there is no pending sign-up",
+          "status": "passed",
+          "title": "offers a way out when there is no pending sign-up",
+          "duration": 24.594583000000057,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        },
+        {
+          "ancestorTitles": ["VerifyEmailPage"],
+          "fullName": "VerifyEmailPage has no accessibility violations",
+          "status": "passed",
+          "title": "has no accessibility violations",
+          "duration": 93.06449999999995,
+          "failureMessages": [],
+          "meta": {},
+          "tags": [],
+          "benchmarks": []
+        }
+      ],
+      "startTime": 1789440360900,
+      "endTime": 1789440361873.0645,
+      "status": "passed",
+      "message": "",
+      "name": "/Users/arturceschin/Desktop/www/markav2/marka-web/src/features/auth/routes/VerifyEmailPage.test.tsx"
+    }
+  ]
+}
