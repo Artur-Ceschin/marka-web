@@ -28,6 +28,7 @@
 }
 
 .card {
+  position: relative;
   display: flex;
   flex-direction: column;
   min-width: 0;
@@ -41,7 +42,7 @@
   position: absolute;
   inset-block-start: var(--space-8);
   inset-inline-end: var(--space-8);
-  z-index: 1;
+  z-index: 2;
   display: flex;
   gap: var(--space-8);
   transition: opacity var(--dur-short) var(--ease-out);
@@ -144,19 +145,41 @@
   }
 }
 
+/* Covers the whole card, under the icon buttons. */
+.open {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border: none;
+  border-radius: var(--radius-input);
+  background: none;
+  cursor: pointer;
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+}
+
+.scientific {
+  @include text-label;
+  color: var(--color-text-muted);
+  overflow: hidden;
+  font-style: italic;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
 .name {
   @include text-meta;
   margin-block-start: var(--space-8);
   overflow: hidden;
   font-weight: 500;
-  font-style: italic;
   white-space: nowrap;
   text-overflow: ellipsis;
 
   @media (min-width: 760px) {
     @include text-body;
     font-weight: 500;
-    font-style: italic;
   }
 }
 

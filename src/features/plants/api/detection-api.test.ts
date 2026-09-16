@@ -14,7 +14,7 @@ const DETECTION_ID = '2026-09-10T12:00:00.000Z#abcd1234';
 beforeEach(() => {
   clearTokens();
   resetSessionStateForTests();
-  setTokens({ idToken: makeJwt({ exp: nowInSeconds() + 3600 }), refreshToken: 'refresh-token' });
+  setTokens({ idToken: makeJwt({ exp: nowInSeconds() + 3600 }), signedIn: true });
 });
 
 afterEach(() => {

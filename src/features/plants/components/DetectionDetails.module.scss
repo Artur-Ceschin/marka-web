@@ -1,0 +1,245 @@
+/* --- hero ---------------------------------------------------------------- */
+
+.hero {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  max-height: 320px;
+  overflow: hidden;
+
+  @media (min-width: 560px) {
+    aspect-ratio: 16 / 9;
+    max-height: 380px;
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+/* Warm rather than neutral: the scrim tints the photo towards the earth
+   colours the rest of the sheet uses, instead of greying it out. */
+.scrim {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      to top,
+      color-mix(in srgb, var(--c-bark) 92%, transparent) 0%,
+      color-mix(in srgb, var(--c-bark) 55%, transparent) 38%,
+      transparent 70%
+    ),
+    linear-gradient(
+      to bottom right,
+      color-mix(in srgb, var(--c-clay) 28%, transparent),
+      transparent 60%
+    );
+}
+
+.heroText {
+  position: absolute;
+  inset-inline: 0;
+  inset-block-end: 0;
+  padding: var(--space-24) var(--space-16);
+  color: var(--color-on-media);
+
+  @media (min-width: 560px) {
+    padding: var(--space-32);
+  }
+}
+
+.eyebrow {
+  @include eyebrow;
+  color: var(--c-amber);
+}
+
+.title {
+  @include text-display;
+  color: var(--color-on-media);
+  margin-block-start: var(--space-4);
+  overflow-wrap: anywhere;
+}
+
+.latin {
+  @include text-body;
+  color: var(--color-on-media-muted);
+  font-style: italic;
+}
+
+/* --- body ---------------------------------------------------------------- */
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-24);
+  padding: var(--space-24) var(--space-16);
+
+  @media (min-width: 560px) {
+    padding: var(--space-32);
+  }
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-8);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: 6px var(--space-12);
+  border-radius: var(--radius-pill);
+  background-color: var(--color-accent-soft);
+  color: var(--color-accent-text);
+  @include text-label;
+  font-weight: 500;
+
+  svg {
+    width: 14px;
+    height: 14px;
+  }
+}
+
+.chipWarn {
+  background-color: var(--color-accent);
+  color: var(--color-accent-fg);
+}
+
+.label {
+  @include eyebrow;
+  color: var(--color-text-muted);
+  margin-block-end: var(--space-8);
+}
+
+.text {
+  @include text-body;
+  overflow-wrap: anywhere;
+}
+
+.muted {
+  @include text-body;
+  color: var(--color-text-muted);
+}
+
+/* A note is the one thing here written by the person, so it is set apart. */
+.notes {
+  padding: var(--space-16);
+  border-inline-start: 3px solid var(--color-accent);
+  border-radius: 0 var(--radius-input) var(--radius-input) 0;
+  background-color: var(--color-accent-soft);
+}
+
+.notesText {
+  @include text-body;
+  color: var(--color-accent-text);
+  overflow-wrap: anywhere;
+}
+
+/* --- care ---------------------------------------------------------------- */
+
+.care {
+  display: grid;
+  gap: var(--space-12);
+
+  @media (min-width: 700px) {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-16);
+  }
+}
+
+.careCard {
+  padding: var(--space-16);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  background-color: var(--color-bg);
+}
+
+.careHead {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  margin-block-end: var(--space-8);
+  @include text-meta;
+  font-weight: 500;
+}
+
+.careIcon {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  border-radius: var(--radius-pill);
+  background-color: var(--color-accent-soft);
+  color: var(--color-accent);
+
+  svg {
+    width: 15px;
+    height: 15px;
+  }
+}
+
+/* --- other matches ------------------------------------------------------- */
+
+.others {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.other {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-12);
+  padding-block: var(--space-8);
+  border-block-start: 1px solid var(--color-border);
+  @include text-meta;
+
+  &:first-child {
+    border-block-start: none;
+  }
+}
+
+.otherName {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.otherScore {
+  flex-shrink: 0;
+  color: var(--color-accent);
+  font-variant-numeric: tabular-nums;
+}
+
+/* --- actions ------------------------------------------------------------- */
+
+.actions {
+  position: sticky;
+  inset-block-end: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+  padding: var(--space-16);
+  border-block-start: 1px solid var(--color-border);
+  background-color: var(--color-surface);
+
+  @media (min-width: 560px) {
+    flex-direction: row;
+    justify-content: flex-end;
+    padding: var(--space-16) var(--space-32);
+  }
+
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+}

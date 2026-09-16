@@ -44,7 +44,7 @@ describe('token expiry', () => {
 
 describe('refreshSession', () => {
   it('shares one in-flight request across concurrent callers', async () => {
-    setTokens({ idToken: makeJwt({ exp: nowInSeconds() - 10 }), refreshToken: 'refresh-token' });
+    setTokens({ idToken: makeJwt({ exp: nowInSeconds() - 10 }), signedIn: true });
 
     let calls = 0;
     server.use(
@@ -72,7 +72,7 @@ describe('refreshSession', () => {
   });
 
   it('allows a new refresh after the first settles', async () => {
-    setTokens({ idToken: makeJwt({ exp: nowInSeconds() - 10 }), refreshToken: 'refresh-token' });
+    setTokens({ idToken: makeJwt({ exp: nowInSeconds() - 10 }), signedIn: true });
 
     let calls = 0;
     server.use(
@@ -90,7 +90,12 @@ describe('refreshSession', () => {
   });
 
   it('ends the session when the refresh token is dead', async () => {
-    setTokens({ idToken: makeJwt({ exp: nowInSeconds() - 10 }), refreshToken: 'dead-token' });
+    setTokens({ idToken: makeJwt({ exp: nowInSeconds() - 10 }), signedIn: true });
+    server.use(
+      http.post(api('/auth/refresh'), () =>
+        HttpResponse.json({ code: 'SESSION_EXPIRED' }, { status: 401 }),
+      ),
+    );
     const onEnded = vi.fn();
     setOnSessionEnded(onEnded);
 
@@ -107,7 +112,7 @@ describe('authorizedRequest', () => {
   it('refreshes before sending when the token is near expiry', async () => {
     // Inside the 60s skew window: valid right now, but likely expired by the
     // time the server reads it.
-    setTokens({ idToken: makeJwt({ exp: nowInSeconds() + 5 }), refreshToken: 'refresh-token' });
+    setTokens({ idToken: makeJwt({ exp: nowInSeconds() + 5 }), signedIn: true });
 
     let refreshes = 0;
     server.use(
@@ -122,7 +127,7 @@ describe('authorizedRequest', () => {
   });
 
   it('does not refresh a token with plenty of life left', async () => {
-    setTokens({ idToken: makeJwt({ exp: nowInSeconds() + 3600 }), refreshToken: 'refresh-token' });
+    setTokens({ idToken: makeJwt({ exp: nowInSeconds() + 3600 }), signedIn: true });
 
     let refreshes = 0;
     server.use(
@@ -137,7 +142,7 @@ describe('authorizedRequest', () => {
   });
 
   it('retries once after a 401, and only once', async () => {
-    setTokens({ idToken: makeJwt({ exp: nowInSeconds() + 3600 }), refreshToken: 'refresh-token' });
+    setTokens({ idToken: makeJwt({ exp: nowInSeconds() + 3600 }), signedIn: true });
 
     let attempts = 0;
     server.use(
@@ -156,7 +161,7 @@ describe('authorizedRequest', () => {
   });
 
   it('succeeds on the retry when the second attempt is accepted', async () => {
-    setTokens({ idToken: makeJwt({ exp: nowInSeconds() + 3600 }), refreshToken: 'refresh-token' });
+    setTokens({ idToken: makeJwt({ exp: nowInSeconds() + 3600 }), signedIn: true });
 
     let attempts = 0;
     server.use(
@@ -176,7 +181,7 @@ describe('authorizedRequest', () => {
 
   it('sends the bearer token', async () => {
     const idToken = makeJwt({ exp: nowInSeconds() + 3600 });
-    setTokens({ idToken, refreshToken: 'refresh-token' });
+    setTokens({ idToken, signedIn: true });
 
     let seen: string | null = null;
     server.use(

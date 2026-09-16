@@ -6,7 +6,7 @@ import { type RequestOptions, request } from '../http';
 import {
   clearTokens,
   getIdToken,
-  getRefreshToken,
+  hasSessionMarker,
   secondsUntilExpiry,
   setTokens,
 } from './token-store';
@@ -55,17 +55,16 @@ export async function refreshSession(): Promise<string> {
   // Join the refresh already running rather than starting another.
   if (inFlightRefresh) return inFlightRefresh;
 
-  const refreshToken = getRefreshToken();
-  if (!refreshToken) {
+  if (!hasSessionMarker()) {
     endSession();
-    throw new ApiError(401, { code: 'SESSION_EXPIRED' }, 'No refresh token');
+    throw new ApiError(401, { code: 'SESSION_EXPIRED' }, 'No session');
   }
 
   inFlightRefresh = (async () => {
     try {
+      // No body: the refresh token is an httpOnly cookie the browser attaches.
       const result = await request('/auth/refresh', {
         method: 'POST',
-        body: { refreshToken },
         schema: refreshResponseSchema,
       });
       setTokens(result);
@@ -93,7 +92,7 @@ export async function getValidIdToken(): Promise<string | null> {
     if (remaining === null || remaining > REFRESH_SKEW_SECONDS) return current;
   }
 
-  if (!getRefreshToken()) return null;
+  if (!hasSessionMarker()) return null;
 
   try {
     return await refreshSession();
@@ -142,7 +141,7 @@ export function resetSessionStateForTests(): void {
  * is the whole point: a refresh that fails because the laptop just woke up
  * with no network, or the API had a 5xx, says nothing about the session, and
  * must not sign anyone out. `refreshSession` ends the session itself, and only
- * when there is no refresh token or the API rejects it with a 401.
+ * when there is no session or the API rejects the refresh with a 401.
  */
 async function currentOrRefreshedIdToken(): Promise<string> {
   const current = getIdToken();

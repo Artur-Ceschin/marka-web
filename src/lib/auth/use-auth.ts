@@ -2,18 +2,18 @@ import { useSyncExternalStore } from 'react';
 
 import { request } from '../http';
 
-import { clearTokens, getIdToken, getRefreshToken, subscribeTokens } from './token-store';
+import { clearTokens, getIdToken, hasSessionMarker, subscribeTokens } from './token-store';
 
 /**
  * Whether this browser holds a session.
  *
- * True with only a refresh token and no id token, which is the normal state
+ * True with only the session marker and no id token, which is the normal state
  * right after a reload: the id token lives in memory and is gone, and the next
  * authenticated request refreshes it. If that refresh fails, the session layer
  * clears everything and this flips to false on its own.
  */
 export function hasSession(): boolean {
-  return Boolean(getIdToken() ?? getRefreshToken());
+  return getIdToken() !== null || hasSessionMarker();
 }
 
 /** Re-renders when tokens change, including sign-out in another tab. */
@@ -30,10 +30,12 @@ export function useIsAuthenticated(): boolean {
  * browser is still signed out; only the leaked-token protection is lost.
  */
 export function signOut(): void {
-  const refreshToken = getRefreshToken();
+  const hadSession = hasSessionMarker();
   clearTokens();
 
-  if (refreshToken) {
-    void request('/auth/signout', { method: 'POST', body: { refreshToken } }).catch(() => {});
+  // No body: the refresh cookie goes with the request, so the API revokes the
+  // token and clears the cookie, neither of which this page can see.
+  if (hadSession) {
+    void request('/auth/signout', { method: 'POST' }).catch(() => {});
   }
 }

@@ -1,6 +1,7 @@
 import { z } from 'zod';
 
 import { config } from '../config';
+import { request } from '../http';
 
 import { challengeFromVerifier, createState, createVerifier, storePkce, takePkce } from './pkce';
 import { setTokens } from './token-store';
@@ -13,11 +14,10 @@ import { setTokens } from './token-store';
  * apart and does not need to.
  */
 
-const tokenResponseSchema = z.object({
-  id_token: z.string(),
-  access_token: z.string(),
-  refresh_token: z.string().optional(),
-  expires_in: z.number(),
+const sessionResponseSchema = z.object({
+  idToken: z.string(),
+  accessToken: z.string(),
+  expiresIn: z.number(),
 });
 
 /** Sends the browser to Cognito. Does not return: the page navigates away. */
@@ -50,16 +50,23 @@ export async function startGoogleSignIn(): Promise<void> {
 /**
  * Completes the flow from the callback URL.
  *
- * The token exchange goes directly to Cognito rather than through our API,
- * because the verifier never leaves this browser. There is no client secret to
- * protect, which is the whole point of PKCE.
+ * The code goes to our API rather than straight to Cognito. Exchanging it here
+ * would hand the refresh token to JavaScript; the API exchanges it and keeps
+ * the refresh token in an httpOnly cookie instead. PKCE still holds: the
+ * verifier leaves this browser once, over TLS, with a code that works once.
  */
 export async function completeGoogleSignIn(search: string): Promise<void> {
   const params = new URLSearchParams(search);
 
   const error = params.get('error');
   if (error) {
-    throw new Error(params.get('error_description') ?? error);
+    // Not `error_description`: it comes from the URL, so anyone can craft a
+    // link that puts their own convincing message on our sign-in screen.
+    throw new Error(
+      error === 'access_denied'
+        ? 'Google sign-in was cancelled.'
+        : 'Google sign-in did not complete. Please try again.',
+    );
   }
 
   const code = params.get('code');
@@ -74,33 +81,12 @@ export async function completeGoogleSignIn(search: string): Promise<void> {
     throw new Error('The sign-in response did not match this session.');
   }
 
-  const { domain, clientId, redirectUri } = config.cognito;
-  const response = await fetch(`https://${domain}/oauth2/token`, {
+  const tokens = await request('/auth/google', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: new URLSearchParams({
-      grant_type: 'authorization_code',
-      client_id: clientId,
-      // Sent again and must match the authorize call exactly; Cognito rejects
-      // the exchange otherwise.
-      redirect_uri: redirectUri,
-      code,
-      code_verifier: verifier,
-    }),
+    // redirectUri must match the authorize call exactly, or Cognito refuses.
+    body: { code, codeVerifier: verifier, redirectUri: config.cognito.redirectUri },
+    schema: sessionResponseSchema,
   });
 
-  if (!response.ok) {
-    throw new Error('Could not complete Google sign-in. Please try again.');
-  }
-
-  const parsed = tokenResponseSchema.safeParse(await response.json());
-  if (!parsed.success) {
-    throw new Error('Google sign-in returned an unexpected response.');
-  }
-
-  setTokens({
-    idToken: parsed.data.id_token,
-    accessToken: parsed.data.access_token,
-    ...(parsed.data.refresh_token ? { refreshToken: parsed.data.refresh_token } : {}),
-  });
+  setTokens({ ...tokens, signedIn: true });
 }

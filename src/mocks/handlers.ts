@@ -97,20 +97,23 @@ export const handlers = [
     }
     return HttpResponse.json({
       idToken: makeJwt({ exp: nowInSeconds() + 3600 }),
+      // No refreshToken: the real API sets it as an httpOnly cookie instead.
       accessToken: 'access-token',
-      refreshToken: 'refresh-token',
       expiresIn: 3600,
     });
   }),
 
-  http.post(api('/auth/refresh'), async ({ request }) => {
-    const body = (await request.json()) as { refreshToken: string };
-    if (body.refreshToken === 'dead-token') {
-      return HttpResponse.json(
-        { success: false, code: 'SESSION_EXPIRED', error: 'Refresh token is no longer valid.' },
-        { status: 401 },
-      );
-    }
+  http.post(api('/auth/google'), () =>
+    HttpResponse.json({
+      idToken: makeJwt({ exp: nowInSeconds() + 3600 }),
+      accessToken: 'access-token',
+      expiresIn: 3600,
+    }),
+  ),
+
+  // The refresh token is a cookie the page never sees, so a test that needs a
+  // dead session overrides this handler with a 401.
+  http.post(api('/auth/refresh'), () => {
     return HttpResponse.json({
       idToken: makeJwt({ exp: nowInSeconds() + 3600 }),
       accessToken: 'new-access-token',

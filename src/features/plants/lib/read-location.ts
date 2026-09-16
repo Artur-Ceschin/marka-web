@@ -18,7 +18,9 @@ import type { Location } from '../api/identify-api';
  */
 export async function readPhotoLocation(photo: Blob): Promise<Location | undefined> {
   try {
-    const { gps } = await import('exifr');
+    // The mini build (28 kB instead of 74 kB) reads JPEG EXIF including GPS,
+    // which covers every photo the app accepts: phones hand over JPEG.
+    const { gps } = await import('exifr/dist/mini.esm.mjs');
     const position = await gps(photo);
     if (!position || !Number.isFinite(position.latitude) || !Number.isFinite(position.longitude)) {
       return undefined;

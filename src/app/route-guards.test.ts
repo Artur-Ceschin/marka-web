@@ -3,7 +3,7 @@ import { HttpResponse, http } from 'msw';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 import { resetSessionStateForTests } from '@/lib/auth/session';
-import { clearTokens, getIdToken, getRefreshToken, setTokens } from '@/lib/auth/token-store';
+import { clearTokens, getIdToken, hasSessionMarker, setTokens } from '@/lib/auth/token-store';
 import { config } from '@/lib/config';
 import { makeJwt, nowInSeconds } from '@/mocks/handlers';
 import { server } from '@/mocks/server';
@@ -26,16 +26,19 @@ async function outcome(guard: () => Promise<void>): Promise<string> {
 }
 
 let refreshCalls = 0;
+// The refresh token is an httpOnly cookie the page never sees, so only the API
+// knows whether the session is dead. This flag stands in for that answer.
+let sessionIsDead = false;
 
 beforeEach(() => {
   clearTokens();
   resetSessionStateForTests();
   refreshCalls = 0;
+  sessionIsDead = false;
   server.use(
-    http.post(api('/auth/refresh'), async ({ request }) => {
+    http.post(api('/auth/refresh'), () => {
       refreshCalls += 1;
-      const body = (await request.json()) as { refreshToken: string };
-      if (body.refreshToken === 'dead-token') {
+      if (sessionIsDead) {
         return HttpResponse.json({ code: 'SESSION_EXPIRED' }, { status: 401 });
       }
       return HttpResponse.json({ idToken: makeJwt({ exp: nowInSeconds() + 3600 }) });
@@ -55,7 +58,7 @@ describe('route guards', () => {
   });
 
   it('lets a valid session straight through without a network call', async () => {
-    setTokens({ idToken: makeJwt({ exp: nowInSeconds() + 3600 }), refreshToken: 'good-token' });
+    setTokens({ idToken: makeJwt({ exp: nowInSeconds() + 3600 }), signedIn: true });
 
     expect(await outcome(requireSession)).toBe('allowed');
     expect(await outcome(redirectIfSignedIn)).toBe('redirect:/app');
@@ -63,8 +66,8 @@ describe('route guards', () => {
   });
 
   it('refreshes an expired session before deciding, rather than after rendering', async () => {
-    // The state after a reload: id token gone from memory, refresh token kept.
-    setTokens({ idToken: makeJwt({ exp: nowInSeconds() - 60 }), refreshToken: 'good-token' });
+    // The state after a reload: id token gone from memory, refresh cookie kept.
+    setTokens({ idToken: makeJwt({ exp: nowInSeconds() - 60 }), signedIn: true });
 
     expect(await outcome(requireSession)).toBe('allowed');
     expect(refreshCalls).toBe(1);
@@ -72,14 +75,16 @@ describe('route guards', () => {
   });
 
   it('redirects a dead session to sign-in without ever rendering the app', async () => {
-    setTokens({ idToken: makeJwt({ exp: nowInSeconds() - 60 }), refreshToken: 'dead-token' });
+    setTokens({ idToken: makeJwt({ exp: nowInSeconds() - 60 }), signedIn: true });
+    sessionIsDead = true;
 
     expect(await outcome(requireSession)).toBe('redirect:/sign-in');
-    expect(getRefreshToken()).toBeNull();
+    expect(hasSessionMarker()).toBe(false);
   });
 
   it('does not bounce a dead session from sign-in through the app', async () => {
-    setTokens({ idToken: makeJwt({ exp: nowInSeconds() - 60 }), refreshToken: 'dead-token' });
+    setTokens({ idToken: makeJwt({ exp: nowInSeconds() - 60 }), signedIn: true });
+    sessionIsDead = true;
 
     // Previously this redirected to /app on the mere presence of a token, then
     // bounced back once the refresh failed.
@@ -87,13 +92,13 @@ describe('route guards', () => {
   });
 
   it('keeps an offline visitor signed in rather than logging them out', async () => {
-    setTokens({ idToken: makeJwt({ exp: nowInSeconds() - 60 }), refreshToken: 'good-token' });
+    setTokens({ idToken: makeJwt({ exp: nowInSeconds() - 60 }), signedIn: true });
     server.use(http.post(api('/auth/refresh'), () => HttpResponse.error()));
 
-    // A network failure says nothing about the session, so the tokens stay and
-    // the app is allowed to load and report the connection problem.
+    // A network failure says nothing about the session, so it stays and the app
+    // is allowed to load and report the connection problem.
     expect(await outcome(requireSession)).toBe('allowed');
-    expect(getRefreshToken()).toBe('good-token');
+    expect(hasSessionMarker()).toBe(true);
     expect(await outcome(redirectIfSignedIn)).toBe('allowed');
   });
 });

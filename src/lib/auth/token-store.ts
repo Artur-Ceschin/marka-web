@@ -1,6 +1,6 @@
 import { clearActivity, recordActivity } from './idle';
 
-const REFRESH_TOKEN_KEY = 'marka-refresh-token';
+const SESSION_KEY = 'marka-session';
 
 /**
  * Where tokens live.
@@ -9,12 +9,11 @@ const REFRESH_TOKEN_KEY = 'marka-refresh-token';
  * with the tab and cannot be read back by script after a page someone left
  * open all week.
  *
- * The refresh token does go to `localStorage`, because without it every reload
- * would mean signing in again. That is the standard trade for an SPA whose API
- * returns tokens in a JSON body: there is no way to set an httpOnly cookie from
- * here, so the refresh token is reachable by any script that runs on this
- * origin. If the API later sets the refresh token as an httpOnly, SameSite
- * cookie, this file is the only thing that has to change.
+ * The refresh token is not here at all. The API keeps it in an httpOnly cookie
+ * that no script on this page can read, and the browser attaches it to
+ * /auth/refresh on its own. What is stored instead is a marker that a session
+ * was started: not a credential, only enough to know after a reload that a
+ * refresh is worth trying, and to tell other tabs when this one signs out.
  */
 let idToken: string | null = null;
 let accessToken: string | null = null;
@@ -27,13 +26,13 @@ function notify(): void {
 }
 
 /**
- * Keeps other tabs in step. Signing out removes the refresh token from
- * localStorage, which fires a `storage` event in every OTHER tab. Without this
- * those tabs keep a live id token in memory and look signed in for up to an
- * hour after the person pressed sign out.
+ * Keeps other tabs in step. Signing out removes the session marker, which
+ * fires a `storage` event in every OTHER tab. Without this those tabs keep a
+ * live id token in memory and look signed in for up to an hour after the person
+ * pressed sign out.
  */
 function handleStorage(event: StorageEvent): void {
-  if (event.key !== REFRESH_TOKEN_KEY) return;
+  if (event.key !== SESSION_KEY) return;
   if (event.newValue === null) {
     idToken = null;
     accessToken = null;
@@ -63,30 +62,30 @@ export function getAccessToken(): string | null {
   return accessToken;
 }
 
-export function getRefreshToken(): string | null {
+/** Whether a session was started in this browser and has not been ended. */
+export function hasSessionMarker(): boolean {
   try {
-    return localStorage.getItem(REFRESH_TOKEN_KEY);
+    return localStorage.getItem(SESSION_KEY) !== null;
   } catch {
-    return null;
+    return false;
   }
 }
 
 export function setTokens(tokens: {
   idToken: string;
   accessToken?: string;
-  refreshToken?: string;
+  /** True for a sign-in; a refresh only replaces the tokens. */
+  signedIn?: boolean;
 }): void {
   idToken = tokens.idToken;
   if (tokens.accessToken) accessToken = tokens.accessToken;
 
-  // A refresh response returns a new id token but usually no new refresh
-  // token, so only overwrite when one actually arrives.
-  if (tokens.refreshToken) {
+  if (tokens.signedIn) {
     // A sign-in is activity; without this a timestamp left over from days ago
     // would sign the person straight back out.
     recordActivity(Date.now(), { force: true });
     try {
-      localStorage.setItem(REFRESH_TOKEN_KEY, tokens.refreshToken);
+      localStorage.setItem(SESSION_KEY, '1');
     } catch {
       // Storage unavailable: the session still works until the tab closes.
     }
@@ -99,7 +98,7 @@ export function clearTokens(): void {
   idToken = null;
   accessToken = null;
   try {
-    localStorage.removeItem(REFRESH_TOKEN_KEY);
+    localStorage.removeItem(SESSION_KEY);
   } catch {
     // Nothing to clear.
   }

@@ -1,5 +1,6 @@
 /* Mobile first: a sheet anchored to the bottom edge, full width. */
 .dialog {
+  position: relative;
   width: 100%;
   max-width: 100%;
   max-height: 92svh;
@@ -40,6 +41,48 @@
         transform: none;
       }
     }
+  }
+}
+
+/* Roomier, for a full record rather than a short form. */
+.wide {
+  @media (min-width: 560px) {
+    max-width: 720px;
+  }
+}
+
+/* No padding: the content runs to the edges, starting with its own photo. */
+.innerBare {
+  padding: 0;
+}
+
+.closeFloating {
+  position: absolute;
+  inset-block-start: var(--space-12);
+  inset-inline-end: var(--space-12);
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: var(--radius-pill);
+  background-color: color-mix(in srgb, var(--color-media-scrim) 55%, transparent);
+  backdrop-filter: blur(10px);
+  color: var(--color-on-media);
+  cursor: pointer;
+
+  &:hover:not(:disabled) {
+    background-color: color-mix(in srgb, var(--color-media-scrim) 80%, transparent);
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+
+  svg {
+    width: 20px;
+    height: 20px;
   }
 }
 

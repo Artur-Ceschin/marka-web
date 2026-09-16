@@ -53,7 +53,7 @@ afterEach(() => {
 describe('after a successful verification', () => {
   it('signs in with the password from sign-up and holds a session', async () => {
     const calls = trackSignIn(() =>
-      HttpResponse.json({ idToken: 'id', accessToken: 'a', refreshToken: 'r', expiresIn: 3600 }),
+      HttpResponse.json({ idToken: 'id', accessToken: 'a', expiresIn: 3600 }),
     );
     setPendingCredentials({ email: EMAIL, password: 'Passphrase123' });
 
@@ -66,9 +66,7 @@ describe('after a successful verification', () => {
   });
 
   it('forgets the password once it has been used', async () => {
-    trackSignIn(() =>
-      HttpResponse.json({ idToken: 'id', accessToken: 'a', refreshToken: 'r', expiresIn: 3600 }),
-    );
+    trackSignIn(() => HttpResponse.json({ idToken: 'id', accessToken: 'a', expiresIn: 3600 }));
     setPendingCredentials({ email: EMAIL, password: 'Passphrase123' });
 
     await verify();

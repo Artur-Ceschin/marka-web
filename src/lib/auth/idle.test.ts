@@ -40,7 +40,7 @@ describe('idle tracking', () => {
   it('starts fresh at sign-in and is cleared at sign-out', () => {
     recordActivity(1, { force: true });
 
-    setTokens({ idToken: 'id', refreshToken: 'refresh' });
+    setTokens({ idToken: 'id', signedIn: true });
     expect(isIdleExpired()).toBe(false);
 
     clearTokens();

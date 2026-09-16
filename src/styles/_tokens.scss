@@ -22,6 +22,10 @@
   --c-muted: #5c6b5f;
   --c-clay: #b3401f;
   --c-clay-soft: #f0a58a;
+  /* Earth tones: the warm half of the palette, for the plant record. */
+  --c-bark: #3a2318;
+  --c-amber: #e0913c;
+  --c-amber-soft: #f7e3c8;
 
   /* tier 2: semantic, this is the component API */
   --color-bg: var(--c-bone);
@@ -34,6 +38,13 @@
   --color-border-strong: #294e3b99;
   --color-focus: var(--c-ink);
   --color-danger: var(--c-clay);
+
+  /* Warm accent. Used where the app is about the plant itself (its record,
+     its care) rather than about the interface. */
+  --color-accent: var(--c-clay);
+  --color-accent-fg: var(--c-white);
+  --color-accent-soft: var(--c-amber-soft);
+  --color-accent-text: #5b2a12;
 
   /* Text that sits on top of a photograph, in both themes. Photos do not
      invert, so these stay fixed rather than following the theme. */
@@ -85,6 +96,13 @@
   --color-focus: var(--c-lime);
   /* The light theme's clay is too dark to read on the dark surface. */
   --color-danger: var(--c-clay-soft);
+
+  /* Same idea as danger: clay turns muddy on the dark green, so the accent
+     moves to amber and its soft tint becomes a translucent warm wash. */
+  --color-accent: var(--c-amber);
+  --color-accent-fg: #2a1607;
+  --color-accent-soft: #e0913c26;
+  --color-accent-text: var(--c-amber-soft);
 }
 
 @media (prefers-reduced-motion: reduce) {

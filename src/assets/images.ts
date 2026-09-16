@@ -1,35 +1,22 @@
-/**
- * Image registry.
- *
- * Every photograph in the app is declared here once, with the widths it will
- * actually be displayed at and its alt text. Two reasons this is centralised:
- *
- * 1. `vite-imagetools` query strings must be static string literals: they are
- *    resolved at build time, so they cannot be built dynamically at the call
- *    site anyway.
- * 2. Alt text is content, not markup. Keeping it beside the file means a photo
- *    can never be used somewhere without one.
- *
- * Quality is deliberately left at the per-format defaults (AVIF 50, WebP 80).
- * imagetools exposes only ONE `quality` directive, applied to every format in
- * the import, so raising it to suit WebP also inflates AVIF, which is the
- * format nearly every visitor actually receives. Measured on forest.jpg at
- * 1120px: AVIF q50 = 329 KB, q70 = 616 KB for no visible gain. If the WebP
- * fallback ever needs tuning, split it into its own import rather than
- * changing this one.
- *
- * Width sets are chosen per usage. A full-bleed hero needs up to 2400px; a card
- * in a three-column grid never renders above ~960px even on a 2x display, and
- * generating more is wasted build time and wasted bytes.
- */
-
-import flowerImg from './flower.jpg?w=560;840;1120&format=avif;webp&as=picture';
-import forestImg from './forest.jpg?w=560;840;1120;1440&format=avif;webp&as=picture';
-import forestTropicalImg from './forest-tropical.jpg?w=800;1280;1920;2400&format=avif;webp&as=picture';
-import lupineImg from './lupine-flower.jpg?w=800;1280;1920&format=avif;webp&as=picture';
-import mountainImg from './moutain.jpg?w=800;1280;1920;2400&format=avif;webp&as=picture';
-import mushroomsImg from './mushrooms.jpg?w=560;840;1120&format=avif;webp&as=picture';
-import treeFruitImg from './tree-fruit.jpg?w=560;840;1120&format=avif;webp&as=picture';
+// AVIF and WebP are imported separately so each gets its own quality. AVIF
+// holds up far better at low quality, and one shared setting either bloats
+// the AVIF (which ~95% of visitors get) or softens the WebP fallback.
+// 1920px is the widest variant: the full-bleed bands never need more at the
+// 100vw size they are shown, and 2400px files cost 250 to 600 kB each.
+import flowerAvif from './flower.jpg?w=560;840;1120&format=avif&quality=50&as=picture';
+import flowerWebp from './flower.jpg?w=560;840;1120&format=webp&quality=72&as=picture';
+import forestAvif from './forest.jpg?w=560;840;1120;1440&format=avif&quality=50&as=picture';
+import forestWebp from './forest.jpg?w=560;840;1120;1440&format=webp&quality=72&as=picture';
+import forestTropicalAvif from './forest-tropical.jpg?w=800;1280;1920&format=avif&quality=50&as=picture';
+import forestTropicalWebp from './forest-tropical.jpg?w=800;1280;1920&format=webp&quality=72&as=picture';
+import lupineAvif from './lupine-flower.jpg?w=800;1280;1920&format=avif&quality=50&as=picture';
+import lupineWebp from './lupine-flower.jpg?w=800;1280;1920&format=webp&quality=72&as=picture';
+import mountainAvif from './moutain.jpg?w=800;1280;1920&format=avif&quality=50&as=picture';
+import mountainWebp from './moutain.jpg?w=800;1280;1920&format=webp&quality=72&as=picture';
+import mushroomsAvif from './mushrooms.jpg?w=560;840;1120&format=avif&quality=50&as=picture';
+import mushroomsWebp from './mushrooms.jpg?w=560;840;1120&format=webp&quality=72&as=picture';
+import treeFruitAvif from './tree-fruit.jpg?w=560;840;1120&format=avif&quality=50&as=picture';
+import treeFruitWebp from './tree-fruit.jpg?w=560;840;1120&format=webp&quality=72&as=picture';
 
 export interface AppImage {
   sources: Record<string, string>;
@@ -37,38 +24,52 @@ export interface AppImage {
   alt: string;
 }
 
-const withAlt = (
-  asset: { sources: Record<string, string>; img: { src: string; w: number; h: number } },
-  alt: string,
-): AppImage => ({ ...asset, alt });
+type GeneratedPicture = {
+  sources: Record<string, string>;
+  img: { src: string; w: number; h: number };
+};
+
+/** One picture from the two per-format imports; the WebP is the <img> fallback. */
+const withAlt = (avif: GeneratedPicture, webp: GeneratedPicture, alt: string): AppImage => ({
+  sources: { ...avif.sources, ...webp.sources },
+  img: webp.img,
+  alt,
+});
 
 export const images = {
   mountain: withAlt(
-    mountainImg,
+    mountainAvif,
+    mountainWebp,
     'A glacial lake winding between forested mountain ridges under a clouded sky.',
   ),
   forestTropical: withAlt(
-    forestTropicalImg,
+    forestTropicalAvif,
+    forestTropicalWebp,
     'Shafts of morning sunlight breaking through the canopy of a misty tropical forest.',
   ),
   flower: withAlt(
-    flowerImg,
+    flowerAvif,
+    flowerWebp,
     'A wild geranium in sharp focus, its five violet petals veined with darker lines, against a meadow of blurred blooms.',
   ),
   mushrooms: withAlt(
-    mushroomsImg,
+    mushroomsAvif,
+    mushroomsWebp,
     'A cluster of tan-capped mushrooms growing in tiers from the mossy bark of a decaying tree trunk.',
   ),
   treeFruit: withAlt(
-    treeFruitImg,
+    treeFruitAvif,
+    treeFruitWebp,
     'Ripe oranges hanging among dark green leaves on a citrus branch at dusk.',
   ),
   forest: withAlt(
-    forestImg,
+    forestAvif,
+    forestWebp,
     'Looking straight up into a beech canopy, sunlight scattering through bright green leaves.',
   ),
   lupine: withAlt(
-    lupineImg,
+    lupineAvif,
+    lupineWebp,
     'A single purple lupine spike standing above its palmate leaves in a green meadow.',
   ),
 } satisfies Record<string, AppImage>;

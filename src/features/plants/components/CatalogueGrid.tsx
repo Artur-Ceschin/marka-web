@@ -3,19 +3,15 @@ import { type ReactNode, useId, useMemo, useRef, useState } from 'react';
 
 import { useI18n } from '@/app/providers/i18n';
 import { Button } from '@/components/ui/Button';
-import type { Messages } from '@/lib/i18n';
 
 import type { Detection } from '../api/identify-api';
 import { useIdentifications } from '../api/queries';
+import { plantNames, primaryName } from '../lib/plant-names';
 
 import styles from './CatalogueGrid.module.scss';
 import { DeleteDetectionDialog } from './DeleteDetectionDialog';
+import { DetectionDetails } from './DetectionDetails';
 import { EditDetectionDialog } from './EditDetectionDialog';
-
-/** An unconfirmed detection shows its best guess, marked as such on the card. */
-function plantName(item: Detection, m: Messages): string {
-  return item.confirmedSpecies ?? item.candidates[0]?.species ?? m.plants.unnamed;
-}
 
 /** Every identification, newest first: two columns on a phone, more as it widens. */
 export function CatalogueGrid() {
@@ -23,6 +19,7 @@ export function CatalogueGrid() {
   const headingId = useId();
   const headingRef = useRef<HTMLHeadingElement>(null);
   const query = useIdentifications();
+  const [viewing, setViewing] = useState<Detection | null>(null);
   const [editing, setEditing] = useState<Detection | null>(null);
   const [deleting, setDeleting] = useState<Detection | null>(null);
   const dateFormat = useMemo(
@@ -35,6 +32,11 @@ export function CatalogueGrid() {
     const date = new Date(iso);
     return Number.isNaN(date.getTime()) ? null : dateFormat.format(date);
   };
+
+  // The open dialog always reflects the freshest copy in the cache, so an edit
+  // made in the edit sheet shows immediately when it returns to the details.
+  const fresh = (item: Detection) =>
+    items.find((candidate) => candidate.detectionId === item.detectionId) ?? item;
 
   let body: ReactNode;
   if (query.isPending) {
@@ -70,16 +72,18 @@ export function CatalogueGrid() {
       <>
         <ul className={styles.grid}>
           {items.map((item) => {
-            const name = plantName(item, m);
-            // When it was seen, if they said; otherwise when it was identified.
+            const names = plantNames(item, m);
+            const title = names.common ?? names.scientific;
             const seen = item.observedAt ? formatDate(item.observedAt) : null;
             const created = formatDate(item.createdAt);
             return (
               <li key={item.detectionId} className={styles.card}>
                 <div className={styles.media}>
                   <img
-                    src={item.imageUrl}
-                    alt={name}
+                    // A few kilobytes instead of the full photo; older detections
+                    // and PNG uploads have no thumbnail and use the original.
+                    src={item.thumbnailUrl ?? item.imageUrl}
+                    alt={title}
                     width={400}
                     height={400}
                     loading="lazy"
@@ -92,7 +96,7 @@ export function CatalogueGrid() {
                     <button
                       type="button"
                       className={styles.tool}
-                      aria-label={m.plants.editPlant(name)}
+                      aria-label={m.plants.editPlant(title)}
                       onClick={() => {
                         setEditing(item);
                       }}
@@ -102,7 +106,7 @@ export function CatalogueGrid() {
                     <button
                       type="button"
                       className={[styles.tool, styles.toolDanger].join(' ')}
-                      aria-label={m.plants.deletePlant(name)}
+                      aria-label={m.plants.deletePlant(title)}
                       onClick={() => {
                         setDeleting(item);
                       }}
@@ -111,9 +115,16 @@ export function CatalogueGrid() {
                     </button>
                   </div>
                 </div>
-                <p className={styles.name} title={name}>
-                  {name}
+
+                <p className={styles.name} title={title}>
+                  {title}
                 </p>
+                {/* Only worth a second line when it says something new. */}
+                {names.common ? (
+                  <p className={styles.scientific} title={names.scientific}>
+                    {names.scientific}
+                  </p>
+                ) : null}
                 <p className={styles.meta}>
                   {item.confirmedSpecies ? null : (
                     <span className={styles.badge}>{m.plants.notConfirmed}</span>
@@ -125,6 +136,19 @@ export function CatalogueGrid() {
                   ) : null}
                 </p>
                 {item.notes ? <p className={styles.notes}>{item.notes}</p> : null}
+
+                {/* One real button covering the card, rather than a click
+                    handler on the <li>: it is tabbable, has a name, and works
+                    with Enter and Space for free. It sits under the icon
+                    buttons, which stay clickable. */}
+                <button
+                  type="button"
+                  className={styles.open}
+                  aria-label={m.plants.openPlant(title)}
+                  onClick={() => {
+                    setViewing(item);
+                  }}
+                />
               </li>
             );
           })}
@@ -155,24 +179,41 @@ export function CatalogueGrid() {
       </h2>
       {body}
 
+      {viewing && !editing && !deleting ? (
+        <DetectionDetails
+          detection={fresh(viewing)}
+          onClose={() => {
+            setViewing(null);
+          }}
+          onEdit={() => {
+            setEditing(viewing);
+          }}
+          onDelete={() => {
+            setDeleting(viewing);
+          }}
+        />
+      ) : null}
+
       {editing ? (
         <EditDetectionDialog
-          detection={editing}
-          name={plantName(editing, m)}
+          detection={fresh(editing)}
+          name={primaryName(fresh(editing), m)}
           onClose={() => {
             setEditing(null);
           }}
         />
       ) : null}
+
       {deleting ? (
         <DeleteDetectionDialog
           detection={deleting}
-          name={plantName(deleting, m)}
+          name={primaryName(deleting, m)}
           onClose={() => {
             setDeleting(null);
           }}
           onDeleted={() => {
             setDeleting(null);
+            setViewing(null);
             // The button that opened the dialog went with the card, so focus
             // would otherwise fall back to the top of the document.
             setTimeout(() => headingRef.current?.focus(), 0);

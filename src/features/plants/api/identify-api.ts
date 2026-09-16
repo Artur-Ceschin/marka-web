@@ -87,6 +87,8 @@ export const detectionSchema = z.object({
   detectionId: z.string(),
   /** Signed and short-lived; refetch the list rather than storing it. */
   imageUrl: z.url(),
+  /** A few-kilobyte version for grids. Absent on some detections: fall back to imageUrl. */
+  thumbnailUrl: z.url().optional(),
   candidates: z.array(plantCandidateSchema),
   certainty: certaintySchema,
   status: statusSchema,

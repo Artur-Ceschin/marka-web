@@ -4,7 +4,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { IDLE_LIMIT_MS, recordActivity } from '@/lib/auth/idle';
 import { resetSessionStateForTests } from '@/lib/auth/session';
-import { clearTokens, getRefreshToken, setTokens } from '@/lib/auth/token-store';
+import { clearTokens, hasSessionMarker, setTokens } from '@/lib/auth/token-store';
 import { makeJwt, nowInSeconds } from '@/mocks/handlers';
 import { renderWithRouter } from '@/test/router';
 
@@ -14,7 +14,7 @@ beforeEach(() => {
   vi.useFakeTimers({ shouldAdvanceTime: true });
   clearTokens();
   resetSessionStateForTests();
-  setTokens({ idToken: makeJwt({ exp: nowInSeconds() + 3600 }), refreshToken: 'refresh-token' });
+  setTokens({ idToken: makeJwt({ exp: nowInSeconds() + 3600 }), signedIn: true });
 });
 
 afterEach(() => {
@@ -47,7 +47,7 @@ describe('IdleSignOut', () => {
 
     expect(screen.queryByRole('alertdialog')).not.toBeInTheDocument();
     expect(onSignedOut).not.toHaveBeenCalled();
-    expect(getRefreshToken()).toBe('refresh-token');
+    expect(hasSessionMarker()).toBe(true);
   });
 
   it('signs out once the 30 minutes are up', async () => {
@@ -56,6 +56,6 @@ describe('IdleSignOut', () => {
     await renderWithRouter(<IdleSignOut onSignedOut={onSignedOut} />);
 
     expect(onSignedOut).toHaveBeenCalledTimes(1);
-    expect(getRefreshToken()).toBeNull();
+    expect(hasSessionMarker()).toBe(false);
   });
 });

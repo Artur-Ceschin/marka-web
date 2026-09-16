@@ -7,3 +7,9 @@ declare module '*&as=picture' {
   };
   export default out;
 }
+
+// exifr ships its smaller builds without their own type declarations. The mini
+// build exposes the same `gps` function as the full one.
+declare module 'exifr/dist/mini.esm.mjs' {
+  export { gps } from 'exifr';
+}

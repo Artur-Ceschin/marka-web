@@ -91,7 +91,6 @@ export function useUpdateDetection() {
 }
 
 export function useDeleteDetection() {
-  const queryClient = useQueryClient();
   const editCatalogue = useEditCatalogue();
   return useMutation({
     mutationFn: async (detectionId: string) => {
@@ -105,9 +104,12 @@ export function useDeleteDetection() {
     onSuccess: (_result, detectionId) => {
       editCatalogue((items) => items.filter((item) => item.detectionId !== detectionId));
       // Not optimistic: for something that cannot be undone, the card only
-      // disappears once the server has really removed it. The refetch then
-      // realigns the page boundaries the removal shifted.
-      void queryClient.invalidateQueries({ queryKey: plantKeys.identifications() });
+      // disappears once the server has really removed it.
+      //
+      // Deliberately no refetch. Every refetch returns freshly signed image
+      // URLs, so the browser cache misses and every photo in the catalogue
+      // downloads again. Removing the item from the cache is exact, and the
+      // cursor for the next page is a key the removal does not change.
     },
   });
 }

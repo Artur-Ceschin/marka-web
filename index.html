@@ -5,6 +5,12 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
+    <!--
+      DNS, TCP and TLS to the API start now, in parallel with the bundle,
+      instead of when the first request is made. `crossorigin` because API
+      calls are CORS requests, which use a separate connection pool.
+    -->
+    <link rel="preconnect" href="%VITE_API_URL%" crossorigin />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Marka: Know what’s growing around you</title>
     <meta

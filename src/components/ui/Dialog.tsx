@@ -16,6 +16,14 @@ interface DialogProps {
   busy?: boolean;
   /** `alertdialog` for confirmations of something destructive. */
   role?: 'dialog' | 'alertdialog';
+  /** `lg` for content that needs the room, such as a plant's full record. */
+  size?: 'md' | 'lg';
+  /**
+   * `bare` drops the header and the padding, for content that brings its own
+   * heading (a full-bleed photo with the name over it). The close button then
+   * floats above that content, and `title` becomes the dialog's own label.
+   */
+  chrome?: 'default' | 'bare';
 }
 
 /**
@@ -36,6 +44,8 @@ export function Dialog({
   children,
   busy = false,
   role = 'dialog',
+  size = 'md',
+  chrome = 'default',
 }: DialogProps) {
   const { m } = useI18n();
   const ref = useRef<HTMLDialogElement>(null);
@@ -82,10 +92,14 @@ export function Dialog({
     // biome-ignore lint/a11y/useKeyWithClickEvents: the click only catches the backdrop; Escape is handled natively by the dialog.
     <dialog
       ref={ref}
-      className={styles.dialog}
+      className={[styles.dialog, size === 'lg' ? styles.wide : ''].filter(Boolean).join(' ')}
       role={role === 'alertdialog' ? 'alertdialog' : undefined}
-      aria-labelledby={titleId}
-      aria-describedby={description ? descriptionId : undefined}
+      {...(chrome === 'bare'
+        ? { 'aria-label': title }
+        : {
+            'aria-labelledby': titleId,
+            'aria-describedby': description ? descriptionId : undefined,
+          })}
       onCancel={(event) => {
         if (busy) event.preventDefault();
       }}
@@ -95,28 +109,40 @@ export function Dialog({
         if (event.target === event.currentTarget && !busy) onClose();
       }}
     >
-      <div className={styles.inner}>
-        <header className={styles.header}>
-          <div className={styles.heading}>
-            <h2 id={titleId} className={styles.title}>
-              {title}
-            </h2>
-            {description ? (
-              <p id={descriptionId} className={styles.description}>
-                {description}
-              </p>
-            ) : null}
-          </div>
+      <div className={chrome === 'bare' ? styles.innerBare : styles.inner}>
+        {chrome === 'bare' ? (
           <button
             type="button"
-            className={styles.close}
+            className={styles.closeFloating}
             onClick={onClose}
             disabled={busy}
             aria-label={m.common.close}
           >
             <X aria-hidden="true" />
           </button>
-        </header>
+        ) : (
+          <header className={styles.header}>
+            <div className={styles.heading}>
+              <h2 id={titleId} className={styles.title}>
+                {title}
+              </h2>
+              {description ? (
+                <p id={descriptionId} className={styles.description}>
+                  {description}
+                </p>
+              ) : null}
+            </div>
+            <button
+              type="button"
+              className={styles.close}
+              onClick={onClose}
+              disabled={busy}
+              aria-label={m.common.close}
+            >
+              <X aria-hidden="true" />
+            </button>
+          </header>
+        )}
         {children}
       </div>
     </dialog>

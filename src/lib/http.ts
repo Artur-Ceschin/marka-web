@@ -40,6 +40,9 @@ export async function request<TResponse = unknown>(
     response = await fetch(`${config.apiUrl}${path}`, {
       method,
       headers,
+      // Sends the httpOnly refresh cookie. The API scopes it to /auth, so other
+      // requests carry no cookie even with this set.
+      credentials: 'include',
       body: body === undefined ? undefined : JSON.stringify(body),
       signal: signal ?? null,
     });

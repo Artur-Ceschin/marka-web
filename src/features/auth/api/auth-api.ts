@@ -14,7 +14,7 @@ import { request } from '@/lib/http';
 export const signInResponseSchema = z.object({
   idToken: z.string(),
   accessToken: z.string(),
-  refreshToken: z.string(),
+  // No refresh token: the API sets it as an httpOnly cookie script cannot read.
   expiresIn: z.number(),
 });
 
@@ -65,7 +65,7 @@ export async function signIn(input: { email: string; password: string }): Promis
     body: input,
     schema: signInResponseSchema,
   });
-  setTokens(tokens);
+  setTokens({ ...tokens, signedIn: true });
   return tokens;
 }
 

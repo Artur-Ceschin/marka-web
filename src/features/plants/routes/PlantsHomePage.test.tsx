@@ -4,7 +4,7 @@ import { HttpResponse, http } from 'msw';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { resetSessionStateForTests } from '@/lib/auth/session';
-import { clearTokens, getIdToken, getRefreshToken, setTokens } from '@/lib/auth/token-store';
+import { clearTokens, getIdToken, hasSessionMarker, setTokens } from '@/lib/auth/token-store';
 import { config } from '@/lib/config';
 import { makeJwt, nowInSeconds } from '@/mocks/handlers';
 import { server } from '@/mocks/server';
@@ -78,7 +78,7 @@ async function pickPhoto() {
 beforeEach(() => {
   clearTokens();
   resetSessionStateForTests();
-  setTokens({ idToken: makeJwt({ exp: nowInSeconds() + 3600 }), refreshToken: 'refresh-token' });
+  setTokens({ idToken: makeJwt({ exp: nowInSeconds() + 3600 }), signedIn: true });
 });
 
 afterEach(() => {
@@ -312,7 +312,7 @@ describe('PlantsHomePage', () => {
     await user.click(screen.getByRole('button', { name: 'Sign out' }));
 
     expect(getIdToken()).toBeNull();
-    expect(getRefreshToken()).toBeNull();
+    expect(hasSessionMarker()).toBe(false);
   });
 
   it('has no accessibility violations', async () => {

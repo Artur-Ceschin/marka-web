@@ -3,18 +3,42 @@ import {
   createRootRoute,
   createRoute,
   createRouter,
+  lazyRouteComponent,
   Outlet,
 } from '@tanstack/react-router';
 import { PageLoader } from '@/components/ui/PageLoader';
-import { AuthCallbackPage } from '@/features/auth/routes/AuthCallbackPage';
-import { ResetPasswordPage } from '@/features/auth/routes/ResetPasswordPage';
-import { SignInPage } from '@/features/auth/routes/SignInPage';
-import { SignUpPage } from '@/features/auth/routes/SignUpPage';
-import { VerifyEmailPage } from '@/features/auth/routes/VerifyEmailPage';
 import { LandingPage } from '@/features/marketing/routes/LandingPage';
-import { PlantsHomePage } from '@/features/plants/routes/PlantsHomePage';
 
 import { redirectIfSignedIn, requireSession } from './route-guards';
+
+// Everything but the landing page is loaded on demand. A first visit to "/"
+// no longer downloads the catalogue, the auth forms, TanStack Form or the
+// identify flow. `defaultPreload: 'intent'` below fetches a route's chunk when
+// a link to it is hovered or focused, so the split costs no wait on click.
+const PlantsHomePage = lazyRouteComponent(
+  () => import('@/features/plants/routes/PlantsHomePage'),
+  'PlantsHomePage',
+);
+const SignInPage = lazyRouteComponent(
+  () => import('@/features/auth/routes/SignInPage'),
+  'SignInPage',
+);
+const SignUpPage = lazyRouteComponent(
+  () => import('@/features/auth/routes/SignUpPage'),
+  'SignUpPage',
+);
+const AuthCallbackPage = lazyRouteComponent(
+  () => import('@/features/auth/routes/AuthCallbackPage'),
+  'AuthCallbackPage',
+);
+const VerifyEmailPage = lazyRouteComponent(
+  () => import('@/features/auth/routes/VerifyEmailPage'),
+  'VerifyEmailPage',
+);
+const ResetPasswordPage = lazyRouteComponent(
+  () => import('@/features/auth/routes/ResetPasswordPage'),
+  'ResetPasswordPage',
+);
 
 const rootRoute = createRootRoute({
   component: () => <Outlet />,

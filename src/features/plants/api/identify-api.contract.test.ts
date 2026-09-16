@@ -21,7 +21,7 @@ const api = (path: string) => `${config.apiUrl}${path}`;
 beforeEach(() => {
   clearTokens();
   resetSessionStateForTests();
-  setTokens({ idToken: makeJwt({ exp: nowInSeconds() + 3600 }), refreshToken: 'refresh-token' });
+  setTokens({ idToken: makeJwt({ exp: nowInSeconds() + 3600 }), signedIn: true });
 });
 
 afterEach(() => {
