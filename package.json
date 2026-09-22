@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "pnpm typecheck && vite build",
+    "verify": "pnpm lint && pnpm typecheck && pnpm test",
     "preview": "vite preview",
     "lint": "biome check .",
     "lint:fix": "biome check --write .",

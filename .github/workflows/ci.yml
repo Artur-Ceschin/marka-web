@@ -1,0 +1,39 @@
+# Checks every push and pull request.
+#
+# Amplify runs `pnpm verify` too, so a broken build cannot deploy. This runs
+# the same checks earlier and on pull requests, where Amplify may not build.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9.15.9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - run: pnpm verify
+
+      # Catches anything that only breaks in a production build, such as the
+      # Content-Security-Policy generated into index.html. It builds with the
+      # committed development defaults: the real values live in Amplify, and a
+      # deployed build refuses to run without them.
+      - run: pnpm build

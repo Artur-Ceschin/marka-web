@@ -1,0 +1,41 @@
+# Response headers for Amplify Hosting.
+#
+# These are the ones a <meta> tag cannot carry. The main Content-Security-Policy
+# is generated into index.html at build time (see vite.config.ts) and pins the
+# inline theme script by hash; the policy below adds only `frame-ancestors`,
+# which a meta tag ignores. Both policies apply, so this one stays narrow.
+customHeaders:
+  - pattern: '**'
+    headers:
+      - key: Strict-Transport-Security
+        value: 'max-age=63072000; includeSubDomains; preload'
+      - key: Content-Security-Policy
+        value: "frame-ancestors 'none'"
+      - key: X-Content-Type-Options
+        value: 'nosniff'
+      - key: Referrer-Policy
+        value: 'strict-origin-when-cross-origin'
+      # The app asks for location on the profile and the identify flow; it
+      # never uses the camera API (photos come through a file input).
+      - key: Permissions-Policy
+        value: 'geolocation=(self), camera=(), microphone=(), payment=()'
+
+  - pattern: '/assets/**'
+    headers:
+      - key: Cache-Control
+        value: 'public, max-age=31536000, immutable'
+
+  - pattern: '/fonts/**'
+    headers:
+      - key: Cache-Control
+        value: 'public, max-age=31536000, immutable'
+
+  - pattern: '/index.html'
+    headers:
+      - key: Cache-Control
+        value: 'no-cache'
+
+  - pattern: '/site.webmanifest'
+    headers:
+      - key: Cache-Control
+        value: 'public, max-age=3600'

@@ -78,10 +78,49 @@ function contentSecurityPolicy(): Plugin {
 }
 
 // https://vite.dev/config/
+/**
+ * Fails a deployed build whose environment was never set.
+ *
+ * Without this, a build in CI or Amplify silently falls back to the committed
+ * development defaults and ships an app pointing at localhost: sign-in would
+ * break in production and nothing would have failed. Local `pnpm build` is
+ * left alone, so building a production bundle on a laptop still works.
+ */
+function requireDeploymentEnv(): Plugin {
+  // AWS_APP_ID is set by Amplify, which is where a wrong value would actually
+  // reach people. A plain CI build is only a compile check and may run with
+  // the development defaults.
+  const deployed = Boolean(process.env.AWS_APP_ID) || process.env.MARKA_REQUIRE_ENV === 'true';
+
+  return {
+    name: 'marka-require-deployment-env',
+    apply: 'build',
+    configResolved(config) {
+      if (!deployed || config.mode !== 'production') return;
+
+      const env = loadEnv(config.mode, config.envDir || process.cwd(), 'VITE_');
+      const problems: string[] = [];
+      for (const key of ['VITE_API_URL', 'VITE_COGNITO_CLIENT_ID', 'VITE_OAUTH_REDIRECT_URI']) {
+        const value = env[key];
+        if (!value) problems.push(`${key} is not set`);
+        else if (value.includes('localhost')) problems.push(`${key} still points at localhost`);
+      }
+
+      if (problems.length > 0) {
+        throw new Error(
+          `Refusing to build for deployment:\n  ${problems.join('\n  ')}\n` +
+            'Set these in the Amplify console (App settings, Environment variables).',
+        );
+      }
+    },
+  };
+}
+
 export default defineConfig({
   plugins: [
     react(),
     contentSecurityPolicy(),
+    requireDeploymentEnv(),
     // Generates responsive, modern-format variants from the originals in
     // src/assets at build time. The source images are 3–7 MP camera JPEGs;
     // shipping them as-is would be ~19 MB of payload.
