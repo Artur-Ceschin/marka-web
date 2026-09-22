@@ -1,6 +1,6 @@
 import { z } from 'zod';
-
-import { API_ERROR_CODES, ApiError, NetworkError } from '@/lib/api-error';
+import { createUpload, uploadPhoto } from '@/lib/api/uploads';
+import { API_ERROR_CODES, ApiError } from '@/lib/api-error';
 import { authorizedRequest } from '@/lib/auth/session';
 
 import { prepareImage } from '../lib/prepare-image';
@@ -19,14 +19,6 @@ const locationSchema = z.object({
 });
 const certaintySchema = z.enum(['high', 'low']);
 const statusSchema = z.enum(['pending_confirmation', 'confirmed', 'rejected']);
-
-export const presignedUploadSchema = z.object({
-  url: z.url(),
-  fields: z.record(z.string(), z.string()),
-  key: z.string(),
-  maxBytes: z.number(),
-  expiresIn: z.number(),
-});
 
 /**
  * One PlantNet match.
@@ -114,7 +106,6 @@ export const identificationsPageSchema = z.object({
   nextCursor: z.string().optional(),
 });
 
-export type PresignedUpload = z.infer<typeof presignedUploadSchema>;
 export type Location = z.infer<typeof locationSchema>;
 export type IdentifyResponse = z.infer<typeof identifyResponseSchema>;
 export type Detection = z.infer<typeof detectionSchema>;
@@ -122,39 +113,9 @@ export type PlantCandidate = z.infer<typeof plantCandidateSchema>;
 export type Enrichment = z.infer<typeof enrichmentSchema>;
 export type ConfirmResponse = Detection;
 
-export function createUpload(contentType: 'image/jpeg' | 'image/png') {
-  return authorizedRequest('/uploads', {
-    method: 'POST',
-    body: { contentType },
-    schema: presignedUploadSchema,
-  });
-}
-
-/**
- * Sends the photo straight to S3 with the presigned POST.
- *
- * Not through `request`: this is S3, not our API: no bearer token, no JSON,
- * and success is an empty 204. Every `fields` entry must come before the file
- * or S3 rejects the policy; S3 itself enforces the size limit.
- */
-export async function uploadPhoto(upload: PresignedUpload, photo: Blob): Promise<void> {
-  const form = new FormData();
-  for (const [name, value] of Object.entries(upload.fields)) {
-    form.append(name, value);
-  }
-  form.append('file', photo);
-
-  let response: Response;
-  try {
-    response = await fetch(upload.url, { method: 'POST', body: form });
-  } catch (cause) {
-    throw new NetworkError(cause);
-  }
-
-  if (!response.ok) {
-    throw new ApiError(response.status, {}, 'The photo could not be uploaded.');
-  }
-}
+export type { PresignedUpload } from '@/lib/api/uploads';
+// Re-exported so the identify flow still reads as one sequence from here.
+export { createUpload, presignedUploadSchema, uploadPhoto } from '@/lib/api/uploads';
 
 /** `observedAt` is ISO 8601 with an offset, ideally from the photo's EXIF. */
 export function identify(input: { key: string; location?: Location; observedAt?: string }) {

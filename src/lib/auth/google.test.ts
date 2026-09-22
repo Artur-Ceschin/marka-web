@@ -42,6 +42,23 @@ describe('completeGoogleSignIn', () => {
     expect(hasSessionMarker()).toBe(true);
   });
 
+  it('says the link was already used when the API rejects the code', async () => {
+    server.use(
+      http.post(api('/auth/google'), () =>
+        HttpResponse.json(
+          { success: false, code: 'INVALID_AUTHORIZATION_CODE', error: 'Invalid code' },
+          { status: 400 },
+        ),
+      ),
+    );
+    storePkce(VERIFIER, 'state-123');
+
+    await expect(completeGoogleSignIn('?code=spent&state=state-123')).rejects.toMatchObject({
+      reason: 'invalidCode',
+    });
+    expect(hasSessionMarker()).toBe(false);
+  });
+
   it('refuses a forged callback before the code reaches the API', async () => {
     let called = false;
     server.use(

@@ -4,30 +4,6 @@
   color: var(--color-text);
 }
 
-/* On a narrow phone the three controls cannot sit beside the logo, so they
-   wrap onto their own row instead of overflowing the screen. */
-.bar {
-  @include container(1100px);
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-8) var(--space-16);
-  min-height: 64px;
-  padding-block: var(--space-12);
-  border-block-end: 1px solid var(--color-border);
-}
-
-.actions {
-  display: flex;
-  align-items: center;
-  gap: var(--space-8);
-
-  @media (min-width: 560px) {
-    gap: var(--space-12);
-  }
-}
-
 .main {
   @include container(1100px);
   padding-block: var(--space-32) var(--space-64);

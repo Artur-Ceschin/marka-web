@@ -1,0 +1,272 @@
+.page {
+  min-height: 100svh;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+}
+
+.main {
+  @include container(820px);
+  padding-block: var(--space-32) var(--space-64);
+
+  @media (min-width: 760px) {
+    padding-block: var(--space-48) var(--space-64);
+  }
+}
+
+.title {
+  @include text-display;
+  margin-block-end: var(--space-8);
+}
+
+.subtitle {
+  @include text-body;
+  color: var(--color-text-muted);
+  margin-block-end: var(--space-32);
+}
+
+.status {
+  @include text-meta;
+  color: var(--color-text-muted);
+}
+
+/* --- months -------------------------------------------------------------- */
+
+.month {
+  margin-block-end: var(--space-32);
+}
+
+.monthHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-12);
+  position: sticky;
+  inset-block-start: 0;
+  z-index: 1;
+  padding-block: var(--space-8);
+  border-block-end: 1px solid var(--color-border);
+  background-color: var(--color-bg);
+}
+
+.monthTitle {
+  @include text-title;
+  text-transform: capitalize;
+}
+
+.monthCount {
+  @include text-label;
+  color: var(--color-text-muted);
+}
+
+/* --- entries ------------------------------------------------------------- */
+
+.entries {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* The date column doubles as the timeline rail: a thin line runs down the
+   border between it and the entries. */
+.entry {
+  display: grid;
+  grid-template-columns: 44px 1fr;
+  gap: var(--space-12);
+
+  @media (min-width: 560px) {
+    grid-template-columns: 64px 1fr;
+    gap: var(--space-24);
+  }
+}
+
+.when {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-block-start: var(--space-16);
+  border-inline-end: 1px solid var(--color-border);
+}
+
+.day {
+  @include text-title;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.weekday {
+  @include text-label;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+}
+
+.card {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-12);
+  padding-block: var(--space-16);
+  min-width: 0;
+
+  @media (min-width: 560px) {
+    gap: var(--space-16);
+  }
+}
+
+.photoButton {
+  display: block;
+  flex-shrink: 0;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-input);
+  background: none;
+  cursor: pointer;
+  transition: opacity var(--dur-short) var(--ease-out);
+
+  &:hover {
+    opacity: 0.85;
+  }
+}
+
+.photo {
+  width: 64px;
+  height: 64px;
+  flex-shrink: 0;
+  object-fit: cover;
+  border-radius: var(--radius-input);
+  background-color: var(--color-border);
+
+  @media (min-width: 560px) {
+    width: 88px;
+    height: 88px;
+  }
+}
+
+.text {
+  flex: 1;
+  min-width: 0;
+}
+
+.name {
+  @include text-body;
+  font-weight: 500;
+}
+
+/* A link in behaviour, so it looks like one rather than like a button. */
+.open {
+  padding: 0;
+  border: none;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+    border-radius: var(--radius-input);
+  }
+}
+
+.scientific {
+  @include text-meta;
+  color: var(--color-text-muted);
+  font-style: italic;
+  overflow-wrap: anywhere;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-4) var(--space-8);
+  margin-block-start: var(--space-4);
+  @include text-label;
+  color: var(--color-text-muted);
+}
+
+.badge {
+  padding-inline: 6px;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-pill);
+}
+
+.notes {
+  @include text-meta;
+  margin-block-start: var(--space-8);
+  padding-inline-start: var(--space-12);
+  border-inline-start: 3px solid var(--color-accent);
+  color: var(--color-text-muted);
+  overflow-wrap: anywhere;
+}
+
+.tools {
+  display: flex;
+  flex-shrink: 0;
+  gap: var(--space-4);
+}
+
+.tool {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: var(--radius-pill);
+  background: none;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition:
+    background-color var(--dur-short) var(--ease-out),
+    color var(--dur-short) var(--ease-out);
+
+  &:hover {
+    background-color: var(--color-border);
+    color: var(--color-text);
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+.toolDanger:hover {
+  color: var(--color-danger);
+}
+
+/* --- states -------------------------------------------------------------- */
+
+.more {
+  display: flex;
+  justify-content: center;
+  margin-block-start: var(--space-24);
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-8);
+  padding: var(--space-32) var(--space-16);
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-card);
+  text-align: center;
+}
+
+.emptyTitle {
+  @include text-title;
+}
+
+.emptyHint {
+  @include text-body;
+  color: var(--color-text-muted);
+}

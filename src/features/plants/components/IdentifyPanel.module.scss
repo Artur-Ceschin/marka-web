@@ -18,6 +18,11 @@
 .photo {
   position: relative;
   overflow: hidden;
+  /* `width: 100%` is load-bearing: with an auto width, `aspect-ratio` plus
+     `max-height` makes the browser narrow the BOX to keep the ratio, leaving
+     a gap beside the photo. A definite width means the ratio sets the height,
+     max-height clamps it, and object-fit crops. */
+  width: 100%;
   aspect-ratio: 4 / 3;
   max-height: 340px;
   border-radius: var(--radius-input);

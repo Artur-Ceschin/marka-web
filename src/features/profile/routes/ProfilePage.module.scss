@@ -1,0 +1,286 @@
+.page {
+  min-height: 100svh;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+}
+
+.main {
+  @include container(640px);
+  padding-block: var(--space-32) var(--space-64);
+
+  @media (min-width: 760px) {
+    padding-block: var(--space-48) var(--space-64);
+  }
+}
+
+.title {
+  @include text-display;
+  margin-block-end: var(--space-8);
+}
+
+.subtitle {
+  @include text-body;
+  color: var(--color-text-muted);
+  margin-block-end: var(--space-32);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-24);
+}
+
+/* --- photo --------------------------------------------------------------- */
+
+.photoRow {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-16);
+
+  @media (min-width: 560px) {
+    gap: var(--space-24);
+  }
+}
+
+.avatar {
+  display: grid;
+  place-items: center;
+  width: 80px;
+  height: 80px;
+  flex-shrink: 0;
+  overflow: hidden;
+  border-radius: var(--radius-pill);
+  background-color: var(--color-accent-soft);
+  color: var(--color-accent-text);
+
+  @media (min-width: 560px) {
+    width: 96px;
+    height: 96px;
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  svg {
+    width: 28px;
+    height: 28px;
+  }
+}
+
+.initials {
+  @include text-title;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+.photoActions {
+  min-width: 0;
+}
+
+.photoButtons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-8);
+  margin-block: var(--space-8);
+
+  svg {
+    width: 15px;
+    height: 15px;
+  }
+}
+
+.hint {
+  @include text-label;
+  color: var(--color-text-muted);
+}
+
+/* Kept in the layout for screen readers; the buttons above drive it. */
+.file {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.location {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+.locationValue {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  @include text-body;
+  font-variant-numeric: tabular-nums;
+
+  svg {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    color: var(--color-text-muted);
+  }
+}
+
+.pendingCoords {
+  @include text-label;
+  color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* --- fields -------------------------------------------------------------- */
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.labelRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-12);
+}
+
+.label {
+  @include text-meta;
+  font-weight: 500;
+  color: var(--color-text);
+}
+
+.count {
+  @include text-label;
+  color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.countOver {
+  color: var(--color-danger);
+}
+
+.textarea {
+  width: 100%;
+  min-height: 120px;
+  padding: var(--space-12) var(--space-16);
+  resize: vertical;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-input);
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  font: inherit;
+  @include text-body;
+  transition: border-color var(--dur-short) var(--ease-out);
+
+  &::placeholder {
+    color: var(--color-text-muted);
+  }
+
+  &:hover {
+    border-color: var(--color-text);
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+    border-color: var(--color-focus);
+  }
+}
+
+.invalid,
+.invalid:hover {
+  border-color: var(--color-danger);
+}
+
+.error {
+  @include text-meta;
+  color: var(--color-danger);
+
+  &:empty {
+    display: none;
+  }
+}
+
+/* --- account ------------------------------------------------------------- */
+
+.account {
+  display: grid;
+  gap: var(--space-4) var(--space-16);
+  margin: 0;
+  padding: var(--space-16);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+
+  @media (min-width: 560px) {
+    grid-template-columns: auto 1fr;
+    align-items: baseline;
+  }
+
+  dd {
+    margin: 0;
+  }
+}
+
+.accountValue {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-8);
+  @include text-body;
+  overflow-wrap: anywhere;
+}
+
+.verified {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: 2px var(--space-8);
+  border-radius: var(--radius-pill);
+  background-color: var(--color-accent-soft);
+  color: var(--color-accent-text);
+  @include text-label;
+
+  svg {
+    width: 13px;
+    height: 13px;
+  }
+}
+
+/* --- footer -------------------------------------------------------------- */
+
+.footer {
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: stretch;
+  gap: var(--space-12);
+
+  @media (min-width: 560px) {
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+  }
+}
+
+.savedNote {
+  @include text-meta;
+  color: var(--color-text-muted);
+  text-align: center;
+
+  @media (min-width: 560px) {
+    margin-inline-end: auto;
+    text-align: start;
+  }
+
+  &:empty {
+    display: none;
+  }
+}

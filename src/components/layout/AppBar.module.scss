@@ -1,0 +1,64 @@
+/* On a narrow phone the controls cannot sit beside the logo and the two
+   links, so they wrap onto their own row instead of overflowing. */
+.bar {
+  @include container(1100px);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-8) var(--space-16);
+  min-height: 64px;
+  padding-block: var(--space-12);
+  border-block-end: 1px solid var(--color-border);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-16);
+  min-width: 0;
+
+  @media (min-width: 560px) {
+    gap: var(--space-24);
+  }
+}
+
+.nav {
+  display: flex;
+  gap: var(--space-4);
+}
+
+.navLink {
+  padding: 6px var(--space-12);
+  border-radius: var(--radius-pill);
+  color: var(--color-text-muted);
+  text-decoration: none;
+  @include text-meta;
+  font-weight: 500;
+  transition:
+    background-color var(--dur-short) var(--ease-out),
+    color var(--dur-short) var(--ease-out);
+
+  &:hover {
+    color: var(--color-text);
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+}
+
+.navActive {
+  background-color: var(--color-accent-soft);
+  color: var(--color-accent-text);
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+
+  @media (min-width: 560px) {
+    gap: var(--space-12);
+  }
+}

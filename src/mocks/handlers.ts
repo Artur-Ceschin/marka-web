@@ -121,6 +121,31 @@ export const handlers = [
     });
   }),
 
+  http.post(api('/me/avatar-upload'), () =>
+    HttpResponse.json(
+      {
+        success: true,
+        url: 'https://uploads.test/',
+        fields: { key: 'avatars/user-1/photo', Policy: 'policy' },
+        key: 'avatars/user-1/photo',
+        maxBytes: 10_485_760,
+        expiresIn: 300,
+      },
+      { status: 201 },
+    ),
+  ),
+
+  http.patch(api('/me'), async ({ request }) =>
+    HttpResponse.json({
+      success: true,
+      userId: 'b428a418-2001-70dc-2a7c-ab479eb808fc',
+      email: 'artur@example.com',
+      emailVerified: true,
+      createdAt: '2026-09-10T12:44:21.155Z',
+      ...((await request.json()) as object),
+    }),
+  ),
+
   http.post(api('/auth/signout'), () => new HttpResponse(null, { status: 204 })),
 
   http.get(api('/me'), ({ request }) => {

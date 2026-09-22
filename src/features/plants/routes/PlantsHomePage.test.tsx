@@ -72,6 +72,8 @@ async function pickPhoto() {
   const input = view.container.querySelector<HTMLInputElement>('input[type="file"]');
   if (!input) throw new Error('file input not found');
   await user.upload(input, new File(['jpeg'], 'rose.jpg', { type: 'image/jpeg' }));
+  // The photo is confirmed before anything is sent.
+  await user.click(await screen.findByRole('button', { name: 'Use this photo' }));
   return { user, ...view };
 }
 
@@ -157,6 +159,55 @@ describe('PlantsHomePage', () => {
     await screen.findByText('Rosa gallica L.');
 
     expect(container.querySelector('li img')).toBeNull();
+  });
+
+  it('sends nothing until the photo is confirmed', async () => {
+    let identifyCalls = 0;
+    server.use(
+      http.post(api('/identify'), () => {
+        identifyCalls += 1;
+        return HttpResponse.json(identifyBody({}), { status: 201 });
+      }),
+    );
+    const user = userEvent.setup();
+    const view = await renderWithRouter(<PlantsHomePage />);
+    const input = view.container.querySelector<HTMLInputElement>('input[type="file"]');
+    if (!input) throw new Error('file input not found');
+
+    await user.upload(input, new File(['jpeg'], 'rose.jpg', { type: 'image/jpeg' }));
+
+    expect(await screen.findByText('Use this photo?')).toBeInTheDocument();
+    // An identification costs a daily try, so none is spent on a photo that
+    // was only looked at.
+    expect(identifyCalls).toBe(0);
+  });
+
+  it('can swap the photo before identifying it', async () => {
+    let identifyCalls = 0;
+    server.use(
+      http.post(api('/identify'), () => {
+        identifyCalls += 1;
+        return HttpResponse.json(identifyBody({}), { status: 201 });
+      }),
+    );
+    const user = userEvent.setup();
+    const view = await renderWithRouter(<PlantsHomePage />);
+    const first = view.container.querySelector<HTMLInputElement>('input[type="file"]');
+    if (!first) throw new Error('file input not found');
+    await user.upload(first, new File(['jpeg'], 'rose.jpg', { type: 'image/jpeg' }));
+    await screen.findByText('Use this photo?');
+
+    const second = view.container.querySelector<HTMLInputElement>('input[type="file"]');
+    if (!second) throw new Error('replacement input not found');
+    await user.upload(second, new File(['jpeg'], 'lupine.jpg', { type: 'image/jpeg' }));
+
+    // Still deciding, and still nothing sent.
+    expect(screen.getByText('Use this photo?')).toBeInTheDocument();
+    expect(identifyCalls).toBe(0);
+
+    await user.click(screen.getByRole('button', { name: 'Use this photo' }));
+    expect(await screen.findByText('Rosa gallica L.')).toBeInTheDocument();
+    expect(identifyCalls).toBe(1);
   });
 
   it('warns rather than nudging when the server is not sure', async () => {

@@ -1,17 +1,14 @@
 import { Pencil, Trash2 } from 'lucide-react';
-import { type ReactNode, useId, useMemo, useRef, useState } from 'react';
+import { type ReactNode, useId, useMemo, useRef } from 'react';
 
 import { useI18n } from '@/app/providers/i18n';
 import { Button } from '@/components/ui/Button';
 
-import type { Detection } from '../api/identify-api';
 import { useIdentifications } from '../api/queries';
-import { plantNames, primaryName } from '../lib/plant-names';
+import { plantNames } from '../lib/plant-names';
 
 import styles from './CatalogueGrid.module.scss';
-import { DeleteDetectionDialog } from './DeleteDetectionDialog';
-import { DetectionDetails } from './DetectionDetails';
-import { EditDetectionDialog } from './EditDetectionDialog';
+import { usePlantDialogs } from './usePlantDialogs';
 
 /** Every identification, newest first: two columns on a phone, more as it widens. */
 export function CatalogueGrid() {
@@ -19,24 +16,21 @@ export function CatalogueGrid() {
   const headingId = useId();
   const headingRef = useRef<HTMLHeadingElement>(null);
   const query = useIdentifications();
-  const [viewing, setViewing] = useState<Detection | null>(null);
-  const [editing, setEditing] = useState<Detection | null>(null);
-  const [deleting, setDeleting] = useState<Detection | null>(null);
   const dateFormat = useMemo(
     () => new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'short', year: 'numeric' }),
     [locale],
   );
   const items = query.data?.pages.flatMap((page) => page.items) ?? [];
+  const dialogs = usePlantDialogs(items, () => {
+    // The button that opened the dialog went with the card, so focus would
+    // otherwise fall back to the top of the document.
+    setTimeout(() => headingRef.current?.focus(), 0);
+  });
 
   const formatDate = (iso: string) => {
     const date = new Date(iso);
     return Number.isNaN(date.getTime()) ? null : dateFormat.format(date);
   };
-
-  // The open dialog always reflects the freshest copy in the cache, so an edit
-  // made in the edit sheet shows immediately when it returns to the details.
-  const fresh = (item: Detection) =>
-    items.find((candidate) => candidate.detectionId === item.detectionId) ?? item;
 
   let body: ReactNode;
   if (query.isPending) {
@@ -98,7 +92,7 @@ export function CatalogueGrid() {
                       className={styles.tool}
                       aria-label={m.plants.editPlant(title)}
                       onClick={() => {
-                        setEditing(item);
+                        dialogs.edit(item);
                       }}
                     >
                       <Pencil aria-hidden="true" />
@@ -108,7 +102,7 @@ export function CatalogueGrid() {
                       className={[styles.tool, styles.toolDanger].join(' ')}
                       aria-label={m.plants.deletePlant(title)}
                       onClick={() => {
-                        setDeleting(item);
+                        dialogs.remove(item);
                       }}
                     >
                       <Trash2 aria-hidden="true" />
@@ -146,7 +140,7 @@ export function CatalogueGrid() {
                   className={styles.open}
                   aria-label={m.plants.openPlant(title)}
                   onClick={() => {
-                    setViewing(item);
+                    dialogs.view(item);
                   }}
                 />
               </li>
@@ -179,47 +173,7 @@ export function CatalogueGrid() {
       </h2>
       {body}
 
-      {viewing && !editing && !deleting ? (
-        <DetectionDetails
-          detection={fresh(viewing)}
-          onClose={() => {
-            setViewing(null);
-          }}
-          onEdit={() => {
-            setEditing(viewing);
-          }}
-          onDelete={() => {
-            setDeleting(viewing);
-          }}
-        />
-      ) : null}
-
-      {editing ? (
-        <EditDetectionDialog
-          detection={fresh(editing)}
-          name={primaryName(fresh(editing), m)}
-          onClose={() => {
-            setEditing(null);
-          }}
-        />
-      ) : null}
-
-      {deleting ? (
-        <DeleteDetectionDialog
-          detection={deleting}
-          name={primaryName(deleting, m)}
-          onClose={() => {
-            setDeleting(null);
-          }}
-          onDeleted={() => {
-            setDeleting(null);
-            setViewing(null);
-            // The button that opened the dialog went with the card, so focus
-            // would otherwise fall back to the top of the document.
-            setTimeout(() => headingRef.current?.focus(), 0);
-          }}
-        />
-      ) : null}
+      {dialogs.element}
     </section>
   );
 }

@@ -151,6 +151,26 @@
       }
     },
     {
+      "includes": ["src/features/profile/**"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noRestrictedImports": {
+              "level": "error",
+              "options": {
+                "patterns": [
+                  {
+                    "group": ["@/features/**", "!@/features/profile/**"],
+                    "message": "Features must not import from sibling features. Promote the shared piece to components/ or lib/."
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
       "includes": ["src/features/plants/**"],
       "linter": {
         "rules": {

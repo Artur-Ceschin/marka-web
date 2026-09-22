@@ -19,6 +19,14 @@ const PlantsHomePage = lazyRouteComponent(
   () => import('@/features/plants/routes/PlantsHomePage'),
   'PlantsHomePage',
 );
+const PlantJournalPage = lazyRouteComponent(
+  () => import('@/features/plants/routes/PlantJournalPage'),
+  'PlantJournalPage',
+);
+const ProfilePage = lazyRouteComponent(
+  () => import('@/features/profile/routes/ProfilePage'),
+  'ProfilePage',
+);
 const SignInPage = lazyRouteComponent(
   () => import('@/features/auth/routes/SignInPage'),
   'SignInPage',
@@ -55,6 +63,20 @@ const appRoute = createRoute({
   path: '/app',
   beforeLoad: requireSession,
   component: PlantsHomePage,
+});
+
+const journalRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/journal',
+  beforeLoad: requireSession,
+  component: PlantJournalPage,
+});
+
+const profileRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/profile',
+  beforeLoad: requireSession,
+  component: ProfilePage,
 });
 
 const signInRoute = createRoute({
@@ -94,6 +116,8 @@ const resetPasswordRoute = createRoute({
 const routeTree = rootRoute.addChildren([
   indexRoute,
   appRoute,
+  journalRoute,
+  profileRoute,
   signInRoute,
   signUpRoute,
   resetPasswordRoute,

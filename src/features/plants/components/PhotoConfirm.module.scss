@@ -1,0 +1,85 @@
+/* Mobile first: everything stacks, and the buttons sit side by side from 560px. */
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-24);
+  padding: var(--space-24) var(--space-16);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  background-color: var(--color-surface);
+
+  @media (min-width: 560px) {
+    padding: var(--space-32);
+  }
+}
+
+.photo {
+  /* Definite width: with `aspect-ratio` and an auto width, `max-height`
+     narrows the box instead of cropping the photo. */
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  max-height: 340px;
+  overflow: hidden;
+  border-radius: var(--radius-input);
+  background-color: var(--color-border);
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.heading {
+  @include text-title;
+}
+
+.hint {
+  @include text-body;
+  color: var(--color-text-muted);
+  margin-block-start: var(--space-4);
+}
+
+.cost {
+  @include text-meta;
+  color: var(--color-accent-text);
+  margin-block-start: var(--space-12);
+  padding: var(--space-8) var(--space-12);
+  border-inline-start: 3px solid var(--color-accent);
+  border-radius: 0 var(--radius-input) var(--radius-input) 0;
+  background-color: var(--color-accent-soft);
+}
+
+.actions {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: var(--space-12);
+
+  @media (min-width: 560px) {
+    flex-direction: row;
+    justify-content: flex-end;
+  }
+
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+.action {
+  width: 100%;
+
+  @media (min-width: 560px) {
+    width: auto;
+  }
+}
+
+/* Reachable by assistive tech; the buttons above drive it. */
+.file {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

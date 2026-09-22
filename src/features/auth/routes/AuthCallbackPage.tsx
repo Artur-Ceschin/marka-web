@@ -2,7 +2,8 @@ import { Link, useNavigate } from '@tanstack/react-router';
 import { useEffect, useRef, useState } from 'react';
 
 import { useI18n } from '@/app/providers/i18n';
-import { completeGoogleSignIn } from '@/lib/auth/google';
+import { Button } from '@/components/ui/Button';
+import { completeGoogleSignIn, type GoogleFailure, GoogleSignInError } from '@/lib/auth/google';
 
 import { AuthLayout } from '../components/AuthLayout';
 
@@ -34,7 +35,18 @@ export function AuthCallbackPage() {
         await navigate({ to: '/app', replace: true });
       })
       .catch((caught: unknown) => {
-        setError(caught instanceof Error ? caught.message : m.auth.googleFailed);
+        // Translated here from a reason code, so the screen never shows an
+        // English string built in the auth layer, nor text from the URL.
+        const messages: Record<GoogleFailure, string> = {
+          cancelled: m.auth.googleCancelled,
+          stale: m.auth.googleStale,
+          mismatch: m.auth.googleMismatch,
+          invalidCode: m.auth.googleExpiredCode,
+          failed: m.auth.googleFailed,
+        };
+        setError(
+          caught instanceof GoogleSignInError ? messages[caught.reason] : m.auth.googleFailed,
+        );
       });
   }, [navigate, m]);
 
@@ -49,7 +61,11 @@ export function AuthCallbackPage() {
           </>
         }
       >
-        <p />
+        {/* Every one of these failures is fixed by starting again, so the
+            screen offers that rather than leaving a dead end. */}
+        <Button asChild>
+          <Link to="/sign-in">{m.auth.googleTryAgain}</Link>
+        </Button>
       </AuthLayout>
     );
   }
