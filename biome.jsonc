@@ -5,7 +5,7 @@
   "vcs": { "enabled": true, "clientKind": "git", "useIgnoreFile": true },
 
   "files": {
-    "includes": ["**", "!dist", "!coverage", "!node_modules", "!public", "!.agents"]
+    "includes": ["**", "!dist", "!coverage", "!node_modules", "!public", "!.agents", "!.pnpm-store"]
   },
 
   // Biome formats JS/TS/JSX/JSON/CSS. It does NOT understand SCSS, so Prettier

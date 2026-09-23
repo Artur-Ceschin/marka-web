@@ -28,6 +28,11 @@ coverage
 .claude
 .agents
 
+# pnpm's content-addressable store. The Amplify build puts it here so the
+# build cache can keep it between deploys; it holds tens of thousands of
+# files and must never be linted, formatted or committed.
+.pnpm-store
+
 # Local overrides
 .env.local
 .env
