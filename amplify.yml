@@ -20,6 +20,11 @@ frontend:
         - pnpm install --frozen-lockfile
     build:
       commands:
+        # Repeated from preBuild: each phase can get its own shell, and an
+        # `nvm use` there does not always survive into this one, which shows
+        # up as "pnpm: command not found" right at the start of the build.
+        - nvm use 24
+        - corepack enable
         - pnpm verify
         - pnpm build
   artifacts:
